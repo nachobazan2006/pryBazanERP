@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Data.OleDb;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace pryBazanERP.Conexión
 {
@@ -18,18 +14,46 @@ namespace pryBazanERP.Conexión
             string rutaBase = Path.Combine(carpetaAplicacion, "Acceso datos", "Bazan.accdb");
             cadenaConexion = @"Provider=Microsoft.ACE.OLEDB.16.0;Data Source=" + rutaBase + ";Persist Security Info=False;";
         }
+
         public bool ProbarConexion()
         {
             try
             {
-                using (OleDbConnection conexion = new OleDbConnection(cadenaConexion)) 
-                    {
+                using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
+                {
                     conexion.Open();
                     return true;
-                    }
+                }
             }
             catch
-            { return false; }
+            {
+                return false;
+            }
+        }
+
+        public bool ValidarUsuario(string mail, string contraseña)
+        {
+            try
+            {
+                using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    string consulta = "SELECT COUNT(*) FROM Usuario WHERE Mail = ? AND [Contraseña] = ?";
+
+                    using (OleDbCommand comando = new OleDbCommand(consulta, conexion))
+                    {
+                        comando.Parameters.AddWithValue("?", mail);
+                        comando.Parameters.AddWithValue("?", contraseña);
+
+                        int cantidad = Convert.ToInt32(comando.ExecuteScalar());
+                        return cantidad > 0;
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
         }
     }
 }
