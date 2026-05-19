@@ -33,20 +33,44 @@ namespace pryBazanERP.Conexión
 
         public bool ValidarUsuario(string mail, string contraseña)
         {
+            string usuario;
+            string perfil;
+            return ObtenerDatosUsuario(mail, contraseña, out usuario, out perfil);
+        }
+
+        public bool ObtenerDatosUsuario(string mail, string contraseña, out string usuario, out string perfil)
+        {
+            usuario = "";
+            perfil = "";
+
             try
             {
                 using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
                 {
                     conexion.Open();
-                    string consulta = "SELECT COUNT(*) FROM Usuario WHERE Mail = ? AND [Contraseña] = ?";
+
+                    string consulta =
+                        "SELECT TOP 1 Usuario.Nombre, Usuario.Apellido, Perfil.Nombre AS NombrePerfil " +
+                        "FROM (Usuario INNER JOIN [Usuario-Perfil] " +
+                        "ON Usuario.Id_Usuario = CInt([Usuario-Perfil].Id_Usuario)) " +
+                        "INNER JOIN Perfil " +
+                        "ON Perfil.Id_Perfil = CInt([Usuario-Perfil].Id_Perfil) " +
+                        "WHERE Usuario.Mail = ? AND Usuario.[Contraseña] = ?";
 
                     using (OleDbCommand comando = new OleDbCommand(consulta, conexion))
                     {
                         comando.Parameters.AddWithValue("?", mail);
                         comando.Parameters.AddWithValue("?", contraseña);
 
-                        int cantidad = Convert.ToInt32(comando.ExecuteScalar());
-                        return cantidad > 0;
+                        using (OleDbDataReader lector = comando.ExecuteReader())
+                        {
+                            if (lector.Read())
+                            {
+                                usuario = lector["Nombre"].ToString() + " " + lector["Apellido"].ToString();
+                                perfil = lector["NombrePerfil"].ToString();
+                                return true;
+                            }
+                        }
                     }
                 }
             }
@@ -54,6 +78,8 @@ namespace pryBazanERP.Conexión
             {
                 return false;
             }
+
+            return false;
         }
     }
 }

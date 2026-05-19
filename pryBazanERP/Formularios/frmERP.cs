@@ -45,14 +45,15 @@ namespace pryBazanERP
         {
             classConexion conexion = new classConexion();
 
-            string usuario = txtUsuario.Text;
-            string contraseña = txtContraseña.Text;
+            string usuario;
+            string perfil;
 
-            if (conexion.ValidarUsuario(usuario, contraseña))
+            if (conexion.ObtenerDatosUsuario(txtUsuario.Text, txtContraseña.Text, out usuario, out perfil))
             {
                 MessageBox.Show("Bienvenido, " + usuario + "!", "Inicio de sesion exitoso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                frmMain mainForm = new frmMain();
+                frmMain mainForm = new frmMain(usuario, perfil);
                 mainForm.Show();
+                this.Hide();
             }
             else
             {
