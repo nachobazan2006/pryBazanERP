@@ -57,6 +57,7 @@ namespace pryBazanERP
             }
             else
             {
+                conexion.GrabarAuditoriaSesion(txtUsuario.Text, "Intento fallido");
                 intentos--;
                 MessageBox.Show("Usuario o contraseña incorrectos. Intentos restantes: " + intentos, "Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
 

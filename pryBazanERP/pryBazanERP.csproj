@@ -47,24 +47,24 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Acceso datos\classConexion.cs" />
-    <Compile Include="Formularios\frmERP.cs">
+    <Compile Include="Formularios\Login\frmERP.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Formularios\frmERP.Designer.cs">
+    <Compile Include="Formularios\Login\frmERP.Designer.cs">
       <DependentUpon>frmERP.cs</DependentUpon>
     </Compile>
-    <Compile Include="Formularios\frmMain.cs">
+    <Compile Include="Formularios\Principal\frmMain.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="Formularios\frmMain.Designer.cs">
+    <Compile Include="Formularios\Principal\frmMain.Designer.cs">
       <DependentUpon>frmMain.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="Formularios\frmERP.resx">
+    <EmbeddedResource Include="Formularios\Login\frmERP.resx">
       <DependentUpon>frmERP.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Formularios\frmMain.resx">
+    <EmbeddedResource Include="Formularios\Principal\frmMain.resx">
       <DependentUpon>frmMain.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">

@@ -81,5 +81,32 @@ namespace pryBazanERP.Conexión
 
             return false;
         }
+
+        public void GrabarAuditoriaSesion(string usuario, string detalle)
+        {
+            try
+            {
+                using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
+                {
+                    conexion.Open();
+
+                    string consulta = "INSERT INTO AuditoriaSesion ([Fecha], [Hora], [Usuario], [Detalle]) VALUES (?, ?, ?, ?)";
+
+                    using (OleDbCommand comando = new OleDbCommand(consulta, conexion))
+                    {
+                        DateTime fechaHoraActual = DateTime.Now;
+
+                        comando.Parameters.AddWithValue("?", fechaHoraActual.Date);
+                        comando.Parameters.AddWithValue("?", fechaHoraActual.ToString("HH:mm:ss"));
+                        comando.Parameters.AddWithValue("?", usuario);
+                        comando.Parameters.AddWithValue("?", detalle);
+                        comando.ExecuteNonQuery();
+                    }
+                }
+            }
+            catch
+            {
+            }
+        }
     }
 }
