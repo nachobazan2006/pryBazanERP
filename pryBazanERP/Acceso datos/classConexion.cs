@@ -108,5 +108,206 @@ namespace pryBazanERP.Conexión
             {
             }
         }
+
+        public bool GuardarContacto(string dniPersonal, string mail, string telefono, bool activo, string instagram, string facebook, string twitter, out string mensaje)
+        {
+            mensaje = "";
+
+            try
+            {
+                using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
+                {
+                    conexion.Open();
+
+                    int idPersonal = ObtenerIdPersonalPorDni(conexion, dniPersonal);
+
+                    if (idPersonal == 0)
+                    {
+                        mensaje = "No se encontro un personal con ese DNI.";
+                        return false;
+                    }
+
+                    using (OleDbTransaction transaccion = conexion.BeginTransaction())
+                    {
+                        try
+                        {
+                            int idContacto = InsertarContacto(conexion, transaccion, idPersonal, mail, telefono, activo);
+
+                            InsertarRedSocial(conexion, transaccion, idContacto, "Instagram", instagram);
+                            InsertarRedSocial(conexion, transaccion, idContacto, "Facebook", facebook);
+                            InsertarRedSocial(conexion, transaccion, idContacto, "Twitter", twitter);
+
+                            transaccion.Commit();
+                            mensaje = "Contacto guardado correctamente.";
+                            return true;
+                        }
+                        catch
+                        {
+                            transaccion.Rollback();
+                            throw;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                mensaje = "No se pudo guardar el contacto: " + ex.Message;
+                return false;
+            }
+        }
+
+        public bool GuardarPersonal(string dni, string apellido, string nombre, string direccion, string geo, string localidad, string provincia, bool activo, out string mensaje)
+        {
+            mensaje = "";
+
+            try
+            {
+                using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
+                {
+                    conexion.Open();
+
+                    if (ObtenerIdPersonalPorDni(conexion, dni) != 0)
+                    {
+                        mensaje = "Ya existe un personal cargado con ese DNI.";
+                        return false;
+                    }
+
+                    int idProvincia = ObtenerOCrearProvincia(conexion, provincia);
+                    object idLocalidad = DBNull.Value;
+
+                    if (provincia == "Cordoba" && !string.IsNullOrWhiteSpace(localidad))
+                    {
+                        idLocalidad = ObtenerOCrearLocalidad(conexion, localidad, idProvincia);
+                    }
+
+                    string consulta =
+                        "INSERT INTO Personal (DNI, Apellido, Nombre, Direccion, Geo, Id_Localidad, Id_Provincia, Activo) " +
+                        "VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
+
+                    using (OleDbCommand comando = new OleDbCommand(consulta, conexion))
+                    {
+                        comando.Parameters.AddWithValue("?", dni);
+                        comando.Parameters.AddWithValue("?", apellido);
+                        comando.Parameters.AddWithValue("?", nombre);
+                        comando.Parameters.AddWithValue("?", direccion);
+                        comando.Parameters.AddWithValue("?", geo);
+                        comando.Parameters.AddWithValue("?", idLocalidad);
+                        comando.Parameters.AddWithValue("?", idProvincia);
+                        comando.Parameters.AddWithValue("?", activo);
+                        comando.ExecuteNonQuery();
+                    }
+
+                    mensaje = "Personal guardado correctamente.";
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                mensaje = "No se pudo guardar el personal: " + ex.Message;
+                return false;
+            }
+        }
+
+        private int ObtenerIdPersonalPorDni(OleDbConnection conexion, string dni)
+        {
+            using (OleDbCommand comando = new OleDbCommand("SELECT TOP 1 Id_Personal FROM Personal WHERE DNI = ?", conexion))
+            {
+                comando.Parameters.AddWithValue("?", dni);
+                object resultado = comando.ExecuteScalar();
+
+                if (resultado == null)
+                {
+                    return 0;
+                }
+
+                return Convert.ToInt32(resultado);
+            }
+        }
+
+        private int ObtenerOCrearProvincia(OleDbConnection conexion, string nombre)
+        {
+            using (OleDbCommand comando = new OleDbCommand("SELECT TOP 1 Id_Provincia FROM Provincia WHERE Nombre = ?", conexion))
+            {
+                comando.Parameters.AddWithValue("?", nombre);
+                object resultado = comando.ExecuteScalar();
+
+                if (resultado != null)
+                {
+                    return Convert.ToInt32(resultado);
+                }
+            }
+
+            using (OleDbCommand comando = new OleDbCommand("INSERT INTO Provincia (Nombre) VALUES (?)", conexion))
+            {
+                comando.Parameters.AddWithValue("?", nombre);
+                comando.ExecuteNonQuery();
+            }
+
+            using (OleDbCommand comando = new OleDbCommand("SELECT @@IDENTITY", conexion))
+            {
+                return Convert.ToInt32(comando.ExecuteScalar());
+            }
+        }
+
+        private int ObtenerOCrearLocalidad(OleDbConnection conexion, string nombre, int idProvincia)
+        {
+            using (OleDbCommand comando = new OleDbCommand("SELECT TOP 1 Id_Localidad FROM Localidad WHERE Nombre = ? AND Id_Provincia = ?", conexion))
+            {
+                comando.Parameters.AddWithValue("?", nombre);
+                comando.Parameters.AddWithValue("?", idProvincia);
+                object resultado = comando.ExecuteScalar();
+
+                if (resultado != null)
+                {
+                    return Convert.ToInt32(resultado);
+                }
+            }
+
+            using (OleDbCommand comando = new OleDbCommand("INSERT INTO Localidad (Nombre, Id_Provincia) VALUES (?, ?)", conexion))
+            {
+                comando.Parameters.AddWithValue("?", nombre);
+                comando.Parameters.AddWithValue("?", idProvincia);
+                comando.ExecuteNonQuery();
+            }
+
+            using (OleDbCommand comando = new OleDbCommand("SELECT @@IDENTITY", conexion))
+            {
+                return Convert.ToInt32(comando.ExecuteScalar());
+            }
+        }
+
+        private int InsertarContacto(OleDbConnection conexion, OleDbTransaction transaccion, int idPersonal, string mail, string telefono, bool activo)
+        {
+            using (OleDbCommand comando = new OleDbCommand("INSERT INTO Contacto (Id_Personal, Mail, Telefono, Redes, Activo) VALUES (?, ?, ?, ?, ?)", conexion, transaccion))
+            {
+                comando.Parameters.AddWithValue("?", idPersonal);
+                comando.Parameters.AddWithValue("?", mail);
+                comando.Parameters.AddWithValue("?", telefono);
+                comando.Parameters.AddWithValue("?", "");
+                comando.Parameters.AddWithValue("?", activo);
+                comando.ExecuteNonQuery();
+            }
+
+            using (OleDbCommand comando = new OleDbCommand("SELECT @@IDENTITY", conexion, transaccion))
+            {
+                return Convert.ToInt32(comando.ExecuteScalar());
+            }
+        }
+
+        private void InsertarRedSocial(OleDbConnection conexion, OleDbTransaction transaccion, int idContacto, string tipo, string usuarioUrl)
+        {
+            if (string.IsNullOrWhiteSpace(usuarioUrl))
+            {
+                return;
+            }
+
+            using (OleDbCommand comando = new OleDbCommand("INSERT INTO RedSocial (Id_Contacto, Tipo, UsuarioUrl) VALUES (?, ?, ?)", conexion, transaccion))
+            {
+                comando.Parameters.AddWithValue("?", idContacto);
+                comando.Parameters.AddWithValue("?", tipo);
+                comando.Parameters.AddWithValue("?", usuarioUrl.Trim());
+                comando.ExecuteNonQuery();
+            }
+        }
     }
 }

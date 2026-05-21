@@ -30,5 +30,23 @@ namespace pryBazanERP.Formulario
             lblFecha.Text = "Fecha: " + DateTime.Now.ToShortDateString();
             lblHora.Text = "Hora: " + DateTime.Now.ToShortTimeString(); 
         }
+
+        private void btnPersonal_Click(object sender, EventArgs e)
+        {
+            frmPersonal formulario = new frmPersonal();
+            formulario.ShowDialog();
+        }
+
+        private void btnContacto_Click(object sender, EventArgs e)
+        {
+            frmContacto formulario = new frmContacto();
+            formulario.ShowDialog();
+        }
+
+        private void btnUsuarioPerfil_Click(object sender, EventArgs e)
+        {
+            frmUsuarioPerfil formulario = new frmUsuarioPerfil();
+            formulario.ShowDialog();
+        }
     }
 }

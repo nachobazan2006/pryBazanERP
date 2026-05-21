@@ -27,12 +27,14 @@ namespace pryBazanERP
             this.lblUsuario = new System.Windows.Forms.Label();
             this.pnlAccent = new System.Windows.Forms.Panel();
             this.lblEstado = new System.Windows.Forms.Label();
+            this.chkOcultarContraseña = new System.Windows.Forms.CheckBox();
             this.pnlCard.SuspendLayout();
             this.SuspendLayout();
             // 
             // pnlCard
             // 
             this.pnlCard.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(238)))), ((int)(((byte)(226)))));
+            this.pnlCard.Controls.Add(this.chkOcultarContraseña);
             this.pnlCard.Controls.Add(this.lblSubtitulo);
             this.pnlCard.Controls.Add(this.lblTitulo);
             this.pnlCard.Controls.Add(this.btnIngresar);
@@ -52,7 +54,7 @@ namespace pryBazanERP
             this.lblSubtitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(92)))), ((int)(((byte)(64)))));
             this.lblSubtitulo.Location = new System.Drawing.Point(56, 74);
             this.lblSubtitulo.Name = "lblSubtitulo";
-            this.lblSubtitulo.Size = new System.Drawing.Size(212, 15);
+            this.lblSubtitulo.Size = new System.Drawing.Size(176, 15);
             this.lblSubtitulo.TabIndex = 7;
             this.lblSubtitulo.Text = "Ingresá tus datos para continuar";
             // 
@@ -63,7 +65,7 @@ namespace pryBazanERP
             this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
             this.lblTitulo.Location = new System.Drawing.Point(53, 37);
             this.lblTitulo.Name = "lblTitulo";
-            this.lblTitulo.Size = new System.Drawing.Size(226, 32);
+            this.lblTitulo.Size = new System.Drawing.Size(204, 32);
             this.lblTitulo.TabIndex = 6;
             this.lblTitulo.Text = "Acceso al sistema";
             // 
@@ -113,7 +115,7 @@ namespace pryBazanERP
             this.lblContraseña.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(60)))), ((int)(((byte)(42)))));
             this.lblContraseña.Location = new System.Drawing.Point(55, 178);
             this.lblContraseña.Name = "lblContraseña";
-            this.lblContraseña.Size = new System.Drawing.Size(70, 15);
+            this.lblContraseña.Size = new System.Drawing.Size(66, 15);
             this.lblContraseña.TabIndex = 2;
             this.lblContraseña.Text = "Contraseña";
             // 
@@ -124,7 +126,7 @@ namespace pryBazanERP
             this.lblUsuario.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(60)))), ((int)(((byte)(42)))));
             this.lblUsuario.Location = new System.Drawing.Point(55, 115);
             this.lblUsuario.Name = "lblUsuario";
-            this.lblUsuario.Size = new System.Drawing.Size(107, 15);
+            this.lblUsuario.Size = new System.Drawing.Size(92, 15);
             this.lblUsuario.TabIndex = 1;
             this.lblUsuario.Text = "Usuario / correo";
             // 
@@ -143,10 +145,25 @@ namespace pryBazanERP
             this.lblEstado.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(60)))), ((int)(((byte)(42)))));
             this.lblEstado.Location = new System.Drawing.Point(24, 416);
             this.lblEstado.Name = "lblEstado";
-            this.lblEstado.Size = new System.Drawing.Size(120, 15);
+            this.lblEstado.Size = new System.Drawing.Size(110, 15);
             this.lblEstado.TabIndex = 2;
             this.lblEstado.Text = "Estado de conexion";
             this.lblEstado.Click += new System.EventHandler(this.lblEstado_Click);
+            // 
+            // chkOcultarContraseña
+            // 
+            this.chkOcultarContraseña.AutoSize = true;
+            this.chkOcultarContraseña.Location = new System.Drawing.Point(59, 226);
+            this.chkOcultarContraseña.Name = "chkOcultarContraseña";
+            this.chkOcultarContraseña.Font = new System.Drawing.Font("Segoe UI Semibold",
+            9F, System.Drawing.FontStyle.Bold);
+            this.chkOcultarContraseña.ForeColor = System.Drawing.Color.FromArgb(84, 60,
+            42);
+            this.chkOcultarContraseña.Size = new System.Drawing.Size(126, 19);
+            this.chkOcultarContraseña.TabIndex = 8;
+            this.chkOcultarContraseña.Text = "Ocultar contraseña";
+            this.chkOcultarContraseña.UseVisualStyleBackColor = true;
+            this.chkOcultarContraseña.CheckedChanged += new System.EventHandler(this.chkOcultarContraseña_CheckedChanged);
             // 
             // frmERP
             // 
@@ -182,5 +199,6 @@ namespace pryBazanERP
         private System.Windows.Forms.Label lblUsuario;
         private System.Windows.Forms.Panel pnlAccent;
         private System.Windows.Forms.Label lblEstado;
+        private System.Windows.Forms.CheckBox chkOcultarContraseña;
     }
 }

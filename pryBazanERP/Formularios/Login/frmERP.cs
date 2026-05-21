@@ -17,11 +17,11 @@ namespace pryBazanERP
         int intentos = 3;
         public frmERP()
         {
-            
+
             InitializeComponent();
             ActualizarEstadoConexion();
         }
-        private void ActualizarEstadoConexion() 
+        private void ActualizarEstadoConexion()
         {
             classConexion conexion = new classConexion();
 
@@ -68,7 +68,19 @@ namespace pryBazanERP
                     txtUsuario.Enabled = false;
                     btnIngresar.Enabled = false;
                 }
-             
+
+            }
+        }
+
+        private void chkOcultarContraseña_CheckedChanged(object sender, EventArgs e)
+        {
+            if (chkOcultarContraseña.Checked == true)
+            {
+                txtContraseña.PasswordChar = '*';
+            }
+            else 
+            {
+                txtContraseña.PasswordChar = '\0';
             }
         }
     }

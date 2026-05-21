@@ -42,11 +42,32 @@
     <Reference Include="System.Deployment" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Net.Http" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Acceso datos\classConexion.cs" />
+    <Compile Include="Acceso datos\ConexionAPI.cs" />
+    <Compile Include="Acceso datos\LocalidadesAPI.cs" />
+    <Compile Include="Formularios\Gestion\frmContacto.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\Gestion\frmContacto.Designer.cs">
+      <DependentUpon>frmContacto.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Gestion\frmPersonal.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\Gestion\frmPersonal.Designer.cs">
+      <DependentUpon>frmPersonal.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Gestion\frmUsuarioPerfil.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Formularios\Gestion\frmUsuarioPerfil.Designer.cs">
+      <DependentUpon>frmUsuarioPerfil.cs</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Login\frmERP.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -61,6 +82,12 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="Formularios\Gestion\frmContacto.resx">
+      <DependentUpon>frmContacto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\Gestion\frmPersonal.resx">
+      <DependentUpon>frmPersonal.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Formularios\Login\frmERP.resx">
       <DependentUpon>frmERP.cs</DependentUpon>
     </EmbeddedResource>
