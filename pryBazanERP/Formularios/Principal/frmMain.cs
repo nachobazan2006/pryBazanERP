@@ -33,20 +33,29 @@ namespace pryBazanERP.Formulario
 
         private void btnPersonal_Click(object sender, EventArgs e)
         {
-            frmPersonal formulario = new frmPersonal();
-            formulario.ShowDialog();
+            AbrirFormularioEnPanel(new frmPersonal());
         }
 
         private void btnContacto_Click(object sender, EventArgs e)
         {
-            frmContacto formulario = new frmContacto();
-            formulario.ShowDialog();
+            AbrirFormularioEnPanel(new frmContacto());
         }
 
         private void btnUsuarioPerfil_Click(object sender, EventArgs e)
         {
-            frmUsuarioPerfil formulario = new frmUsuarioPerfil();
-            formulario.ShowDialog();
+            AbrirFormularioEnPanel(new frmUsuarioPerfil());
+        }
+
+        private void AbrirFormularioEnPanel(Form formulario)
+        {
+            pnlContenido.Controls.Clear();
+
+            formulario.TopLevel = false;
+            formulario.FormBorderStyle = FormBorderStyle.None;
+            formulario.Dock = DockStyle.Fill;
+
+            pnlContenido.Controls.Add(formulario);
+            formulario.Show();
         }
     }
 }

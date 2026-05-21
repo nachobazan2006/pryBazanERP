@@ -10,6 +10,7 @@ namespace pryBazanERP.Acceso_datos
     internal class LocalidadesAPI
     {
         private const string UrlLocalidadesCordoba = "https://apis.datos.gob.ar/georef/api/localidades?provincia=cordoba&campos=id,nombre,provincia&max=5000";
+        private readonly Dictionary<string, List<string>> busquedasCordoba = new Dictionary<string, List<string>>();
 
         public async Task<List<string>> BuscarLocalidadesCordobaAsync(string texto)
         {
@@ -18,8 +19,15 @@ namespace pryBazanERP.Acceso_datos
                 return new List<string>();
             }
 
+            string textoNormalizado = texto.Trim().ToLower();
+
+            if (busquedasCordoba.ContainsKey(textoNormalizado))
+            {
+                return new List<string>(busquedasCordoba[textoNormalizado]);
+            }
+
             string url = "https://apis.datos.gob.ar/georef/api/localidades?provincia=cordoba&nombre=" +
-                Uri.EscapeDataString(texto.Trim()) +
+                Uri.EscapeDataString(textoNormalizado) +
                 "&campos=id,nombre,provincia&max=10";
 
             ConexionAPI conexionAPI = new ConexionAPI();
@@ -42,7 +50,8 @@ namespace pryBazanERP.Acceso_datos
                 }
             }
 
-            return localidades;
+            busquedasCordoba[textoNormalizado] = localidades;
+            return new List<string>(localidades);
         }
 
         public async Task<int> ImportarLocalidadesCordobaAsync()

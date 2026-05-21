@@ -1,6 +1,9 @@
 using System.Windows.Forms;
 using pryBazanERP.Acceso_datos;
 using pryBazanERP.Conexión;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace pryBazanERP.Formulario
 {
@@ -8,13 +11,42 @@ namespace pryBazanERP.Formulario
     {
         private readonly LocalidadesAPI localidadesAPI = new LocalidadesAPI();
         private readonly Timer temporizadorBusquedaLocalidad = new Timer();
+        private readonly List<string> provinciasDisponibles = new List<string>
+        {
+            "Buenos Aires",
+            "Catamarca",
+            "Chaco",
+            "Chubut",
+            "Ciudad Autonoma de Buenos Aires",
+            "Cordoba",
+            "Corrientes",
+            "Entre Rios",
+            "Formosa",
+            "Jujuy",
+            "La Pampa",
+            "La Rioja",
+            "Mendoza",
+            "Misiones",
+            "Neuquen",
+            "Rio Negro",
+            "Salta",
+            "San Juan",
+            "San Luis",
+            "Santa Cruz",
+            "Santa Fe",
+            "Santiago del Estero",
+            "Tierra del Fuego",
+            "Tucuman"
+        };
+        private bool seleccionandoProvincia;
 
         public frmPersonal()
         {
             InitializeComponent();
             temporizadorBusquedaLocalidad.Interval = 450;
             temporizadorBusquedaLocalidad.Tick += temporizadorBusquedaLocalidad_Tick;
-            cboProvincia.SelectedIndex = 0;
+            txtProvincia.Text = "Cordoba";
+            ActualizarEstadoLocalidad();
         }
 
         private void txtLocalidad_TextChanged(object sender, System.EventArgs e)
@@ -91,7 +123,71 @@ namespace pryBazanERP.Formulario
             txtLocalidad.Focus();
         }
 
-        private void cboProvincia_SelectedIndexChanged(object sender, System.EventArgs e)
+        private void txtProvincia_TextChanged(object sender, EventArgs e)
+        {
+            if (!seleccionandoProvincia)
+            {
+                MostrarProvinciasFiltradas();
+            }
+
+            ActualizarEstadoLocalidad();
+        }
+
+        private void txtProvincia_Enter(object sender, EventArgs e)
+        {
+            MostrarProvinciasFiltradas();
+        }
+
+        private void lstProvincias_Click(object sender, EventArgs e)
+        {
+            SeleccionarProvincia();
+        }
+
+        private void lstProvincias_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                SeleccionarProvincia();
+                e.Handled = true;
+            }
+        }
+
+        private void MostrarProvinciasFiltradas()
+        {
+            string texto = txtProvincia.Text.Trim();
+            IEnumerable<string> provinciasFiltradas = string.IsNullOrWhiteSpace(texto)
+                ? provinciasDisponibles
+                : provinciasDisponibles.Where(p => p.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0);
+
+            lstProvincias.Items.Clear();
+
+            foreach (string provincia in provinciasFiltradas)
+            {
+                lstProvincias.Items.Add(provincia);
+            }
+
+            lstProvincias.Visible = lstProvincias.Items.Count > 0;
+            lstProvincias.BringToFront();
+        }
+
+        private void SeleccionarProvincia()
+        {
+            if (lstProvincias.SelectedItem == null)
+            {
+                return;
+            }
+
+            seleccionandoProvincia = true;
+            txtProvincia.Text = lstProvincias.SelectedItem.ToString();
+            txtProvincia.SelectionStart = txtProvincia.Text.Length;
+            seleccionandoProvincia = false;
+
+            lstProvincias.Visible = false;
+            ActualizarEstadoLocalidad();
+            txtProvincia.Focus();
+        }
+
+        private void ActualizarEstadoLocalidad()
         {
             bool esCordoba = ProvinciaSeleccionadaEsCordoba();
             txtLocalidad.Enabled = esCordoba;
@@ -120,7 +216,7 @@ namespace pryBazanERP.Formulario
                 txtDireccion.Text.Trim(),
                 txtGeo.Text.Trim(),
                 txtLocalidad.Text.Trim(),
-                cboProvincia.Text,
+                ObtenerProvinciaNormalizada(),
                 chkActivo.Checked,
                 out mensaje);
 
@@ -164,10 +260,17 @@ namespace pryBazanERP.Formulario
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(cboProvincia.Text))
+            if (string.IsNullOrWhiteSpace(txtProvincia.Text))
             {
                 MessageBox.Show("Seleccioná una provincia.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                cboProvincia.Focus();
+                txtProvincia.Focus();
+                return false;
+            }
+
+            if (!ProvinciaIngresadaEsValida())
+            {
+                MessageBox.Show("Seleccioná una provincia válida de la lista.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtProvincia.Focus();
                 return false;
             }
 
@@ -182,15 +285,27 @@ namespace pryBazanERP.Formulario
             txtDireccion.Clear();
             txtGeo.Clear();
             txtLocalidad.Clear();
-            cboProvincia.SelectedIndex = 0;
+            txtProvincia.Text = "Cordoba";
             chkActivo.Checked = true;
+            lstProvincias.Visible = false;
             lstLocalidades.Visible = false;
+            ActualizarEstadoLocalidad();
             txtDni.Focus();
         }
 
         private bool ProvinciaSeleccionadaEsCordoba()
         {
-            return cboProvincia.Text == "Cordoba";
+            return txtProvincia.Text.Trim().Equals("Cordoba", StringComparison.OrdinalIgnoreCase);
+        }
+
+        private bool ProvinciaIngresadaEsValida()
+        {
+            return provinciasDisponibles.Any(p => p.Equals(txtProvincia.Text.Trim(), StringComparison.OrdinalIgnoreCase));
+        }
+
+        private string ObtenerProvinciaNormalizada()
+        {
+            return provinciasDisponibles.First(p => p.Equals(txtProvincia.Text.Trim(), StringComparison.OrdinalIgnoreCase));
         }
     }
 }

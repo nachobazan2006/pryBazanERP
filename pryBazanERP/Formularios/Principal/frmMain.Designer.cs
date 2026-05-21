@@ -42,6 +42,7 @@ namespace pryBazanERP.Formulario
             // pnlHeader
             // 
             this.pnlHeader.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(74)))), ((int)(((byte)(45)))));
+            this.pnlHeader.Controls.Add(this.pnlDatos);
             this.pnlHeader.Controls.Add(this.lblSubtitulo);
             this.pnlHeader.Controls.Add(this.lblTitulo);
             this.pnlHeader.Dock = System.Windows.Forms.DockStyle.Top;
@@ -82,7 +83,7 @@ namespace pryBazanERP.Formulario
             this.pnlSidebar.Dock = System.Windows.Forms.DockStyle.Left;
             this.pnlSidebar.Location = new System.Drawing.Point(0, 78);
             this.pnlSidebar.Name = "pnlSidebar";
-            this.pnlSidebar.Size = new System.Drawing.Size(210, 442);
+            this.pnlSidebar.Size = new System.Drawing.Size(210, 552);
             this.pnlSidebar.TabIndex = 1;
             // 
             // btnUsuarioPerfil
@@ -146,11 +147,10 @@ namespace pryBazanERP.Formulario
             // 
             // pnlContenido
             // 
-            this.pnlContenido.Controls.Add(this.pnlDatos);
             this.pnlContenido.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pnlContenido.Location = new System.Drawing.Point(210, 78);
             this.pnlContenido.Name = "pnlContenido";
-            this.pnlContenido.Size = new System.Drawing.Size(710, 442);
+            this.pnlContenido.Size = new System.Drawing.Size(800, 552);
             this.pnlContenido.TabIndex = 2;
             // 
             // pnlDatos
@@ -163,9 +163,9 @@ namespace pryBazanERP.Formulario
             this.pnlDatos.Controls.Add(this.lblFecha);
             this.pnlDatos.Controls.Add(this.lblPerfil);
             this.pnlDatos.Controls.Add(this.lblNombre);
-            this.pnlDatos.Location = new System.Drawing.Point(443, 20);
+            this.pnlDatos.Location = new System.Drawing.Point(750, 8);
             this.pnlDatos.Name = "pnlDatos";
-            this.pnlDatos.Size = new System.Drawing.Size(245, 120);
+            this.pnlDatos.Size = new System.Drawing.Size(245, 62);
             this.pnlDatos.TabIndex = 0;
             // 
             // pnlLinea
@@ -173,7 +173,7 @@ namespace pryBazanERP.Formulario
             this.pnlLinea.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(111)))), ((int)(((byte)(76)))));
             this.pnlLinea.Location = new System.Drawing.Point(11, 11);
             this.pnlLinea.Name = "pnlLinea";
-            this.pnlLinea.Size = new System.Drawing.Size(4, 96);
+            this.pnlLinea.Size = new System.Drawing.Size(4, 42);
             this.pnlLinea.TabIndex = 5;
             // 
             // lblDatosTitulo
@@ -192,7 +192,7 @@ namespace pryBazanERP.Formulario
             this.lblHora.AutoSize = true;
             this.lblHora.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblHora.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
-            this.lblHora.Location = new System.Drawing.Point(21, 92);
+            this.lblHora.Location = new System.Drawing.Point(130, 42);
             this.lblHora.Name = "lblHora";
             this.lblHora.Size = new System.Drawing.Size(35, 15);
             this.lblHora.TabIndex = 3;
@@ -203,7 +203,7 @@ namespace pryBazanERP.Formulario
             this.lblFecha.AutoSize = true;
             this.lblFecha.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblFecha.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
-            this.lblFecha.Location = new System.Drawing.Point(21, 70);
+            this.lblFecha.Location = new System.Drawing.Point(21, 42);
             this.lblFecha.Name = "lblFecha";
             this.lblFecha.Size = new System.Drawing.Size(41, 15);
             this.lblFecha.TabIndex = 2;
@@ -214,7 +214,7 @@ namespace pryBazanERP.Formulario
             this.lblPerfil.AutoSize = true;
             this.lblPerfil.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblPerfil.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
-            this.lblPerfil.Location = new System.Drawing.Point(21, 48);
+            this.lblPerfil.Location = new System.Drawing.Point(130, 23);
             this.lblPerfil.Name = "lblPerfil";
             this.lblPerfil.Size = new System.Drawing.Size(36, 15);
             this.lblPerfil.TabIndex = 1;
@@ -225,7 +225,7 @@ namespace pryBazanERP.Formulario
             this.lblNombre.AutoSize = true;
             this.lblNombre.Font = new System.Drawing.Font("Segoe UI", 8.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblNombre.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
-            this.lblNombre.Location = new System.Drawing.Point(21, 26);
+            this.lblNombre.Location = new System.Drawing.Point(21, 23);
             this.lblNombre.Name = "lblNombre";
             this.lblNombre.Size = new System.Drawing.Size(49, 15);
             this.lblNombre.TabIndex = 0;
@@ -236,7 +236,7 @@ namespace pryBazanERP.Formulario
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(218)))), ((int)(((byte)(198)))));
-            this.ClientSize = new System.Drawing.Size(920, 520);
+            this.ClientSize = new System.Drawing.Size(1010, 630);
             this.Controls.Add(this.pnlContenido);
             this.Controls.Add(this.pnlSidebar);
             this.Controls.Add(this.pnlHeader);
@@ -251,7 +251,6 @@ namespace pryBazanERP.Formulario
             this.pnlHeader.PerformLayout();
             this.pnlSidebar.ResumeLayout(false);
             this.pnlSidebar.PerformLayout();
-            this.pnlContenido.ResumeLayout(false);
             this.pnlDatos.ResumeLayout(false);
             this.pnlDatos.PerformLayout();
             this.ResumeLayout(false);

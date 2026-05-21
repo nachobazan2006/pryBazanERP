@@ -27,7 +27,8 @@ namespace pryBazanERP.Formulario
             this.lblDni = new System.Windows.Forms.Label();
             this.grpDomicilio = new System.Windows.Forms.GroupBox();
             this.lstLocalidades = new System.Windows.Forms.ListBox();
-            this.cboProvincia = new System.Windows.Forms.ComboBox();
+            this.lstProvincias = new System.Windows.Forms.ListBox();
+            this.txtProvincia = new System.Windows.Forms.TextBox();
             this.lblProvincia = new System.Windows.Forms.Label();
             this.txtLocalidad = new System.Windows.Forms.TextBox();
             this.lblLocalidad = new System.Windows.Forms.Label();
@@ -160,7 +161,8 @@ namespace pryBazanERP.Formulario
             // grpDomicilio
             // 
             this.grpDomicilio.Controls.Add(this.lstLocalidades);
-            this.grpDomicilio.Controls.Add(this.cboProvincia);
+            this.grpDomicilio.Controls.Add(this.lstProvincias);
+            this.grpDomicilio.Controls.Add(this.txtProvincia);
             this.grpDomicilio.Controls.Add(this.lblProvincia);
             this.grpDomicilio.Controls.Add(this.txtLocalidad);
             this.grpDomicilio.Controls.Add(this.lblLocalidad);
@@ -193,43 +195,34 @@ namespace pryBazanERP.Formulario
             this.lstLocalidades.Click += new System.EventHandler(this.lstLocalidades_Click);
             this.lstLocalidades.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstLocalidades_KeyDown);
             // 
-            // cboProvincia
+            // lstProvincias
             // 
-            this.cboProvincia.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(243)))));
-            this.cboProvincia.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboProvincia.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.cboProvincia.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
-            this.cboProvincia.FormattingEnabled = true;
-            this.cboProvincia.Items.AddRange(new object[] {
-            "Cordoba",
-            "Buenos Aires",
-            "Catamarca",
-            "Chaco",
-            "Chubut",
-            "Ciudad Autonoma de Buenos Aires",
-            "Corrientes",
-            "Entre Rios",
-            "Formosa",
-            "Jujuy",
-            "La Pampa",
-            "La Rioja",
-            "Mendoza",
-            "Misiones",
-            "Neuquen",
-            "Rio Negro",
-            "Salta",
-            "San Juan",
-            "San Luis",
-            "Santa Cruz",
-            "Santa Fe",
-            "Santiago del Estero",
-            "Tierra del Fuego",
-            "Tucuman"});
-            this.cboProvincia.Location = new System.Drawing.Point(24, 44);
-            this.cboProvincia.Name = "cboProvincia";
-            this.cboProvincia.Size = new System.Drawing.Size(260, 25);
-            this.cboProvincia.TabIndex = 1;
-            this.cboProvincia.SelectedIndexChanged += new System.EventHandler(this.cboProvincia_SelectedIndexChanged);
+            this.lstProvincias.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(243)))));
+            this.lstProvincias.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.lstProvincias.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lstProvincias.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
+            this.lstProvincias.FormattingEnabled = true;
+            this.lstProvincias.ItemHeight = 15;
+            this.lstProvincias.Location = new System.Drawing.Point(24, 69);
+            this.lstProvincias.Name = "lstProvincias";
+            this.lstProvincias.Size = new System.Drawing.Size(260, 62);
+            this.lstProvincias.TabIndex = 2;
+            this.lstProvincias.Visible = false;
+            this.lstProvincias.Click += new System.EventHandler(this.lstProvincias_Click);
+            this.lstProvincias.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstProvincias_KeyDown);
+            // 
+            // txtProvincia
+            // 
+            this.txtProvincia.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(243)))));
+            this.txtProvincia.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.txtProvincia.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtProvincia.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
+            this.txtProvincia.Location = new System.Drawing.Point(24, 44);
+            this.txtProvincia.Name = "txtProvincia";
+            this.txtProvincia.Size = new System.Drawing.Size(260, 25);
+            this.txtProvincia.TabIndex = 1;
+            this.txtProvincia.TextChanged += new System.EventHandler(this.txtProvincia_TextChanged);
+            this.txtProvincia.Enter += new System.EventHandler(this.txtProvincia_Enter);
             // 
             // lblProvincia
             // 
@@ -375,7 +368,8 @@ namespace pryBazanERP.Formulario
         private System.Windows.Forms.Label lblDni;
         private System.Windows.Forms.GroupBox grpDomicilio;
         private System.Windows.Forms.ListBox lstLocalidades;
-        private System.Windows.Forms.ComboBox cboProvincia;
+        private System.Windows.Forms.ListBox lstProvincias;
+        private System.Windows.Forms.TextBox txtProvincia;
         private System.Windows.Forms.Label lblProvincia;
         private System.Windows.Forms.TextBox txtLocalidad;
         private System.Windows.Forms.Label lblLocalidad;
