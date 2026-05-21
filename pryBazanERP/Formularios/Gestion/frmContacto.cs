@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using pryBazanERP.Conexión;
 
@@ -5,23 +7,41 @@ namespace pryBazanERP.Formulario
 {
     public partial class frmContacto : Form
     {
+        private readonly classConexion conexion = new classConexion();
+
         public frmContacto()
         {
             InitializeComponent();
+            CargarPersonal();
         }
 
-        private void btnGuardar_Click(object sender, System.EventArgs e)
+        private void CargarPersonal()
+        {
+            try
+            {
+                List<classConexion.PersonalItem> personal = conexion.ObtenerPersonalItems();
+
+                cmbPersonal.DataSource = personal;
+                cmbPersonal.DisplayMember = "Descripcion";
+                cmbPersonal.ValueMember = "DNI";
+                cmbPersonal.SelectedIndex = personal.Count > 0 ? 0 : -1;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se pudo cargar el personal: " + ex.Message, "Contacto", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void btnGuardar_Click(object sender, EventArgs e)
         {
             if (!ValidarCampos())
             {
                 return;
             }
 
-            classConexion conexion = new classConexion();
             string mensaje;
-
             bool guardado = conexion.GuardarContacto(
-                txtPersonal.Text.Trim(),
+                cmbPersonal.SelectedValue.ToString(),
                 txtMail.Text.Trim(),
                 txtTelefono.Text.Trim(),
                 chkActivo.Checked,
@@ -42,17 +62,17 @@ namespace pryBazanERP.Formulario
             }
         }
 
-        private void btnLimpiar_Click(object sender, System.EventArgs e)
+        private void btnLimpiar_Click(object sender, EventArgs e)
         {
             LimpiarCampos();
         }
 
         private bool ValidarCampos()
         {
-            if (string.IsNullOrWhiteSpace(txtPersonal.Text))
+            if (cmbPersonal.SelectedValue == null)
             {
-                MessageBox.Show("Ingresá el DNI del personal.", "Contacto", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtPersonal.Focus();
+                MessageBox.Show("Seleccione un personal.", "Contacto", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                cmbPersonal.Focus();
                 return false;
             }
 
@@ -62,7 +82,7 @@ namespace pryBazanERP.Formulario
                 string.IsNullOrWhiteSpace(txtFacebook.Text) &&
                 string.IsNullOrWhiteSpace(txtTwitter.Text))
             {
-                MessageBox.Show("Ingresá al menos un dato de contacto.", "Contacto", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Ingrese al menos un dato de contacto.", "Contacto", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtMail.Focus();
                 return false;
             }
@@ -72,14 +92,19 @@ namespace pryBazanERP.Formulario
 
         private void LimpiarCampos()
         {
-            txtPersonal.Clear();
             txtMail.Clear();
             txtTelefono.Clear();
             txtInstagram.Clear();
             txtFacebook.Clear();
             txtTwitter.Clear();
             chkActivo.Checked = true;
-            txtPersonal.Focus();
+
+            if (cmbPersonal.Items.Count > 0)
+            {
+                cmbPersonal.SelectedIndex = 0;
+            }
+
+            cmbPersonal.Focus();
         }
     }
 }

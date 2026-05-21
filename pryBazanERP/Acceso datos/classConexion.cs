@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
 
@@ -7,6 +8,19 @@ namespace pryBazanERP.Conexión
     public class classConexion
     {
         private readonly string cadenaConexion;
+
+        public class PersonalItem
+        {
+            public int IdPersonal { get; set; }
+            public string DNI { get; set; }
+            public string Apellido { get; set; }
+            public string Nombre { get; set; }
+
+            public string Descripcion
+            {
+                get { return DNI + " - " + Apellido + ", " + Nombre; }
+            }
+        }
 
         public classConexion()
         {
@@ -206,6 +220,35 @@ namespace pryBazanERP.Conexión
                 mensaje = "No se pudo guardar el personal: " + ex.Message;
                 return false;
             }
+        }
+
+        public List<PersonalItem> ObtenerPersonalItems()
+        {
+            List<PersonalItem> personal = new List<PersonalItem>();
+
+            using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
+            {
+                conexion.Open();
+
+                string consulta = "SELECT Id_Personal, DNI, Apellido, Nombre FROM Personal ORDER BY Apellido, Nombre";
+
+                using (OleDbCommand comando = new OleDbCommand(consulta, conexion))
+                using (OleDbDataReader lector = comando.ExecuteReader())
+                {
+                    while (lector.Read())
+                    {
+                        personal.Add(new PersonalItem
+                        {
+                            IdPersonal = Convert.ToInt32(lector["Id_Personal"]),
+                            DNI = lector["DNI"].ToString(),
+                            Apellido = lector["Apellido"].ToString(),
+                            Nombre = lector["Nombre"].ToString()
+                        });
+                    }
+                }
+            }
+
+            return personal;
         }
 
         private int ObtenerIdPersonalPorDni(OleDbConnection conexion, string dni)

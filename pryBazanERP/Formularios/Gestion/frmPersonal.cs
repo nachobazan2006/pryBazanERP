@@ -1,9 +1,9 @@
-using System.Windows.Forms;
-using pryBazanERP.Acceso_datos;
-using pryBazanERP.Conexión;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Forms;
+using pryBazanERP.Acceso_datos;
+using pryBazanERP.Conexión;
 
 namespace pryBazanERP.Formulario
 {
@@ -38,6 +38,7 @@ namespace pryBazanERP.Formulario
             "Tierra del Fuego",
             "Tucuman"
         };
+
         private bool seleccionandoProvincia;
 
         public frmPersonal()
@@ -47,80 +48,6 @@ namespace pryBazanERP.Formulario
             temporizadorBusquedaLocalidad.Tick += temporizadorBusquedaLocalidad_Tick;
             txtProvincia.Text = "Cordoba";
             ActualizarEstadoLocalidad();
-        }
-
-        private void txtLocalidad_TextChanged(object sender, System.EventArgs e)
-        {
-            temporizadorBusquedaLocalidad.Stop();
-            lstLocalidades.Visible = false;
-
-            if (ProvinciaSeleccionadaEsCordoba() && txtLocalidad.Text.Trim().Length >= 2)
-            {
-                temporizadorBusquedaLocalidad.Start();
-            }
-        }
-
-        private async void temporizadorBusquedaLocalidad_Tick(object sender, System.EventArgs e)
-        {
-            temporizadorBusquedaLocalidad.Stop();
-
-            try
-            {
-                string textoBuscado = txtLocalidad.Text;
-
-                if (textoBuscado.Trim().Length < 2)
-                {
-                    lstLocalidades.Visible = false;
-                    return;
-                }
-
-                System.Collections.Generic.List<string> localidades = await localidadesAPI.BuscarLocalidadesCordobaAsync(textoBuscado);
-
-                if (txtLocalidad.Text != textoBuscado)
-                {
-                    return;
-                }
-
-                lstLocalidades.Items.Clear();
-
-                foreach (string localidad in localidades)
-                {
-                    lstLocalidades.Items.Add(localidad);
-                }
-
-                lstLocalidades.Visible = lstLocalidades.Items.Count > 0;
-            }
-            catch
-            {
-                lstLocalidades.Visible = false;
-            }
-        }
-
-        private void lstLocalidades_Click(object sender, System.EventArgs e)
-        {
-            SeleccionarLocalidad();
-        }
-
-        private void lstLocalidades_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                SeleccionarLocalidad();
-                e.Handled = true;
-            }
-        }
-
-        private void SeleccionarLocalidad()
-        {
-            if (lstLocalidades.SelectedItem == null)
-            {
-                return;
-            }
-
-            txtLocalidad.Text = lstLocalidades.SelectedItem.ToString();
-            txtLocalidad.SelectionStart = txtLocalidad.Text.Length;
-            lstLocalidades.Visible = false;
-            txtLocalidad.Focus();
         }
 
         private void txtProvincia_TextChanged(object sender, EventArgs e)
@@ -187,19 +114,82 @@ namespace pryBazanERP.Formulario
             txtProvincia.Focus();
         }
 
-        private void ActualizarEstadoLocalidad()
+        private void txtLocalidad_TextChanged(object sender, EventArgs e)
         {
-            bool esCordoba = ProvinciaSeleccionadaEsCordoba();
-            txtLocalidad.Enabled = esCordoba;
+            temporizadorBusquedaLocalidad.Stop();
             lstLocalidades.Visible = false;
 
-            if (!esCordoba)
+            if (ProvinciaSeleccionadaEsCordoba() && txtLocalidad.Text.Trim().Length >= 2)
             {
-                txtLocalidad.Clear();
+                temporizadorBusquedaLocalidad.Start();
             }
         }
 
-        private void btnGuardar_Click(object sender, System.EventArgs e)
+        private async void temporizadorBusquedaLocalidad_Tick(object sender, EventArgs e)
+        {
+            temporizadorBusquedaLocalidad.Stop();
+
+            try
+            {
+                string textoBuscado = txtLocalidad.Text;
+
+                if (textoBuscado.Trim().Length < 2)
+                {
+                    lstLocalidades.Visible = false;
+                    return;
+                }
+
+                List<string> localidades = await localidadesAPI.BuscarLocalidadesCordobaAsync(textoBuscado);
+
+                if (txtLocalidad.Text != textoBuscado)
+                {
+                    return;
+                }
+
+                lstLocalidades.Items.Clear();
+
+                foreach (string localidad in localidades)
+                {
+                    lstLocalidades.Items.Add(localidad);
+                }
+
+                lstLocalidades.Visible = lstLocalidades.Items.Count > 0;
+                lstLocalidades.BringToFront();
+            }
+            catch
+            {
+                lstLocalidades.Visible = false;
+            }
+        }
+
+        private void lstLocalidades_Click(object sender, EventArgs e)
+        {
+            SeleccionarLocalidad();
+        }
+
+        private void lstLocalidades_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                SeleccionarLocalidad();
+                e.Handled = true;
+            }
+        }
+
+        private void SeleccionarLocalidad()
+        {
+            if (lstLocalidades.SelectedItem == null)
+            {
+                return;
+            }
+
+            txtLocalidad.Text = lstLocalidades.SelectedItem.ToString();
+            txtLocalidad.SelectionStart = txtLocalidad.Text.Length;
+            lstLocalidades.Visible = false;
+            txtLocalidad.Focus();
+        }
+
+        private void btnGuardar_Click(object sender, EventArgs e)
         {
             if (!ValidarCampos())
             {
@@ -232,7 +222,7 @@ namespace pryBazanERP.Formulario
             }
         }
 
-        private void btnLimpiar_Click(object sender, System.EventArgs e)
+        private void btnLimpiar_Click(object sender, EventArgs e)
         {
             LimpiarCampos();
         }
@@ -241,35 +231,35 @@ namespace pryBazanERP.Formulario
         {
             if (string.IsNullOrWhiteSpace(txtDni.Text))
             {
-                MessageBox.Show("Ingresá el DNI.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Ingresa el DNI.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtDni.Focus();
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(txtApellido.Text))
             {
-                MessageBox.Show("Ingresá el apellido.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Ingresa el apellido.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtApellido.Focus();
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(txtNombre.Text))
             {
-                MessageBox.Show("Ingresá el nombre.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Ingresa el nombre.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtNombre.Focus();
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(txtProvincia.Text))
             {
-                MessageBox.Show("Seleccioná una provincia.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Selecciona una provincia.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtProvincia.Focus();
                 return false;
             }
 
             if (!ProvinciaIngresadaEsValida())
             {
-                MessageBox.Show("Seleccioná una provincia válida de la lista.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Selecciona una provincia valida de la lista.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtProvincia.Focus();
                 return false;
             }
@@ -291,6 +281,18 @@ namespace pryBazanERP.Formulario
             lstLocalidades.Visible = false;
             ActualizarEstadoLocalidad();
             txtDni.Focus();
+        }
+
+        private void ActualizarEstadoLocalidad()
+        {
+            bool esCordoba = ProvinciaSeleccionadaEsCordoba();
+            txtLocalidad.Enabled = esCordoba;
+            lstLocalidades.Visible = false;
+
+            if (!esCordoba)
+            {
+                txtLocalidad.Clear();
+            }
         }
 
         private bool ProvinciaSeleccionadaEsCordoba()

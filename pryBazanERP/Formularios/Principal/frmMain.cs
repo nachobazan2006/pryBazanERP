@@ -15,6 +15,8 @@ namespace pryBazanERP.Formulario
     {
         private string usuario;
         private string perfil;
+        private Form formularioActivo;
+        private int posicionFinalFormulario;
 
         public frmMain(string usuario, string perfil)
         {
@@ -33,21 +35,25 @@ namespace pryBazanERP.Formulario
 
         private void btnPersonal_Click(object sender, EventArgs e)
         {
+            btnPersonal.Checked = true;
             AbrirFormularioEnPanel(new frmPersonal());
         }
 
         private void btnContacto_Click(object sender, EventArgs e)
         {
+            btnContacto.Checked = true;
             AbrirFormularioEnPanel(new frmContacto());
         }
 
         private void btnUsuarioPerfil_Click(object sender, EventArgs e)
         {
+            btnUsuarioPerfil.Checked = true;
             AbrirFormularioEnPanel(new frmUsuarioPerfil());
         }
 
         private void AbrirFormularioEnPanel(Form formulario)
         {
+            fadeTimer.Stop();
             pnlContenido.Controls.Clear();
 
             formulario.TopLevel = false;
@@ -56,6 +62,29 @@ namespace pryBazanERP.Formulario
 
             pnlContenido.Controls.Add(formulario);
             formulario.Show();
+
+            formularioActivo = formulario;
+            posicionFinalFormulario = formulario.Left;
+            formulario.Left += 18;
+            fadeTimer.Start();
+        }
+
+        private void fadeTimer_Tick(object sender, EventArgs e)
+        {
+            if (formularioActivo == null)
+            {
+                fadeTimer.Stop();
+                return;
+            }
+
+            if (formularioActivo.Left <= posicionFinalFormulario)
+            {
+                formularioActivo.Left = posicionFinalFormulario;
+                fadeTimer.Stop();
+                return;
+            }
+
+            formularioActivo.Left -= 3;
         }
     }
 }

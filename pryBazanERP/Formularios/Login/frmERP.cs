@@ -15,12 +15,23 @@ namespace pryBazanERP
     public partial class frmERP : Form
     {
         int intentos = 3;
+        private int posicionFinalCard;
         public frmERP()
         {
 
             InitializeComponent();
             ActualizarEstadoConexion();
         }
+
+        private void frmERP_Load(object sender, EventArgs e)
+        {
+            posicionFinalCard = pnlCard.Left;
+            pnlCard.Left += 28;
+            pnlCard.Visible = true;
+            loginTimer.Start();
+            txtUsuario.Focus();
+        }
+
         private void ActualizarEstadoConexion()
         {
             classConexion conexion = new classConexion();
@@ -28,12 +39,14 @@ namespace pryBazanERP
             if (conexion.ProbarConexion())
             {
                 lblEstado.Text = "Conectado";
-                lblEstado.ForeColor = Color.Green;
+                lblEstado.ForeColor = Color.FromArgb(68, 112, 74);
+                pnlEstado.FillColor = Color.FromArgb(68, 112, 74);
             }
             else
             {
                 lblEstado.Text = "No está conectado";
-                lblEstado.ForeColor = Color.Red;
+                lblEstado.ForeColor = Color.FromArgb(126, 76, 61);
+                pnlEstado.FillColor = Color.FromArgb(126, 76, 61);
             }
         }
         private void lblEstado_Click(object sender, EventArgs e)
@@ -76,11 +89,33 @@ namespace pryBazanERP
         {
             if (chkOcultarContraseña.Checked == true)
             {
-                txtContraseña.PasswordChar = '*';
+                txtContraseña.PasswordChar = '\0';
             }
             else 
             {
-                txtContraseña.PasswordChar = '\0';
+                txtContraseña.PasswordChar = '*';
+            }
+        }
+
+        private void loginTimer_Tick(object sender, EventArgs e)
+        {
+            if (pnlCard.Left <= posicionFinalCard)
+            {
+                pnlCard.Left = posicionFinalCard;
+                loginTimer.Stop();
+                return;
+            }
+
+            pnlCard.Left -= 4;
+        }
+
+        private void txtContraseña_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Enter)
+            {
+                btnIngresar.PerformClick();
+                e.Handled = true;
+                e.SuppressKeyPress = true;
             }
         }
     }

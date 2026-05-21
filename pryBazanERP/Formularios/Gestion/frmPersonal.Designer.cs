@@ -17,27 +17,29 @@ namespace pryBazanERP.Formulario
         {
             this.lblTitulo = new System.Windows.Forms.Label();
             this.lblSubtitulo = new System.Windows.Forms.Label();
-            this.grpDatos = new System.Windows.Forms.GroupBox();
-            this.chkActivo = new System.Windows.Forms.CheckBox();
-            this.txtNombre = new System.Windows.Forms.TextBox();
+            this.grpDatos = new Guna.UI2.WinForms.Guna2Panel();
+            this.chkActivo = new Guna.UI2.WinForms.Guna2CheckBox();
+            this.txtNombre = new Guna.UI2.WinForms.Guna2TextBox();
             this.lblNombre = new System.Windows.Forms.Label();
-            this.txtApellido = new System.Windows.Forms.TextBox();
+            this.txtApellido = new Guna.UI2.WinForms.Guna2TextBox();
             this.lblApellido = new System.Windows.Forms.Label();
-            this.txtDni = new System.Windows.Forms.TextBox();
+            this.txtDni = new Guna.UI2.WinForms.Guna2TextBox();
             this.lblDni = new System.Windows.Forms.Label();
-            this.grpDomicilio = new System.Windows.Forms.GroupBox();
+            this.lblDatosTitulo = new System.Windows.Forms.Label();
+            this.grpDomicilio = new Guna.UI2.WinForms.Guna2Panel();
             this.lstLocalidades = new System.Windows.Forms.ListBox();
             this.lstProvincias = new System.Windows.Forms.ListBox();
-            this.txtProvincia = new System.Windows.Forms.TextBox();
-            this.lblProvincia = new System.Windows.Forms.Label();
-            this.txtLocalidad = new System.Windows.Forms.TextBox();
+            this.txtLocalidad = new Guna.UI2.WinForms.Guna2TextBox();
             this.lblLocalidad = new System.Windows.Forms.Label();
-            this.txtGeo = new System.Windows.Forms.TextBox();
+            this.txtProvincia = new Guna.UI2.WinForms.Guna2TextBox();
+            this.lblProvincia = new System.Windows.Forms.Label();
+            this.txtGeo = new Guna.UI2.WinForms.Guna2TextBox();
             this.lblGeo = new System.Windows.Forms.Label();
-            this.txtDireccion = new System.Windows.Forms.TextBox();
+            this.txtDireccion = new Guna.UI2.WinForms.Guna2TextBox();
             this.lblDireccion = new System.Windows.Forms.Label();
-            this.btnGuardar = new System.Windows.Forms.Button();
-            this.btnLimpiar = new System.Windows.Forms.Button();
+            this.lblDomicilioTitulo = new System.Windows.Forms.Label();
+            this.btnGuardar = new Guna.UI2.WinForms.Guna2Button();
+            this.btnLimpiar = new Guna.UI2.WinForms.Guna2Button();
             this.grpDatos.SuspendLayout();
             this.grpDomicilio.SuspendLayout();
             this.SuspendLayout();
@@ -45,27 +47,30 @@ namespace pryBazanERP.Formulario
             // lblTitulo
             // 
             this.lblTitulo.AutoSize = true;
-            this.lblTitulo.Font = new System.Drawing.Font("Segoe UI Semibold", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
-            this.lblTitulo.Location = new System.Drawing.Point(34, 28);
+            this.lblTitulo.Font = new System.Drawing.Font("Segoe UI Semibold", 24F, System.Drawing.FontStyle.Bold);
+            this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
+            this.lblTitulo.Location = new System.Drawing.Point(34, 26);
             this.lblTitulo.Name = "lblTitulo";
-            this.lblTitulo.Size = new System.Drawing.Size(106, 32);
+            this.lblTitulo.Size = new System.Drawing.Size(141, 45);
             this.lblTitulo.TabIndex = 0;
             this.lblTitulo.Text = "Personal";
             // 
             // lblSubtitulo
             // 
             this.lblSubtitulo.AutoSize = true;
-            this.lblSubtitulo.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblSubtitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(92)))), ((int)(((byte)(64)))));
-            this.lblSubtitulo.Location = new System.Drawing.Point(38, 66);
+            this.lblSubtitulo.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.lblSubtitulo.ForeColor = System.Drawing.Color.FromArgb(120, 92, 64);
+            this.lblSubtitulo.Location = new System.Drawing.Point(39, 74);
             this.lblSubtitulo.Name = "lblSubtitulo";
-            this.lblSubtitulo.Size = new System.Drawing.Size(217, 15);
+            this.lblSubtitulo.Size = new System.Drawing.Size(223, 19);
             this.lblSubtitulo.TabIndex = 1;
-            this.lblSubtitulo.Text = "Alta y modificacion de datos personales";
+            this.lblSubtitulo.Text = "Alta de datos personales y domicilio";
             // 
             // grpDatos
             // 
+            this.grpDatos.BorderColor = System.Drawing.Color.FromArgb(218, 198, 174);
+            this.grpDatos.BorderRadius = 16;
+            this.grpDatos.BorderThickness = 1;
             this.grpDatos.Controls.Add(this.chkActivo);
             this.grpDatos.Controls.Add(this.txtNombre);
             this.grpDatos.Controls.Add(this.lblNombre);
@@ -73,276 +78,367 @@ namespace pryBazanERP.Formulario
             this.grpDatos.Controls.Add(this.lblApellido);
             this.grpDatos.Controls.Add(this.txtDni);
             this.grpDatos.Controls.Add(this.lblDni);
-            this.grpDatos.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpDatos.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
-            this.grpDatos.Location = new System.Drawing.Point(40, 105);
+            this.grpDatos.Controls.Add(this.lblDatosTitulo);
+            this.grpDatos.FillColor = System.Drawing.Color.FromArgb(246, 238, 226);
+            this.grpDatos.Location = new System.Drawing.Point(40, 118);
             this.grpDatos.Name = "grpDatos";
-            this.grpDatos.Size = new System.Drawing.Size(320, 245);
+            this.grpDatos.ShadowDecoration.Color = System.Drawing.Color.FromArgb(120, 92, 64);
+            this.grpDatos.ShadowDecoration.Depth = 8;
+            this.grpDatos.ShadowDecoration.Enabled = true;
+            this.grpDatos.Size = new System.Drawing.Size(330, 288);
             this.grpDatos.TabIndex = 2;
-            this.grpDatos.TabStop = false;
-            this.grpDatos.Text = "Datos personales";
             // 
             // chkActivo
             // 
             this.chkActivo.AutoSize = true;
             this.chkActivo.Checked = true;
+            this.chkActivo.CheckedState.BorderColor = System.Drawing.Color.FromArgb(111, 74, 45);
+            this.chkActivo.CheckedState.BorderRadius = 3;
+            this.chkActivo.CheckedState.FillColor = System.Drawing.Color.FromArgb(111, 74, 45);
             this.chkActivo.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.chkActivo.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.chkActivo.Location = new System.Drawing.Point(24, 204);
+            this.chkActivo.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
+            this.chkActivo.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
+            this.chkActivo.Location = new System.Drawing.Point(26, 244);
             this.chkActivo.Name = "chkActivo";
-            this.chkActivo.Size = new System.Drawing.Size(60, 19);
-            this.chkActivo.TabIndex = 6;
+            this.chkActivo.Size = new System.Drawing.Size(65, 21);
+            this.chkActivo.TabIndex = 7;
             this.chkActivo.Text = "Activo";
-            this.chkActivo.UseVisualStyleBackColor = true;
+            this.chkActivo.UncheckedState.BorderColor = System.Drawing.Color.FromArgb(150, 111, 76);
+            this.chkActivo.UncheckedState.BorderRadius = 3;
+            this.chkActivo.UncheckedState.FillColor = System.Drawing.Color.Transparent;
             // 
             // txtNombre
             // 
-            this.txtNombre.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(243)))));
-            this.txtNombre.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtNombre.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtNombre.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
-            this.txtNombre.Location = new System.Drawing.Point(24, 162);
+            this.txtNombre.BorderColor = System.Drawing.Color.FromArgb(218, 198, 174);
+            this.txtNombre.BorderRadius = 12;
+            this.txtNombre.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.txtNombre.DefaultText = "";
+            this.txtNombre.FillColor = System.Drawing.Color.FromArgb(255, 250, 243);
+            this.txtNombre.FocusedState.BorderColor = System.Drawing.Color.FromArgb(111, 74, 45);
+            this.txtNombre.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txtNombre.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
+            this.txtNombre.Location = new System.Drawing.Point(26, 199);
             this.txtNombre.Name = "txtNombre";
-            this.txtNombre.Size = new System.Drawing.Size(260, 25);
-            this.txtNombre.TabIndex = 5;
+            this.txtNombre.PasswordChar = '\0';
+            this.txtNombre.PlaceholderText = "Nombre";
+            this.txtNombre.SelectedText = "";
+            this.txtNombre.Size = new System.Drawing.Size(278, 36);
+            this.txtNombre.TabIndex = 6;
             // 
             // lblNombre
             // 
             this.lblNombre.AutoSize = true;
-            this.lblNombre.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblNombre.Location = new System.Drawing.Point(21, 141);
+            this.lblNombre.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblNombre.ForeColor = System.Drawing.Color.FromArgb(84, 60, 42);
+            this.lblNombre.Location = new System.Drawing.Point(24, 180);
             this.lblNombre.Name = "lblNombre";
             this.lblNombre.Size = new System.Drawing.Size(51, 15);
-            this.lblNombre.TabIndex = 4;
+            this.lblNombre.TabIndex = 5;
             this.lblNombre.Text = "Nombre";
             // 
             // txtApellido
             // 
-            this.txtApellido.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(243)))));
-            this.txtApellido.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtApellido.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtApellido.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
-            this.txtApellido.Location = new System.Drawing.Point(24, 103);
+            this.txtApellido.BorderColor = System.Drawing.Color.FromArgb(218, 198, 174);
+            this.txtApellido.BorderRadius = 12;
+            this.txtApellido.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.txtApellido.DefaultText = "";
+            this.txtApellido.FillColor = System.Drawing.Color.FromArgb(255, 250, 243);
+            this.txtApellido.FocusedState.BorderColor = System.Drawing.Color.FromArgb(111, 74, 45);
+            this.txtApellido.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txtApellido.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
+            this.txtApellido.Location = new System.Drawing.Point(26, 135);
             this.txtApellido.Name = "txtApellido";
-            this.txtApellido.Size = new System.Drawing.Size(260, 25);
-            this.txtApellido.TabIndex = 3;
+            this.txtApellido.PasswordChar = '\0';
+            this.txtApellido.PlaceholderText = "Apellido";
+            this.txtApellido.SelectedText = "";
+            this.txtApellido.Size = new System.Drawing.Size(278, 36);
+            this.txtApellido.TabIndex = 4;
             // 
             // lblApellido
             // 
             this.lblApellido.AutoSize = true;
-            this.lblApellido.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblApellido.Location = new System.Drawing.Point(21, 82);
+            this.lblApellido.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblApellido.ForeColor = System.Drawing.Color.FromArgb(84, 60, 42);
+            this.lblApellido.Location = new System.Drawing.Point(24, 116);
             this.lblApellido.Name = "lblApellido";
             this.lblApellido.Size = new System.Drawing.Size(51, 15);
-            this.lblApellido.TabIndex = 2;
+            this.lblApellido.TabIndex = 3;
             this.lblApellido.Text = "Apellido";
             // 
             // txtDni
             // 
-            this.txtDni.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(243)))));
-            this.txtDni.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtDni.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtDni.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
-            this.txtDni.Location = new System.Drawing.Point(24, 47);
+            this.txtDni.BorderColor = System.Drawing.Color.FromArgb(218, 198, 174);
+            this.txtDni.BorderRadius = 12;
+            this.txtDni.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.txtDni.DefaultText = "";
+            this.txtDni.FillColor = System.Drawing.Color.FromArgb(255, 250, 243);
+            this.txtDni.FocusedState.BorderColor = System.Drawing.Color.FromArgb(111, 74, 45);
+            this.txtDni.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txtDni.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
+            this.txtDni.Location = new System.Drawing.Point(26, 72);
             this.txtDni.Name = "txtDni";
-            this.txtDni.Size = new System.Drawing.Size(260, 25);
-            this.txtDni.TabIndex = 1;
+            this.txtDni.PasswordChar = '\0';
+            this.txtDni.PlaceholderText = "DNI";
+            this.txtDni.SelectedText = "";
+            this.txtDni.Size = new System.Drawing.Size(278, 36);
+            this.txtDni.TabIndex = 2;
             // 
             // lblDni
             // 
             this.lblDni.AutoSize = true;
-            this.lblDni.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDni.Location = new System.Drawing.Point(21, 26);
+            this.lblDni.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblDni.ForeColor = System.Drawing.Color.FromArgb(84, 60, 42);
+            this.lblDni.Location = new System.Drawing.Point(24, 53);
             this.lblDni.Name = "lblDni";
             this.lblDni.Size = new System.Drawing.Size(27, 15);
-            this.lblDni.TabIndex = 0;
+            this.lblDni.TabIndex = 1;
             this.lblDni.Text = "DNI";
+            // 
+            // lblDatosTitulo
+            // 
+            this.lblDatosTitulo.AutoSize = true;
+            this.lblDatosTitulo.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold);
+            this.lblDatosTitulo.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
+            this.lblDatosTitulo.Location = new System.Drawing.Point(22, 19);
+            this.lblDatosTitulo.Name = "lblDatosTitulo";
+            this.lblDatosTitulo.Size = new System.Drawing.Size(141, 21);
+            this.lblDatosTitulo.TabIndex = 0;
+            this.lblDatosTitulo.Text = "Datos personales";
             // 
             // grpDomicilio
             // 
+            this.grpDomicilio.BorderColor = System.Drawing.Color.FromArgb(218, 198, 174);
+            this.grpDomicilio.BorderRadius = 16;
+            this.grpDomicilio.BorderThickness = 1;
             this.grpDomicilio.Controls.Add(this.lstLocalidades);
             this.grpDomicilio.Controls.Add(this.lstProvincias);
-            this.grpDomicilio.Controls.Add(this.txtProvincia);
-            this.grpDomicilio.Controls.Add(this.lblProvincia);
             this.grpDomicilio.Controls.Add(this.txtLocalidad);
             this.grpDomicilio.Controls.Add(this.lblLocalidad);
+            this.grpDomicilio.Controls.Add(this.txtProvincia);
+            this.grpDomicilio.Controls.Add(this.lblProvincia);
             this.grpDomicilio.Controls.Add(this.txtGeo);
             this.grpDomicilio.Controls.Add(this.lblGeo);
             this.grpDomicilio.Controls.Add(this.txtDireccion);
             this.grpDomicilio.Controls.Add(this.lblDireccion);
-            this.grpDomicilio.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.grpDomicilio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
-            this.grpDomicilio.Location = new System.Drawing.Point(390, 105);
+            this.grpDomicilio.Controls.Add(this.lblDomicilioTitulo);
+            this.grpDomicilio.FillColor = System.Drawing.Color.FromArgb(246, 238, 226);
+            this.grpDomicilio.Location = new System.Drawing.Point(402, 118);
             this.grpDomicilio.Name = "grpDomicilio";
-            this.grpDomicilio.Size = new System.Drawing.Size(320, 285);
+            this.grpDomicilio.ShadowDecoration.Color = System.Drawing.Color.FromArgb(120, 92, 64);
+            this.grpDomicilio.ShadowDecoration.Depth = 8;
+            this.grpDomicilio.ShadowDecoration.Enabled = true;
+            this.grpDomicilio.Size = new System.Drawing.Size(330, 360);
             this.grpDomicilio.TabIndex = 3;
-            this.grpDomicilio.TabStop = false;
-            this.grpDomicilio.Text = "Domicilio";
             // 
             // lstLocalidades
             // 
-            this.lstLocalidades.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(243)))));
+            this.lstLocalidades.BackColor = System.Drawing.Color.FromArgb(255, 250, 243);
             this.lstLocalidades.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lstLocalidades.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lstLocalidades.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
+            this.lstLocalidades.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.lstLocalidades.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
             this.lstLocalidades.FormattingEnabled = true;
             this.lstLocalidades.ItemHeight = 15;
-            this.lstLocalidades.Location = new System.Drawing.Point(24, 233);
+            this.lstLocalidades.Location = new System.Drawing.Point(26, 300);
             this.lstLocalidades.Name = "lstLocalidades";
-            this.lstLocalidades.Size = new System.Drawing.Size(260, 47);
-            this.lstLocalidades.TabIndex = 8;
+            this.lstLocalidades.Size = new System.Drawing.Size(278, 47);
+            this.lstLocalidades.TabIndex = 10;
             this.lstLocalidades.Visible = false;
             this.lstLocalidades.Click += new System.EventHandler(this.lstLocalidades_Click);
             this.lstLocalidades.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstLocalidades_KeyDown);
             // 
             // lstProvincias
             // 
-            this.lstProvincias.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(243)))));
+            this.lstProvincias.BackColor = System.Drawing.Color.FromArgb(255, 250, 243);
             this.lstProvincias.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.lstProvincias.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lstProvincias.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
+            this.lstProvincias.Font = new System.Drawing.Font("Segoe UI", 9F);
+            this.lstProvincias.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
             this.lstProvincias.FormattingEnabled = true;
             this.lstProvincias.ItemHeight = 15;
-            this.lstProvincias.Location = new System.Drawing.Point(24, 69);
+            this.lstProvincias.Location = new System.Drawing.Point(26, 109);
             this.lstProvincias.Name = "lstProvincias";
-            this.lstProvincias.Size = new System.Drawing.Size(260, 62);
-            this.lstProvincias.TabIndex = 2;
+            this.lstProvincias.Size = new System.Drawing.Size(278, 62);
+            this.lstProvincias.TabIndex = 3;
             this.lstProvincias.Visible = false;
             this.lstProvincias.Click += new System.EventHandler(this.lstProvincias_Click);
             this.lstProvincias.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstProvincias_KeyDown);
             // 
+            // txtLocalidad
+            // 
+            this.txtLocalidad.BorderColor = System.Drawing.Color.FromArgb(218, 198, 174);
+            this.txtLocalidad.BorderRadius = 12;
+            this.txtLocalidad.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.txtLocalidad.DefaultText = "";
+            this.txtLocalidad.FillColor = System.Drawing.Color.FromArgb(255, 250, 243);
+            this.txtLocalidad.FocusedState.BorderColor = System.Drawing.Color.FromArgb(111, 74, 45);
+            this.txtLocalidad.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txtLocalidad.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
+            this.txtLocalidad.Location = new System.Drawing.Point(26, 264);
+            this.txtLocalidad.Name = "txtLocalidad";
+            this.txtLocalidad.PasswordChar = '\0';
+            this.txtLocalidad.PlaceholderText = "Escriba para buscar";
+            this.txtLocalidad.SelectedText = "";
+            this.txtLocalidad.Size = new System.Drawing.Size(278, 36);
+            this.txtLocalidad.TabIndex = 9;
+            this.txtLocalidad.TextChanged += new System.EventHandler(this.txtLocalidad_TextChanged);
+            // 
+            // lblLocalidad
+            // 
+            this.lblLocalidad.AutoSize = true;
+            this.lblLocalidad.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblLocalidad.ForeColor = System.Drawing.Color.FromArgb(84, 60, 42);
+            this.lblLocalidad.Location = new System.Drawing.Point(24, 245);
+            this.lblLocalidad.Name = "lblLocalidad";
+            this.lblLocalidad.Size = new System.Drawing.Size(58, 15);
+            this.lblLocalidad.TabIndex = 8;
+            this.lblLocalidad.Text = "Localidad";
+            // 
             // txtProvincia
             // 
-            this.txtProvincia.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(243)))));
-            this.txtProvincia.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtProvincia.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtProvincia.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
-            this.txtProvincia.Location = new System.Drawing.Point(24, 44);
+            this.txtProvincia.BorderColor = System.Drawing.Color.FromArgb(218, 198, 174);
+            this.txtProvincia.BorderRadius = 12;
+            this.txtProvincia.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.txtProvincia.DefaultText = "";
+            this.txtProvincia.FillColor = System.Drawing.Color.FromArgb(255, 250, 243);
+            this.txtProvincia.FocusedState.BorderColor = System.Drawing.Color.FromArgb(111, 74, 45);
+            this.txtProvincia.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txtProvincia.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
+            this.txtProvincia.Location = new System.Drawing.Point(26, 72);
             this.txtProvincia.Name = "txtProvincia";
-            this.txtProvincia.Size = new System.Drawing.Size(260, 25);
-            this.txtProvincia.TabIndex = 1;
+            this.txtProvincia.PasswordChar = '\0';
+            this.txtProvincia.PlaceholderText = "Provincia";
+            this.txtProvincia.SelectedText = "";
+            this.txtProvincia.Size = new System.Drawing.Size(278, 36);
+            this.txtProvincia.TabIndex = 2;
             this.txtProvincia.TextChanged += new System.EventHandler(this.txtProvincia_TextChanged);
             this.txtProvincia.Enter += new System.EventHandler(this.txtProvincia_Enter);
             // 
             // lblProvincia
             // 
             this.lblProvincia.AutoSize = true;
-            this.lblProvincia.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblProvincia.Location = new System.Drawing.Point(21, 23);
+            this.lblProvincia.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblProvincia.ForeColor = System.Drawing.Color.FromArgb(84, 60, 42);
+            this.lblProvincia.Location = new System.Drawing.Point(24, 53);
             this.lblProvincia.Name = "lblProvincia";
             this.lblProvincia.Size = new System.Drawing.Size(56, 15);
-            this.lblProvincia.TabIndex = 0;
+            this.lblProvincia.TabIndex = 1;
             this.lblProvincia.Text = "Provincia";
-            // 
-            // txtLocalidad
-            // 
-            this.txtLocalidad.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(243)))));
-            this.txtLocalidad.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtLocalidad.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtLocalidad.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
-            this.txtLocalidad.Location = new System.Drawing.Point(24, 208);
-            this.txtLocalidad.Name = "txtLocalidad";
-            this.txtLocalidad.Size = new System.Drawing.Size(260, 25);
-            this.txtLocalidad.TabIndex = 7;
-            this.txtLocalidad.TextChanged += new System.EventHandler(this.txtLocalidad_TextChanged);
-            // 
-            // lblLocalidad
-            // 
-            this.lblLocalidad.AutoSize = true;
-            this.lblLocalidad.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblLocalidad.Location = new System.Drawing.Point(21, 187);
-            this.lblLocalidad.Name = "lblLocalidad";
-            this.lblLocalidad.Size = new System.Drawing.Size(58, 15);
-            this.lblLocalidad.TabIndex = 6;
-            this.lblLocalidad.Text = "Localidad";
             // 
             // txtGeo
             // 
-            this.txtGeo.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(243)))));
-            this.txtGeo.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtGeo.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtGeo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
-            this.txtGeo.Location = new System.Drawing.Point(24, 150);
+            this.txtGeo.BorderColor = System.Drawing.Color.FromArgb(218, 198, 174);
+            this.txtGeo.BorderRadius = 12;
+            this.txtGeo.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.txtGeo.DefaultText = "";
+            this.txtGeo.FillColor = System.Drawing.Color.FromArgb(255, 250, 243);
+            this.txtGeo.FocusedState.BorderColor = System.Drawing.Color.FromArgb(111, 74, 45);
+            this.txtGeo.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txtGeo.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
+            this.txtGeo.Location = new System.Drawing.Point(26, 202);
             this.txtGeo.Name = "txtGeo";
-            this.txtGeo.Size = new System.Drawing.Size(260, 25);
-            this.txtGeo.TabIndex = 5;
+            this.txtGeo.PasswordChar = '\0';
+            this.txtGeo.PlaceholderText = "Geo / Google";
+            this.txtGeo.SelectedText = "";
+            this.txtGeo.Size = new System.Drawing.Size(278, 36);
+            this.txtGeo.TabIndex = 7;
             // 
             // lblGeo
             // 
             this.lblGeo.AutoSize = true;
-            this.lblGeo.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblGeo.Location = new System.Drawing.Point(21, 129);
+            this.lblGeo.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblGeo.ForeColor = System.Drawing.Color.FromArgb(84, 60, 42);
+            this.lblGeo.Location = new System.Drawing.Point(24, 183);
             this.lblGeo.Name = "lblGeo";
             this.lblGeo.Size = new System.Drawing.Size(85, 15);
-            this.lblGeo.TabIndex = 4;
+            this.lblGeo.TabIndex = 6;
             this.lblGeo.Text = "Geo / Google";
             // 
             // txtDireccion
             // 
-            this.txtDireccion.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(243)))));
-            this.txtDireccion.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.txtDireccion.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtDireccion.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
-            this.txtDireccion.Location = new System.Drawing.Point(24, 102);
+            this.txtDireccion.BorderColor = System.Drawing.Color.FromArgb(218, 198, 174);
+            this.txtDireccion.BorderRadius = 12;
+            this.txtDireccion.Cursor = System.Windows.Forms.Cursors.IBeam;
+            this.txtDireccion.DefaultText = "";
+            this.txtDireccion.FillColor = System.Drawing.Color.FromArgb(255, 250, 243);
+            this.txtDireccion.FocusedState.BorderColor = System.Drawing.Color.FromArgb(111, 74, 45);
+            this.txtDireccion.Font = new System.Drawing.Font("Segoe UI", 10F);
+            this.txtDireccion.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
+            this.txtDireccion.Location = new System.Drawing.Point(26, 140);
             this.txtDireccion.Name = "txtDireccion";
-            this.txtDireccion.Size = new System.Drawing.Size(260, 25);
-            this.txtDireccion.TabIndex = 3;
+            this.txtDireccion.PasswordChar = '\0';
+            this.txtDireccion.PlaceholderText = "Direccion";
+            this.txtDireccion.SelectedText = "";
+            this.txtDireccion.Size = new System.Drawing.Size(278, 36);
+            this.txtDireccion.TabIndex = 5;
             // 
             // lblDireccion
             // 
             this.lblDireccion.AutoSize = true;
-            this.lblDireccion.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblDireccion.Location = new System.Drawing.Point(21, 81);
+            this.lblDireccion.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.lblDireccion.ForeColor = System.Drawing.Color.FromArgb(84, 60, 42);
+            this.lblDireccion.Location = new System.Drawing.Point(24, 121);
             this.lblDireccion.Name = "lblDireccion";
             this.lblDireccion.Size = new System.Drawing.Size(58, 15);
-            this.lblDireccion.TabIndex = 2;
+            this.lblDireccion.TabIndex = 4;
             this.lblDireccion.Text = "Direccion";
+            // 
+            // lblDomicilioTitulo
+            // 
+            this.lblDomicilioTitulo.AutoSize = true;
+            this.lblDomicilioTitulo.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold);
+            this.lblDomicilioTitulo.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
+            this.lblDomicilioTitulo.Location = new System.Drawing.Point(22, 19);
+            this.lblDomicilioTitulo.Name = "lblDomicilioTitulo";
+            this.lblDomicilioTitulo.Size = new System.Drawing.Size(80, 21);
+            this.lblDomicilioTitulo.TabIndex = 0;
+            this.lblDomicilioTitulo.Text = "Domicilio";
             // 
             // btnGuardar
             // 
-            this.btnGuardar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(74)))), ((int)(((byte)(45)))));
+            this.btnGuardar.Animated = true;
+            this.btnGuardar.BorderRadius = 12;
             this.btnGuardar.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnGuardar.FlatAppearance.BorderSize = 0;
-            this.btnGuardar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnGuardar.FillColor = System.Drawing.Color.FromArgb(111, 74, 45);
+            this.btnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.btnGuardar.ForeColor = System.Drawing.Color.White;
-            this.btnGuardar.Location = new System.Drawing.Point(246, 420);
+            this.btnGuardar.HoverState.FillColor = System.Drawing.Color.FromArgb(84, 60, 42);
+            this.btnGuardar.Location = new System.Drawing.Point(252, 508);
             this.btnGuardar.Name = "btnGuardar";
-            this.btnGuardar.Size = new System.Drawing.Size(120, 36);
+            this.btnGuardar.Size = new System.Drawing.Size(140, 42);
             this.btnGuardar.TabIndex = 4;
             this.btnGuardar.Text = "Guardar";
-            this.btnGuardar.UseVisualStyleBackColor = false;
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
             // 
             // btnLimpiar
             // 
-            this.btnLimpiar.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(111)))), ((int)(((byte)(76)))));
+            this.btnLimpiar.Animated = true;
+            this.btnLimpiar.BorderColor = System.Drawing.Color.FromArgb(150, 111, 76);
+            this.btnLimpiar.BorderRadius = 12;
+            this.btnLimpiar.BorderThickness = 1;
             this.btnLimpiar.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnLimpiar.FlatAppearance.BorderSize = 0;
-            this.btnLimpiar.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLimpiar.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.btnLimpiar.ForeColor = System.Drawing.Color.White;
-            this.btnLimpiar.Location = new System.Drawing.Point(384, 420);
+            this.btnLimpiar.FillColor = System.Drawing.Color.FromArgb(246, 238, 226);
+            this.btnLimpiar.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
+            this.btnLimpiar.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
+            this.btnLimpiar.HoverState.FillColor = System.Drawing.Color.FromArgb(218, 198, 174);
+            this.btnLimpiar.Location = new System.Drawing.Point(408, 508);
             this.btnLimpiar.Name = "btnLimpiar";
-            this.btnLimpiar.Size = new System.Drawing.Size(120, 36);
+            this.btnLimpiar.Size = new System.Drawing.Size(140, 42);
             this.btnLimpiar.TabIndex = 5;
             this.btnLimpiar.Text = "Limpiar";
-            this.btnLimpiar.UseVisualStyleBackColor = false;
             this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
             // 
             // frmPersonal
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(218)))), ((int)(((byte)(198)))));
-            this.ClientSize = new System.Drawing.Size(760, 530);
+            this.BackColor = System.Drawing.Color.FromArgb(232, 218, 198);
+            this.ClientSize = new System.Drawing.Size(800, 580);
             this.Controls.Add(this.btnLimpiar);
             this.Controls.Add(this.btnGuardar);
             this.Controls.Add(this.grpDomicilio);
             this.Controls.Add(this.grpDatos);
             this.Controls.Add(this.lblSubtitulo);
             this.Controls.Add(this.lblTitulo);
-            this.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.Font = new System.Drawing.Font("Segoe UI", 9F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MaximizeBox = false;
             this.Name = "frmPersonal";
@@ -358,26 +454,28 @@ namespace pryBazanERP.Formulario
 
         private System.Windows.Forms.Label lblTitulo;
         private System.Windows.Forms.Label lblSubtitulo;
-        private System.Windows.Forms.GroupBox grpDatos;
-        private System.Windows.Forms.CheckBox chkActivo;
-        private System.Windows.Forms.TextBox txtNombre;
+        private Guna.UI2.WinForms.Guna2Panel grpDatos;
+        private Guna.UI2.WinForms.Guna2CheckBox chkActivo;
+        private Guna.UI2.WinForms.Guna2TextBox txtNombre;
         private System.Windows.Forms.Label lblNombre;
-        private System.Windows.Forms.TextBox txtApellido;
+        private Guna.UI2.WinForms.Guna2TextBox txtApellido;
         private System.Windows.Forms.Label lblApellido;
-        private System.Windows.Forms.TextBox txtDni;
+        private Guna.UI2.WinForms.Guna2TextBox txtDni;
         private System.Windows.Forms.Label lblDni;
-        private System.Windows.Forms.GroupBox grpDomicilio;
+        private System.Windows.Forms.Label lblDatosTitulo;
+        private Guna.UI2.WinForms.Guna2Panel grpDomicilio;
         private System.Windows.Forms.ListBox lstLocalidades;
         private System.Windows.Forms.ListBox lstProvincias;
-        private System.Windows.Forms.TextBox txtProvincia;
-        private System.Windows.Forms.Label lblProvincia;
-        private System.Windows.Forms.TextBox txtLocalidad;
+        private Guna.UI2.WinForms.Guna2TextBox txtLocalidad;
         private System.Windows.Forms.Label lblLocalidad;
-        private System.Windows.Forms.TextBox txtGeo;
+        private Guna.UI2.WinForms.Guna2TextBox txtProvincia;
+        private System.Windows.Forms.Label lblProvincia;
+        private Guna.UI2.WinForms.Guna2TextBox txtGeo;
         private System.Windows.Forms.Label lblGeo;
-        private System.Windows.Forms.TextBox txtDireccion;
+        private Guna.UI2.WinForms.Guna2TextBox txtDireccion;
         private System.Windows.Forms.Label lblDireccion;
-        private System.Windows.Forms.Button btnGuardar;
-        private System.Windows.Forms.Button btnLimpiar;
+        private System.Windows.Forms.Label lblDomicilioTitulo;
+        private Guna.UI2.WinForms.Guna2Button btnGuardar;
+        private Guna.UI2.WinForms.Guna2Button btnLimpiar;
     }
 }
