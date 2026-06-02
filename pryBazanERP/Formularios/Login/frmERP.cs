@@ -71,8 +71,9 @@ namespace pryBazanERP
 
             if (conexion.ObtenerDatosUsuario(txtUsuario.Text, txtContraseña.Text, out usuario, out perfil, out idUsuario, out idPersonal))
             {
+                conexion.GrabarAuditoriaSesion(txtUsuario.Text.Trim(), "Inicio de sesion exitoso");
                 MessageBox.Show("Bienvenido, " + usuario + "!", "Inicio de sesion exitoso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                frmMain mainForm = new frmMain(usuario, perfil, idUsuario, idPersonal);
+                frmMain mainForm = new frmMain(usuario, perfil, txtUsuario.Text.Trim(), idUsuario, idPersonal);
                 mainForm.Show();
                 this.Hide();
             }

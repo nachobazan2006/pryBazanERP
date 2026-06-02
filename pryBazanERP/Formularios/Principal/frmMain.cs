@@ -15,17 +15,21 @@ namespace pryBazanERP.Formulario
     {
         private string usuario;
         private string perfil;
+        private string mail;
         private int idUsuario;
         private int idPersonal;
         private Form formularioActivo;
+        private Guna.UI2.WinForms.Guna2Button btnGenerarUsuarios;
+        private Guna.UI2.WinForms.Guna2Button btnAuditoria;
         private int posicionFinalFormulario;
 
-        public frmMain(string usuario, string perfil, int idUsuario, int idPersonal)
+        public frmMain(string usuario, string perfil, string mail, int idUsuario, int idPersonal)
         {
             InitializeComponent();
             AppIcon.Aplicar(this);
             this.usuario = usuario;
             this.perfil = perfil;
+            this.mail = mail;
             this.idUsuario = idUsuario;
             this.idPersonal = idPersonal;
         }
@@ -35,7 +39,16 @@ namespace pryBazanERP.Formulario
             lblNombre.Text = "Usuario: " + usuario; 
             lblPerfil.Text = "Perfil: " + perfil; 
             lblFecha.Text = "Fecha: " + DateTime.Now.ToShortDateString();
-            lblHora.Text = "Hora: " + DateTime.Now.ToShortTimeString(); 
+            lblHora.Text = "Hora: " + DateTime.Now.ToShortTimeString();
+
+            ConfigurarModuloGenerarUsuarios();
+            ActualizarEstadoPersonal();
+
+            if (!TienePersonalAsociado())
+            {
+                btnPersonal.Checked = true;
+                AbrirFormularioEnPanel(new frmPersonal(idUsuario, idPersonal, ActualizarPersonalSesion));
+            }
         }
 
         private void btnPersonal_Click(object sender, EventArgs e)
@@ -46,6 +59,14 @@ namespace pryBazanERP.Formulario
 
         private void btnContacto_Click(object sender, EventArgs e)
         {
+            if (!TienePersonalAsociado())
+            {
+                MessageBox.Show("Primero completa tus datos personales. Despues vas a poder cargar contactos.", "Contacto", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                btnPersonal.Checked = true;
+                AbrirFormularioEnPanel(new frmPersonal(idUsuario, idPersonal, ActualizarPersonalSesion));
+                return;
+            }
+
             btnContacto.Checked = true;
             AbrirFormularioEnPanel(new frmContacto(idPersonal, usuario));
         }
@@ -53,7 +74,31 @@ namespace pryBazanERP.Formulario
         private void btnUsuarioPerfil_Click(object sender, EventArgs e)
         {
             btnUsuarioPerfil.Checked = true;
-            AbrirFormularioEnPanel(new frmUsuarioPerfil(idUsuario));
+            AbrirFormularioEnPanel(new frmUsuarioPerfil(idUsuario, usuario, mail, perfil, idPersonal));
+        }
+
+        private void btnGenerarUsuarios_Click(object sender, EventArgs e)
+        {
+            if (!EsAdministrador())
+            {
+                MessageBox.Show("Solo los administradores pueden generar usuarios.", "Generar usuario", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            btnGenerarUsuarios.Checked = true;
+            AbrirFormularioEnPanel(new frmGenerarUsuario(mail));
+        }
+
+        private void btnAuditoria_Click(object sender, EventArgs e)
+        {
+            if (!EsAdministrador())
+            {
+                MessageBox.Show("Solo los administradores pueden ver la auditoria.", "Auditoria", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            btnAuditoria.Checked = true;
+            AbrirFormularioEnPanel(new frmAuditoriaSesion());
         }
 
         private void AbrirFormularioEnPanel(Form formulario)
@@ -77,6 +122,87 @@ namespace pryBazanERP.Formulario
         private void ActualizarPersonalSesion(int idPersonalNuevo)
         {
             idPersonal = idPersonalNuevo;
+            ActualizarEstadoPersonal();
+        }
+
+        private void ConfigurarModuloGenerarUsuarios()
+        {
+            if (!EsAdministrador())
+            {
+                return;
+            }
+
+            btnGenerarUsuarios = new Guna.UI2.WinForms.Guna2Button();
+            btnGenerarUsuarios.Animated = true;
+            btnGenerarUsuarios.BorderRadius = 12;
+            btnGenerarUsuarios.ButtonMode = Guna.UI2.WinForms.Enums.ButtonMode.RadioButton;
+            btnGenerarUsuarios.CheckedState.FillColor = Color.FromArgb(246, 238, 226);
+            btnGenerarUsuarios.CheckedState.ForeColor = Color.FromArgb(72, 48, 34);
+            btnGenerarUsuarios.Cursor = Cursors.Hand;
+            btnGenerarUsuarios.FillColor = Color.FromArgb(111, 74, 45);
+            btnGenerarUsuarios.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            btnGenerarUsuarios.ForeColor = Color.White;
+            btnGenerarUsuarios.HoverState.FillColor = Color.FromArgb(150, 111, 76);
+            btnGenerarUsuarios.Location = new Point(22, 288);
+            btnGenerarUsuarios.Name = "btnGenerarUsuarios";
+            btnGenerarUsuarios.Padding = new Padding(12, 0, 0, 0);
+            btnGenerarUsuarios.Size = new Size(196, 46);
+            btnGenerarUsuarios.Text = "Usuarios";
+            btnGenerarUsuarios.TextAlign = HorizontalAlignment.Left;
+            btnGenerarUsuarios.Click += btnGenerarUsuarios_Click;
+            pnlSidebar.Controls.Add(btnGenerarUsuarios);
+
+            btnAuditoria = CrearBotonMenuAdmin("btnAuditoria", "Auditoria", 344);
+            btnAuditoria.Click += btnAuditoria_Click;
+            pnlSidebar.Controls.Add(btnAuditoria);
+        }
+
+        private Guna.UI2.WinForms.Guna2Button CrearBotonMenuAdmin(string nombre, string texto, int y)
+        {
+            Guna.UI2.WinForms.Guna2Button boton = new Guna.UI2.WinForms.Guna2Button();
+            boton.Animated = true;
+            boton.BorderRadius = 12;
+            boton.ButtonMode = Guna.UI2.WinForms.Enums.ButtonMode.RadioButton;
+            boton.CheckedState.FillColor = Color.FromArgb(246, 238, 226);
+            boton.CheckedState.ForeColor = Color.FromArgb(72, 48, 34);
+            boton.Cursor = Cursors.Hand;
+            boton.FillColor = Color.FromArgb(111, 74, 45);
+            boton.Font = new Font("Segoe UI Semibold", 10F, FontStyle.Bold);
+            boton.ForeColor = Color.White;
+            boton.HoverState.FillColor = Color.FromArgb(150, 111, 76);
+            boton.Location = new Point(22, y);
+            boton.Name = nombre;
+            boton.Padding = new Padding(12, 0, 0, 0);
+            boton.Size = new Size(196, 46);
+            boton.Text = texto;
+            boton.TextAlign = HorizontalAlignment.Left;
+            return boton;
+        }
+
+        private bool EsAdministrador()
+        {
+            return perfil != null && perfil.IndexOf("Administrador", StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+        private bool TienePersonalAsociado()
+        {
+            return idPersonal > 0;
+        }
+
+        private void ActualizarEstadoPersonal()
+        {
+            btnContacto.Enabled = TienePersonalAsociado();
+
+            if (TienePersonalAsociado())
+            {
+                lblInicioTitulo.Text = "Resumen";
+                lblInicioDetalle.Text = "Seleccione una opcion del menu para comenzar.";
+            }
+            else
+            {
+                lblInicioTitulo.Text = "Completa tu ficha";
+                lblInicioDetalle.Text = "Antes de cargar contactos, completa tus datos personales.";
+            }
         }
 
         private void fadeTimer_Tick(object sender, EventArgs e)

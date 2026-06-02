@@ -72,7 +72,7 @@ namespace pryBazanERP.Formulario
             }
             else
             {
-                btnGuardar.Text = "Guardar mis datos";
+                btnGuardar.Text = "Guardar mi ficha";
             }
         }
 
@@ -101,14 +101,14 @@ namespace pryBazanERP.Formulario
             }
             catch (Exception ex)
             {
-                MessageBox.Show("No se pudieron cargar tus datos personales: " + ex.Message, "Personal", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("No se pudieron cargar tus datos personales: " + ex.Message, "Mi ficha", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 BloquearSinPersonalAsociado();
             }
         }
 
         private void BloquearSinPersonalAsociado()
         {
-            MessageBox.Show("El usuario actual no tiene un personal asociado. No se pueden editar datos personales desde este modulo.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            MessageBox.Show("El usuario actual no tiene un personal asociado. No se pueden editar datos personales desde este modulo.", "Mi ficha", MessageBoxButtons.OK, MessageBoxIcon.Information);
             grpDatos.Enabled = false;
             grpDomicilio.Enabled = false;
             btnGuardar.Enabled = false;
@@ -358,14 +358,14 @@ namespace pryBazanERP.Formulario
                     }
                     else
                     {
-                        MessageBox.Show(mensajeAsociacion, "Personal", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                        MessageBox.Show(mensajeAsociacion, "Mi ficha", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
             }
 
             MessageBox.Show(
                 mensaje,
-                "Personal",
+                "Mi ficha",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
 
@@ -396,35 +396,35 @@ namespace pryBazanERP.Formulario
         {
             if (string.IsNullOrWhiteSpace(txtDni.Text))
             {
-                MessageBox.Show("Ingresa el DNI.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Ingresa el DNI.", "Mi ficha", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 txtDni.Focus();
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(txtApellido.Text))
             {
-                MessageBox.Show("Ingresa el apellido.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Ingresa el apellido.", "Mi ficha", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 txtApellido.Focus();
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(txtNombre.Text))
             {
-                MessageBox.Show("Ingresa el nombre.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Ingresa el nombre.", "Mi ficha", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 txtNombre.Focus();
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(txtProvincia.Text))
             {
-                MessageBox.Show("Selecciona una provincia.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Selecciona una provincia.", "Mi ficha", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 txtProvincia.Focus();
                 return false;
             }
 
             if (!ProvinciaIngresadaEsValida())
             {
-                MessageBox.Show("Selecciona una provincia valida de la lista.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Selecciona una provincia valida de la lista.", "Mi ficha", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 txtProvincia.Focus();
                 return false;
             }

@@ -58,11 +58,17 @@
     <Compile Include="Acceso datos\classConexion.cs" />
     <Compile Include="Acceso datos\ConexionAPI.cs" />
     <Compile Include="Acceso datos\LocalidadesAPI.cs" />
+    <Compile Include="Formularios\Gestion\frmAuditoriaSesion.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Formularios\Gestion\frmContacto.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Formularios\Gestion\frmContacto.Designer.cs">
       <DependentUpon>frmContacto.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Formularios\Gestion\frmGenerarUsuario.cs">
+      <SubType>Form</SubType>
     </Compile>
     <Compile Include="Formularios\Gestion\frmPersonal.cs">
       <SubType>Form</SubType>

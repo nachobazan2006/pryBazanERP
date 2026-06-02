@@ -54,7 +54,7 @@ namespace pryBazanERP.Formulario
             this.lblTitulo.Name = "lblTitulo";
             this.lblTitulo.Size = new System.Drawing.Size(141, 45);
             this.lblTitulo.TabIndex = 0;
-            this.lblTitulo.Text = "Personal";
+            this.lblTitulo.Text = "Mi ficha";
             // 
             // lblSubtitulo
             // 
@@ -65,7 +65,7 @@ namespace pryBazanERP.Formulario
             this.lblSubtitulo.Name = "lblSubtitulo";
             this.lblSubtitulo.Size = new System.Drawing.Size(223, 19);
             this.lblSubtitulo.TabIndex = 1;
-            this.lblSubtitulo.Text = "Alta de datos personales y domicilio";
+            this.lblSubtitulo.Text = "Datos personales y domicilio del usuario actual";
             // 
             // grpDatos
             // 
@@ -467,7 +467,7 @@ namespace pryBazanERP.Formulario
             this.MaximizeBox = false;
             this.Name = "frmPersonal";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterParent;
-            this.Text = "Bazan ERP - Personal";
+            this.Text = "Bazan ERP - Mi ficha";
             this.grpDatos.ResumeLayout(false);
             this.grpDatos.PerformLayout();
             this.grpDomicilio.ResumeLayout(false);

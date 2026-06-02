@@ -51,7 +51,7 @@ namespace pryBazanERP.Formulario
             this.lblSubtitulo.Name = "lblSubtitulo";
             this.lblSubtitulo.Size = new System.Drawing.Size(252, 19);
             this.lblSubtitulo.TabIndex = 1;
-            this.lblSubtitulo.Text = "Actualizacion de contrasena de acceso";
+            this.lblSubtitulo.Text = "Datos de usuario, perfil y contrasena de acceso";
             // 
             // grpCambio
             // 

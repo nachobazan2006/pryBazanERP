@@ -41,12 +41,23 @@ namespace pryBazanERP.Conexión
             public string Medio { get; set; }
             public string Uso { get; set; }
             public string Dato { get; set; }
+            public string Enlace { get; set; }
         }
 
         public class RedItem
         {
             public int IdRed { get; set; }
             public string Nombre { get; set; }
+        }
+
+        public class AuditoriaItem
+        {
+            public int IdAuditoria { get; set; }
+            public DateTime Fecha { get; set; }
+            public string Hora { get; set; }
+            public string Usuario { get; set; }
+            public string Perfil { get; set; }
+            public string Detalle { get; set; }
         }
 
         public classConexion()
@@ -124,7 +135,13 @@ namespace pryBazanERP.Conexión
                                 }
 
                                 usuario = lector["Nombre"].ToString() + " " + lector["Apellido"].ToString();
-                                perfil = lector["NombrePerfil"].ToString();
+                                perfil = ObtenerPerfilesUsuario(conexion, idUsuario);
+
+                                if (string.IsNullOrWhiteSpace(perfil))
+                                {
+                                    perfil = lector["NombrePerfil"].ToString();
+                                }
+
                                 return true;
                             }
                         }
@@ -166,7 +183,46 @@ namespace pryBazanERP.Conexión
             }
         }
 
+        public List<AuditoriaItem> ObtenerAuditoriaSesion()
+        {
+            List<AuditoriaItem> auditorias = new List<AuditoriaItem>();
+
+            using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
+            {
+                conexion.Open();
+
+                string consulta =
+                    "SELECT Id_Auditoria, Fecha, Hora, Usuario, Detalle " +
+                    "FROM AuditoriaSesion " +
+                    "ORDER BY Id_Auditoria DESC";
+
+                using (OleDbCommand comando = new OleDbCommand(consulta, conexion))
+                using (OleDbDataReader lector = comando.ExecuteReader())
+                {
+                    while (lector.Read())
+                    {
+                        auditorias.Add(new AuditoriaItem
+                        {
+                            IdAuditoria = Convert.ToInt32(lector["Id_Auditoria"]),
+                            Fecha = lector["Fecha"] == DBNull.Value ? DateTime.MinValue : Convert.ToDateTime(lector["Fecha"]),
+                            Hora = lector["Hora"].ToString(),
+                            Usuario = lector["Usuario"].ToString(),
+                            Perfil = ObtenerPerfilesPorUsuario(conexion, lector["Usuario"].ToString()),
+                            Detalle = lector["Detalle"].ToString()
+                        });
+                    }
+                }
+            }
+
+            return auditorias;
+        }
+
         public bool GuardarContacto(int idPersonal, string medio, string uso, string dato, out string mensaje)
+        {
+            return GuardarContacto(idPersonal, medio, uso, dato, "", out mensaje);
+        }
+
+        public bool GuardarContacto(int idPersonal, string medio, string uso, string dato, string enlace, out string mensaje)
         {
             mensaje = "";
 
@@ -183,7 +239,7 @@ namespace pryBazanERP.Conexión
                         return false;
                     }
 
-                    if (ExisteContacto(conexion, idPersonal, medio, uso, dato))
+                    if (ExisteContacto(conexion, idPersonal, medio, uso, dato, enlace))
                     {
                         mensaje = "Ese contacto ya esta cargado para la persona actual.";
                         return false;
@@ -193,7 +249,7 @@ namespace pryBazanERP.Conexión
                     {
                         try
                         {
-                            InsertarContacto(conexion, transaccion, idPersonal, medio, uso, dato);
+                            InsertarContacto(conexion, transaccion, idPersonal, medio, uso, dato, enlace);
                             transaccion.Commit();
                             mensaje = "Contacto guardado correctamente.";
                             return true;
@@ -223,7 +279,7 @@ namespace pryBazanERP.Conexión
                 AsegurarTablaContacto(conexion);
 
                 string consulta =
-                    "SELECT Id_Contacto, Medio, Uso, Dato FROM Contacto " +
+                    "SELECT Id_Contacto, Medio, Uso, Dato, Enlace FROM Contacto " +
                     "WHERE Id_Personal = ? AND Activo = ? " +
                     "ORDER BY Uso, Medio, Dato";
 
@@ -241,7 +297,8 @@ namespace pryBazanERP.Conexión
                                 IdContacto = Convert.ToInt32(lector["Id_Contacto"]),
                                 Medio = lector["Medio"].ToString(),
                                 Uso = lector["Uso"].ToString(),
-                                Dato = lector["Dato"].ToString()
+                                Dato = lector["Dato"].ToString(),
+                                Enlace = lector["Enlace"].ToString()
                             });
                         }
                     }
@@ -518,6 +575,69 @@ namespace pryBazanERP.Conexión
             }
         }
 
+        public string ObtenerNombreUsuarioDisponible(string nombreBase)
+        {
+            string usuario = nombreBase;
+            int numero = 2;
+
+            using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
+            {
+                conexion.Open();
+
+                while (ExisteUsuario(conexion, usuario))
+                {
+                    usuario = nombreBase + numero.ToString();
+                    numero++;
+                }
+            }
+
+            return usuario;
+        }
+
+        public bool GuardarUsuarioGenerado(string nombre, string apellido, string usuario, string contrasena, out string mensaje)
+        {
+            mensaje = "";
+
+            try
+            {
+                using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
+                {
+                    conexion.Open();
+
+                    if (ExisteUsuario(conexion, usuario))
+                    {
+                        mensaje = "Ya existe un usuario con ese nombre de acceso.";
+                        return false;
+                    }
+
+                    int idPerfil = ObtenerIdPerfil(conexion, "Lector");
+
+                    using (OleDbTransaction transaccion = conexion.BeginTransaction())
+                    {
+                        try
+                        {
+                            int idUsuario = InsertarUsuario(conexion, transaccion, nombre, apellido, usuario, contrasena);
+                            InsertarUsuarioPerfil(conexion, transaccion, idUsuario, idPerfil);
+                            transaccion.Commit();
+
+                            mensaje = "Usuario generado correctamente. Entregale el usuario y la contrasena inicial, y pedile que la cambie al ingresar.";
+                            return true;
+                        }
+                        catch
+                        {
+                            transaccion.Rollback();
+                            throw;
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                mensaje = "No se pudo generar el usuario: " + ex.Message;
+                return false;
+            }
+        }
+
         private int ObtenerIdPersonalPorDni(OleDbConnection conexion, string dni)
         {
             using (OleDbCommand comando = new OleDbCommand("SELECT TOP 1 Id_Personal FROM Personal WHERE DNI = ?", conexion))
@@ -531,6 +651,144 @@ namespace pryBazanERP.Conexión
                 }
 
                 return Convert.ToInt32(resultado);
+            }
+        }
+
+        private bool ExisteUsuario(OleDbConnection conexion, string usuario)
+        {
+            using (OleDbCommand comando = new OleDbCommand("SELECT COUNT(*) FROM Usuario WHERE Mail = ?", conexion))
+            {
+                comando.Parameters.AddWithValue("?", usuario);
+                return Convert.ToInt32(comando.ExecuteScalar()) > 0;
+            }
+        }
+
+        private string ObtenerPerfilesUsuario(OleDbConnection conexion, int idUsuario)
+        {
+            List<string> perfiles = new List<string>();
+
+            string consulta =
+                "SELECT Perfil.Nombre FROM [Usuario-Perfil] " +
+                "INNER JOIN Perfil ON Perfil.Id_Perfil = CInt([Usuario-Perfil].Id_Perfil) " +
+                "WHERE CInt([Usuario-Perfil].Id_Usuario) = ? " +
+                "ORDER BY Perfil.Id_Perfil";
+
+            using (OleDbCommand comando = new OleDbCommand(consulta, conexion))
+            {
+                comando.Parameters.AddWithValue("?", idUsuario);
+
+                using (OleDbDataReader lector = comando.ExecuteReader())
+                {
+                    while (lector.Read())
+                    {
+                        perfiles.Add(lector["Nombre"].ToString());
+                    }
+                }
+            }
+
+            return string.Join(", ", perfiles);
+        }
+
+        private string ObtenerPerfilesPorUsuario(OleDbConnection conexion, string usuario)
+        {
+            if (string.IsNullOrWhiteSpace(usuario))
+            {
+                return "";
+            }
+
+            object idUsuario;
+
+            using (OleDbCommand comando = new OleDbCommand("SELECT TOP 1 Id_Usuario FROM Usuario WHERE Mail = ?", conexion))
+            {
+                comando.Parameters.AddWithValue("?", usuario);
+                idUsuario = comando.ExecuteScalar();
+            }
+
+            if (idUsuario == null)
+            {
+                return "";
+            }
+
+            return ObtenerPerfilesUsuario(conexion, Convert.ToInt32(idUsuario));
+        }
+
+        public string ObtenerNombreCompletoUsuarioPorMail(string mail)
+        {
+            if (string.IsNullOrWhiteSpace(mail))
+            {
+                return "";
+            }
+
+            using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
+            {
+                conexion.Open();
+
+                using (OleDbCommand comando = new OleDbCommand("SELECT TOP 1 Nombre, Apellido FROM Usuario WHERE Mail = ?", conexion))
+                {
+                    comando.Parameters.AddWithValue("?", mail);
+
+                    using (OleDbDataReader lector = comando.ExecuteReader())
+                    {
+                        if (lector.Read())
+                        {
+                            return lector["Nombre"].ToString() + " " + lector["Apellido"].ToString();
+                        }
+                    }
+                }
+            }
+
+            return mail;
+        }
+
+        private int ObtenerIdPerfil(OleDbConnection conexion, string nombrePerfil)
+        {
+            using (OleDbCommand comando = new OleDbCommand("SELECT TOP 1 Id_Perfil FROM Perfil WHERE Nombre = ?", conexion))
+            {
+                comando.Parameters.AddWithValue("?", nombrePerfil);
+                object resultado = comando.ExecuteScalar();
+
+                if (resultado != null)
+                {
+                    return Convert.ToInt32(resultado);
+                }
+            }
+
+            using (OleDbCommand comando = new OleDbCommand("INSERT INTO Perfil (Nombre) VALUES (?)", conexion))
+            {
+                comando.Parameters.AddWithValue("?", nombrePerfil);
+                comando.ExecuteNonQuery();
+            }
+
+            using (OleDbCommand comando = new OleDbCommand("SELECT @@IDENTITY", conexion))
+            {
+                return Convert.ToInt32(comando.ExecuteScalar());
+            }
+        }
+
+        private int InsertarUsuario(OleDbConnection conexion, OleDbTransaction transaccion, string nombre, string apellido, string usuario, string contrasena)
+        {
+            using (OleDbCommand comando = new OleDbCommand("INSERT INTO Usuario (Nombre, Apellido, Mail, [Contraseña]) VALUES (?, ?, ?, ?)", conexion, transaccion))
+            {
+                comando.Parameters.AddWithValue("?", nombre);
+                comando.Parameters.AddWithValue("?", apellido);
+                comando.Parameters.AddWithValue("?", usuario);
+                comando.Parameters.AddWithValue("?", contrasena);
+                comando.ExecuteNonQuery();
+            }
+
+            using (OleDbCommand comando = new OleDbCommand("SELECT @@IDENTITY", conexion, transaccion))
+            {
+                return Convert.ToInt32(comando.ExecuteScalar());
+            }
+        }
+
+        private void InsertarUsuarioPerfil(OleDbConnection conexion, OleDbTransaction transaccion, int idUsuario, int idPerfil)
+        {
+            using (OleDbCommand comando = new OleDbCommand("INSERT INTO [Usuario-Perfil] (Id_Usuario, Id_Perfil) VALUES (?, ?)", conexion, transaccion))
+            {
+                comando.Parameters.AddWithValue("?", idUsuario.ToString());
+                comando.Parameters.AddWithValue("?", idPerfil.ToString());
+                comando.ExecuteNonQuery();
             }
         }
 
@@ -601,6 +859,7 @@ namespace pryBazanERP.Conexión
             AgregarColumnaSiNoExiste(conexion, "Contacto", "Medio", "TEXT(20)");
             AgregarColumnaSiNoExiste(conexion, "Contacto", "Uso", "TEXT(20)");
             AgregarColumnaSiNoExiste(conexion, "Contacto", "Dato", "TEXT(255)");
+            AgregarColumnaSiNoExiste(conexion, "Contacto", "Enlace", "TEXT(255)");
             MigrarContactosAnteriores(conexion);
         }
 
@@ -641,31 +900,33 @@ namespace pryBazanERP.Conexión
             }
         }
 
-        private bool ExisteContacto(OleDbConnection conexion, int idPersonal, string medio, string uso, string dato)
+        private bool ExisteContacto(OleDbConnection conexion, int idPersonal, string medio, string uso, string dato, string enlace)
         {
-            using (OleDbCommand comando = new OleDbCommand("SELECT COUNT(*) FROM Contacto WHERE Id_Personal = ? AND Medio = ? AND Uso = ? AND Dato = ? AND Activo = ?", conexion))
+            using (OleDbCommand comando = new OleDbCommand("SELECT COUNT(*) FROM Contacto WHERE Id_Personal = ? AND Medio = ? AND Uso = ? AND Dato = ? AND Enlace = ? AND Activo = ?", conexion))
             {
                 comando.Parameters.AddWithValue("?", idPersonal);
                 comando.Parameters.AddWithValue("?", medio);
                 comando.Parameters.AddWithValue("?", uso);
                 comando.Parameters.AddWithValue("?", dato);
+                comando.Parameters.AddWithValue("?", enlace);
                 comando.Parameters.AddWithValue("?", true);
                 return Convert.ToInt32(comando.ExecuteScalar()) > 0;
             }
         }
 
-        private int InsertarContacto(OleDbConnection conexion, OleDbTransaction transaccion, int idPersonal, string medio, string uso, string dato)
+        private int InsertarContacto(OleDbConnection conexion, OleDbTransaction transaccion, int idPersonal, string medio, string uso, string dato, string enlace)
         {
-            using (OleDbCommand comando = new OleDbCommand("INSERT INTO Contacto (Id_Personal, Mail, Telefono, Redes, Activo, Medio, Uso, Dato) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", conexion, transaccion))
+            using (OleDbCommand comando = new OleDbCommand("INSERT INTO Contacto (Id_Personal, Mail, Telefono, Redes, Activo, Medio, Uso, Dato, Enlace) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", conexion, transaccion))
             {
                 comando.Parameters.AddWithValue("?", idPersonal);
                 comando.Parameters.AddWithValue("?", medio == "Mail" ? dato : "");
                 comando.Parameters.AddWithValue("?", medio == "Telefono" ? dato : "");
-                comando.Parameters.AddWithValue("?", "");
+                comando.Parameters.AddWithValue("?", medio == "Red social" ? dato : "");
                 comando.Parameters.AddWithValue("?", true);
                 comando.Parameters.AddWithValue("?", medio);
                 comando.Parameters.AddWithValue("?", uso);
                 comando.Parameters.AddWithValue("?", dato);
+                comando.Parameters.AddWithValue("?", enlace);
                 comando.ExecuteNonQuery();
             }
 

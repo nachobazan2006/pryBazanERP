@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Windows.Forms;
 using pryBazanERP.Conexión;
 
@@ -10,6 +11,8 @@ namespace pryBazanERP.Formulario
         private readonly classConexion conexion = new classConexion();
         private readonly int idPersonal;
         private readonly string nombrePersona;
+        private Label lblEnlace;
+        private Guna.UI2.WinForms.Guna2TextBox txtEnlace;
 
         public frmContacto() : this(0, "")
         {
@@ -21,6 +24,7 @@ namespace pryBazanERP.Formulario
             AppIcon.Aplicar(this);
             this.idPersonal = idPersonal;
             this.nombrePersona = nombrePersona;
+            CrearCampoEnlace();
             InicializarCombos();
             CargarPantalla();
         }
@@ -30,12 +34,45 @@ namespace pryBazanERP.Formulario
             cmbMedio.Items.Clear();
             cmbMedio.Items.Add("Mail");
             cmbMedio.Items.Add("Telefono");
+            cmbMedio.Items.Add("Red social");
             cmbMedio.SelectedIndex = 0;
+            cmbMedio.SelectedIndexChanged += cmbMedio_SelectedIndexChanged;
 
             cmbUso.Items.Clear();
             cmbUso.Items.Add("Principal");
             cmbUso.Items.Add("Auxilio");
             cmbUso.SelectedIndex = 0;
+
+            ActualizarVistaMedio();
+        }
+
+        private void CrearCampoEnlace()
+        {
+            lblEnlace = new Label();
+            lblEnlace.AutoSize = true;
+            lblEnlace.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            lblEnlace.ForeColor = Color.FromArgb(84, 60, 42);
+            lblEnlace.Location = new Point(24, 267);
+            lblEnlace.Name = "lblEnlace";
+            lblEnlace.Text = "Enlace";
+
+            txtEnlace = new Guna.UI2.WinForms.Guna2TextBox();
+            txtEnlace.BorderColor = Color.FromArgb(218, 198, 174);
+            txtEnlace.BorderRadius = 12;
+            txtEnlace.Cursor = Cursors.IBeam;
+            txtEnlace.DefaultText = "";
+            txtEnlace.FillColor = Color.FromArgb(255, 250, 243);
+            txtEnlace.FocusedState.BorderColor = Color.FromArgb(111, 74, 45);
+            txtEnlace.Font = new Font("Segoe UI", 10F);
+            txtEnlace.ForeColor = Color.FromArgb(72, 48, 34);
+            txtEnlace.Location = new Point(26, 286);
+            txtEnlace.Name = "txtEnlace";
+            txtEnlace.PlaceholderText = "https://...";
+            txtEnlace.SelectedText = "";
+            txtEnlace.Size = new Size(278, 36);
+
+            grpCarga.Controls.Add(lblEnlace);
+            grpCarga.Controls.Add(txtEnlace);
         }
 
         private void CargarPantalla()
@@ -86,6 +123,7 @@ namespace pryBazanERP.Formulario
                 cmbMedio.Text,
                 cmbUso.Text,
                 txtDato.Text.Trim(),
+                txtEnlace.Text.Trim(),
                 out mensaje);
 
             MessageBox.Show(
@@ -129,6 +167,13 @@ namespace pryBazanERP.Formulario
                 return false;
             }
 
+            if (MedioEsRedSocial() && string.IsNullOrWhiteSpace(txtEnlace.Text))
+            {
+                MessageBox.Show("Ingrese el enlace de la red social.", "Contacto", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                txtEnlace.Focus();
+                return false;
+            }
+
             return true;
         }
 
@@ -137,7 +182,29 @@ namespace pryBazanERP.Formulario
             cmbMedio.SelectedIndex = 0;
             cmbUso.SelectedIndex = 0;
             txtDato.Clear();
+            txtEnlace.Clear();
+            ActualizarVistaMedio();
             txtDato.Focus();
+        }
+
+        private void cmbMedio_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            ActualizarVistaMedio();
+        }
+
+        private void ActualizarVistaMedio()
+        {
+            bool esRedSocial = MedioEsRedSocial();
+            lblDato.Text = esRedSocial ? "Red social" : "Dato";
+            txtDato.PlaceholderText = esRedSocial ? "Instagram, Tik Tok, usuario..." : "Mail o telefono";
+            lblEnlace.Visible = esRedSocial;
+            txtEnlace.Visible = esRedSocial;
+            grpCarga.Size = esRedSocial ? new Size(330, 352) : new Size(330, 288);
+        }
+
+        private bool MedioEsRedSocial()
+        {
+            return cmbMedio.Text == "Red social";
         }
     }
 }

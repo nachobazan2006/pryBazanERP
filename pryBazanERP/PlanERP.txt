@@ -1,0 +1,57 @@
+Plan de mejora del flujo ERP
+
+Estado actual implementado:
+- Paso 1 iniciado: si el usuario no tiene personal asociado, el sistema abre Personal automaticamente.
+- Contacto queda bloqueado hasta que el usuario complete su ficha personal.
+- Paso 2 iniciado: la navegacion separa Mi ficha, Contactos y Mi cuenta.
+- Mi cuenta muestra datos de usuario, mail, perfil y estado de ficha personal.
+- Paso 3 iniciado: Contactos permite cargar Red social con un campo de red/usuario y otro de enlace.
+- Modulo administrativo agregado: Generar usuario crea credenciales iniciales solo para administradores.
+- Modulo administrativo agregado: Auditoria muestra movimientos en grilla solo para administradores.
+- Auditoria permite filtrar por perfil, dia y detalle.
+
+Proximos pasos acordados:
+
+1. Completar flujo de primer ingreso
+- Si no existe Id_Personal en la sesion, guiar al usuario a completar su ficha.
+- Al guardar la ficha, asociarla al usuario y habilitar Contacto.
+
+2. Separar conceptos de navegacion
+- Mi ficha: datos personales del usuario logueado.
+- Contactos: mails, telefonos y redes del personal asociado.
+- Mi cuenta: datos del usuario, perfil y cambio de contrasena.
+- Estado: iniciado.
+
+3. Completar Contactos
+- Permitir varios contactos por personal.
+- Mantener Mail y Telefono.
+- Agregar Red social usando un campo de red y otro campo de enlace.
+- Para redes, mantener entrada simple con TextBox para no complicar la carga.
+- Agregar editar y desactivar contactos cargados.
+- Estado: iniciado. Falta editar y desactivar contactos cargados.
+
+4. Permisos por perfil
+- Administrador: gestion completa.
+- Editor: puede editar su ficha y contactos.
+- Lector: solo consulta.
+
+5. Auditoria para administradores
+- Crear un modulo completo de Auditoria.
+- Mostrar movimientos del sistema: login correcto, intentos fallidos, altas, modificaciones, cambios de contrasena y desactivaciones.
+- Este modulo debe ser visible solo para administradores.
+- Permitir filtros por perfil, dia y detalle.
+- Estado: iniciado. Muestra auditoria de sesion, login correcto, intentos fallidos y generacion de usuarios.
+
+6. Generacion administrativa de usuarios
+- Crear usuarios desde nombre y apellido, sin registro publico.
+- Usuario generado con primera letra del nombre + apellido.
+- Contrasena inicial segura aleatoria de 8 caracteres.
+- Perfil inicial asignado: Lector.
+- El admin entrega usuario y contrasena, indicando cambio de contrasena al primer ingreso.
+- Estado: implementado.
+
+7. Reportes
+- Pensar mas adelante un modulo de reportes.
+- Debe generar informacion clave automaticamente segun los datos disponibles del sistema.
+- Posibles fuentes: usuarios, perfiles, fichas personales, contactos y auditoria.
+- Estado: pendiente.

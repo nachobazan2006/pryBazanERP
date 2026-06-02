@@ -284,7 +284,7 @@ namespace pryBazanERP.Formulario
             this.btnContacto.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
             this.btnContacto.Size = new System.Drawing.Size(196, 46);
             this.btnContacto.TabIndex = 3;
-            this.btnContacto.Text = "Contacto";
+            this.btnContacto.Text = "Contactos";
             this.btnContacto.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.btnContacto.Click += new System.EventHandler(this.btnContacto_Click);
             // 
@@ -305,7 +305,7 @@ namespace pryBazanERP.Formulario
             this.btnPersonal.Padding = new System.Windows.Forms.Padding(12, 0, 0, 0);
             this.btnPersonal.Size = new System.Drawing.Size(196, 46);
             this.btnPersonal.TabIndex = 2;
-            this.btnPersonal.Text = "Personal";
+            this.btnPersonal.Text = "Mi ficha";
             this.btnPersonal.TextAlign = System.Windows.Forms.HorizontalAlignment.Left;
             this.btnPersonal.Click += new System.EventHandler(this.btnPersonal_Click);
             // 
