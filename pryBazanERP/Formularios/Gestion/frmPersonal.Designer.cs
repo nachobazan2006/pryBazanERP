@@ -39,7 +39,8 @@ namespace pryBazanERP.Formulario
             this.lblDireccion = new System.Windows.Forms.Label();
             this.lblDomicilioTitulo = new System.Windows.Forms.Label();
             this.btnGuardar = new Guna.UI2.WinForms.Guna2Button();
-            this.btnLimpiar = new Guna.UI2.WinForms.Guna2Button();
+            this.btnLimpiarDatos = new Guna.UI2.WinForms.Guna2Button();
+            this.btnLimpiarDomicilio = new Guna.UI2.WinForms.Guna2Button();
             this.grpDatos.SuspendLayout();
             this.grpDomicilio.SuspendLayout();
             this.SuspendLayout();
@@ -71,6 +72,7 @@ namespace pryBazanERP.Formulario
             this.grpDatos.BorderColor = System.Drawing.Color.FromArgb(218, 198, 174);
             this.grpDatos.BorderRadius = 16;
             this.grpDatos.BorderThickness = 1;
+            this.grpDatos.Controls.Add(this.btnLimpiarDatos);
             this.grpDatos.Controls.Add(this.chkActivo);
             this.grpDatos.Controls.Add(this.txtNombre);
             this.grpDatos.Controls.Add(this.lblNombre);
@@ -210,6 +212,7 @@ namespace pryBazanERP.Formulario
             this.grpDomicilio.BorderColor = System.Drawing.Color.FromArgb(218, 198, 174);
             this.grpDomicilio.BorderRadius = 16;
             this.grpDomicilio.BorderThickness = 1;
+            this.grpDomicilio.Controls.Add(this.btnLimpiarDomicilio);
             this.grpDomicilio.Controls.Add(this.lstLocalidades);
             this.grpDomicilio.Controls.Add(this.lstProvincias);
             this.grpDomicilio.Controls.Add(this.txtLocalidad);
@@ -245,6 +248,7 @@ namespace pryBazanERP.Formulario
             this.lstLocalidades.Visible = false;
             this.lstLocalidades.Click += new System.EventHandler(this.lstLocalidades_Click);
             this.lstLocalidades.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstLocalidades_KeyDown);
+            this.lstLocalidades.Leave += new System.EventHandler(this.lstLocalidades_Leave);
             // 
             // lstProvincias
             // 
@@ -261,6 +265,7 @@ namespace pryBazanERP.Formulario
             this.lstProvincias.Visible = false;
             this.lstProvincias.Click += new System.EventHandler(this.lstProvincias_Click);
             this.lstProvincias.KeyDown += new System.Windows.Forms.KeyEventHandler(this.lstProvincias_KeyDown);
+            this.lstProvincias.Leave += new System.EventHandler(this.lstProvincias_Leave);
             // 
             // txtLocalidad
             // 
@@ -280,6 +285,7 @@ namespace pryBazanERP.Formulario
             this.txtLocalidad.Size = new System.Drawing.Size(278, 36);
             this.txtLocalidad.TabIndex = 9;
             this.txtLocalidad.TextChanged += new System.EventHandler(this.txtLocalidad_TextChanged);
+            this.txtLocalidad.Leave += new System.EventHandler(this.txtLocalidad_Leave);
             // 
             // lblLocalidad
             // 
@@ -311,6 +317,7 @@ namespace pryBazanERP.Formulario
             this.txtProvincia.TabIndex = 2;
             this.txtProvincia.TextChanged += new System.EventHandler(this.txtProvincia_TextChanged);
             this.txtProvincia.Enter += new System.EventHandler(this.txtProvincia_Enter);
+            this.txtProvincia.Leave += new System.EventHandler(this.txtProvincia_Leave);
             // 
             // lblProvincia
             // 
@@ -408,23 +415,41 @@ namespace pryBazanERP.Formulario
             this.btnGuardar.Text = "Guardar";
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
             // 
-            // btnLimpiar
+            // btnLimpiarDatos
             // 
-            this.btnLimpiar.Animated = true;
-            this.btnLimpiar.BorderColor = System.Drawing.Color.FromArgb(150, 111, 76);
-            this.btnLimpiar.BorderRadius = 12;
-            this.btnLimpiar.BorderThickness = 1;
-            this.btnLimpiar.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnLimpiar.FillColor = System.Drawing.Color.FromArgb(246, 238, 226);
-            this.btnLimpiar.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
-            this.btnLimpiar.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
-            this.btnLimpiar.HoverState.FillColor = System.Drawing.Color.FromArgb(218, 198, 174);
-            this.btnLimpiar.Location = new System.Drawing.Point(408, 508);
-            this.btnLimpiar.Name = "btnLimpiar";
-            this.btnLimpiar.Size = new System.Drawing.Size(140, 42);
-            this.btnLimpiar.TabIndex = 5;
-            this.btnLimpiar.Text = "Limpiar";
-            this.btnLimpiar.Click += new System.EventHandler(this.btnLimpiar_Click);
+            this.btnLimpiarDatos.Animated = true;
+            this.btnLimpiarDatos.BorderColor = System.Drawing.Color.FromArgb(150, 111, 76);
+            this.btnLimpiarDatos.BorderRadius = 8;
+            this.btnLimpiarDatos.BorderThickness = 1;
+            this.btnLimpiarDatos.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnLimpiarDatos.FillColor = System.Drawing.Color.FromArgb(255, 250, 243);
+            this.btnLimpiarDatos.Font = new System.Drawing.Font("Segoe UI Semibold", 8.5F, System.Drawing.FontStyle.Bold);
+            this.btnLimpiarDatos.ForeColor = System.Drawing.Color.FromArgb(84, 60, 42);
+            this.btnLimpiarDatos.HoverState.FillColor = System.Drawing.Color.FromArgb(218, 198, 174);
+            this.btnLimpiarDatos.Location = new System.Drawing.Point(219, 18);
+            this.btnLimpiarDatos.Name = "btnLimpiarDatos";
+            this.btnLimpiarDatos.Size = new System.Drawing.Size(85, 28);
+            this.btnLimpiarDatos.TabIndex = 8;
+            this.btnLimpiarDatos.Text = "Limpiar";
+            this.btnLimpiarDatos.Click += new System.EventHandler(this.btnLimpiarDatos_Click);
+            // 
+            // btnLimpiarDomicilio
+            // 
+            this.btnLimpiarDomicilio.Animated = true;
+            this.btnLimpiarDomicilio.BorderColor = System.Drawing.Color.FromArgb(150, 111, 76);
+            this.btnLimpiarDomicilio.BorderRadius = 8;
+            this.btnLimpiarDomicilio.BorderThickness = 1;
+            this.btnLimpiarDomicilio.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnLimpiarDomicilio.FillColor = System.Drawing.Color.FromArgb(255, 250, 243);
+            this.btnLimpiarDomicilio.Font = new System.Drawing.Font("Segoe UI Semibold", 8.5F, System.Drawing.FontStyle.Bold);
+            this.btnLimpiarDomicilio.ForeColor = System.Drawing.Color.FromArgb(84, 60, 42);
+            this.btnLimpiarDomicilio.HoverState.FillColor = System.Drawing.Color.FromArgb(218, 198, 174);
+            this.btnLimpiarDomicilio.Location = new System.Drawing.Point(219, 18);
+            this.btnLimpiarDomicilio.Name = "btnLimpiarDomicilio";
+            this.btnLimpiarDomicilio.Size = new System.Drawing.Size(85, 28);
+            this.btnLimpiarDomicilio.TabIndex = 11;
+            this.btnLimpiarDomicilio.Text = "Limpiar";
+            this.btnLimpiarDomicilio.Click += new System.EventHandler(this.btnLimpiarDomicilio_Click);
             // 
             // frmPersonal
             // 
@@ -432,7 +457,6 @@ namespace pryBazanERP.Formulario
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.FromArgb(232, 218, 198);
             this.ClientSize = new System.Drawing.Size(800, 580);
-            this.Controls.Add(this.btnLimpiar);
             this.Controls.Add(this.btnGuardar);
             this.Controls.Add(this.grpDomicilio);
             this.Controls.Add(this.grpDatos);
@@ -476,6 +500,7 @@ namespace pryBazanERP.Formulario
         private System.Windows.Forms.Label lblDireccion;
         private System.Windows.Forms.Label lblDomicilioTitulo;
         private Guna.UI2.WinForms.Guna2Button btnGuardar;
-        private Guna.UI2.WinForms.Guna2Button btnLimpiar;
+        private Guna.UI2.WinForms.Guna2Button btnLimpiarDatos;
+        private Guna.UI2.WinForms.Guna2Button btnLimpiarDomicilio;
     }
 }

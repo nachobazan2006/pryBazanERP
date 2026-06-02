@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Script.Serialization;
 
@@ -11,6 +12,13 @@ namespace pryBazanERP.Acceso_datos
     {
         private const string UrlLocalidadesCordoba = "https://apis.datos.gob.ar/georef/api/localidades?provincia=cordoba&campos=id,nombre,provincia&max=5000";
         private readonly Dictionary<string, List<string>> busquedasCordoba = new Dictionary<string, List<string>>();
+        private List<string> localidadesCordoba;
+        private Task<List<string>> cargaLocalidadesCordoba;
+
+        public Task PrecargarLocalidadesCordobaAsync()
+        {
+            return ObtenerLocalidadesCordobaAsync();
+        }
 
         public async Task<List<string>> BuscarLocalidadesCordobaAsync(string texto)
         {
@@ -26,32 +34,70 @@ namespace pryBazanERP.Acceso_datos
                 return new List<string>(busquedasCordoba[textoNormalizado]);
             }
 
-            string url = "https://apis.datos.gob.ar/georef/api/localidades?provincia=cordoba&nombre=" +
-                Uri.EscapeDataString(textoNormalizado) +
-                "&campos=id,nombre,provincia&max=10";
+            List<string> localidades = await ObtenerLocalidadesCordobaAsync();
 
+            List<string> resultado = localidades
+                .Where(l => l.IndexOf(textoNormalizado, StringComparison.OrdinalIgnoreCase) >= 0)
+                .OrderBy(l => l.StartsWith(textoNormalizado, StringComparison.OrdinalIgnoreCase) ? 0 : 1)
+                .ThenBy(l => l)
+                .Take(10)
+                .ToList();
+
+            busquedasCordoba[textoNormalizado] = resultado;
+            return new List<string>(resultado);
+        }
+
+        private Task<List<string>> ObtenerLocalidadesCordobaAsync()
+        {
+            if (localidadesCordoba != null)
+            {
+                return Task.FromResult(new List<string>(localidadesCordoba));
+            }
+
+            if (cargaLocalidadesCordoba == null)
+            {
+                cargaLocalidadesCordoba = CargarLocalidadesCordobaAsync();
+            }
+
+            return cargaLocalidadesCordoba;
+        }
+
+        private async Task<List<string>> CargarLocalidadesCordobaAsync()
+        {
+            List<string> localidades = ObtenerLocalidadesCordobaDesdeBase();
+
+            if (localidades.Count == 0)
+            {
+                localidades = await ObtenerLocalidadesCordobaDesdeApiAsync();
+                GuardarLocalidadesCordobaEnBase(localidades);
+            }
+
+            localidadesCordoba = localidades
+                .Where(l => !string.IsNullOrWhiteSpace(l))
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .OrderBy(l => l)
+                .ToList();
+
+            return new List<string>(localidadesCordoba);
+        }
+
+        private async Task<List<string>> ObtenerLocalidadesCordobaDesdeApiAsync()
+        {
             ConexionAPI conexionAPI = new ConexionAPI();
-            string json = await conexionAPI.ObtenerJsonAsync(url);
+            string json = await conexionAPI.ObtenerJsonAsync(UrlLocalidadesCordoba);
 
             JavaScriptSerializer serializador = new JavaScriptSerializer();
             RespuestaLocalidades respuesta = serializador.Deserialize<RespuestaLocalidades>(json);
-            List<string> localidades = new List<string>();
 
             if (respuesta == null || respuesta.localidades == null)
             {
-                return localidades;
+                return new List<string>();
             }
 
-            foreach (LocalidadGeoref localidad in respuesta.localidades)
-            {
-                if (localidad != null && !string.IsNullOrWhiteSpace(localidad.nombre))
-                {
-                    localidades.Add(localidad.nombre);
-                }
-            }
-
-            busquedasCordoba[textoNormalizado] = localidades;
-            return new List<string>(localidades);
+            return respuesta.localidades
+                .Where(l => l != null && !string.IsNullOrWhiteSpace(l.nombre))
+                .Select(l => l.nombre.Trim())
+                .ToList();
         }
 
         public async Task<int> ImportarLocalidadesCordobaAsync()
@@ -137,6 +183,66 @@ namespace pryBazanERP.Acceso_datos
                 comando.Parameters.AddWithValue("?", nombre);
                 comando.Parameters.AddWithValue("?", idProvincia);
                 comando.ExecuteNonQuery();
+            }
+        }
+
+        private List<string> ObtenerLocalidadesCordobaDesdeBase()
+        {
+            List<string> localidades = new List<string>();
+            string carpetaAplicacion = Path.GetDirectoryName(typeof(LocalidadesAPI).Assembly.Location);
+            string rutaBase = Path.Combine(carpetaAplicacion, "Acceso datos", "Bazan.accdb");
+            string cadenaConexion = @"Provider=Microsoft.ACE.OLEDB.16.0;Data Source=" + rutaBase + ";Persist Security Info=False;";
+
+            using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
+            {
+                conexion.Open();
+
+                string consulta =
+                    "SELECT Localidad.Nombre " +
+                    "FROM Localidad INNER JOIN Provincia ON Localidad.Id_Provincia = Provincia.Id_Provincia " +
+                    "WHERE Provincia.Nombre = ? " +
+                    "ORDER BY Localidad.Nombre";
+
+                using (OleDbCommand comando = new OleDbCommand(consulta, conexion))
+                {
+                    comando.Parameters.AddWithValue("?", "Cordoba");
+
+                    using (OleDbDataReader lector = comando.ExecuteReader())
+                    {
+                        while (lector.Read())
+                        {
+                            localidades.Add(lector["Nombre"].ToString());
+                        }
+                    }
+                }
+            }
+
+            return localidades;
+        }
+
+        private void GuardarLocalidadesCordobaEnBase(List<string> localidades)
+        {
+            if (localidades.Count == 0)
+            {
+                return;
+            }
+
+            string carpetaAplicacion = Path.GetDirectoryName(typeof(LocalidadesAPI).Assembly.Location);
+            string rutaBase = Path.Combine(carpetaAplicacion, "Acceso datos", "Bazan.accdb");
+            string cadenaConexion = @"Provider=Microsoft.ACE.OLEDB.16.0;Data Source=" + rutaBase + ";Persist Security Info=False;";
+
+            using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
+            {
+                conexion.Open();
+                int idProvincia = ObtenerOCrearProvincia(conexion, "Cordoba");
+
+                foreach (string localidad in localidades)
+                {
+                    if (!ExisteLocalidad(conexion, localidad, idProvincia))
+                    {
+                        InsertarLocalidad(conexion, localidad, idProvincia);
+                    }
+                }
             }
         }
 

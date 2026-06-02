@@ -22,6 +22,33 @@ namespace pryBazanERP.Conexión
             }
         }
 
+        public class PersonalDetalle
+        {
+            public int IdPersonal { get; set; }
+            public string DNI { get; set; }
+            public string Apellido { get; set; }
+            public string Nombre { get; set; }
+            public string Direccion { get; set; }
+            public string Geo { get; set; }
+            public string Localidad { get; set; }
+            public string Provincia { get; set; }
+            public bool Activo { get; set; }
+        }
+
+        public class ContactoItem
+        {
+            public int IdContacto { get; set; }
+            public string Medio { get; set; }
+            public string Uso { get; set; }
+            public string Dato { get; set; }
+        }
+
+        public class RedItem
+        {
+            public int IdRed { get; set; }
+            public string Nombre { get; set; }
+        }
+
         public classConexion()
         {
             string carpetaAplicacion = Path.GetDirectoryName(typeof(classConexion).Assembly.Location);
@@ -54,8 +81,17 @@ namespace pryBazanERP.Conexión
 
         public bool ObtenerDatosUsuario(string mail, string contraseña, out string usuario, out string perfil)
         {
+            int idUsuario;
+            int idPersonal;
+            return ObtenerDatosUsuario(mail, contraseña, out usuario, out perfil, out idUsuario, out idPersonal);
+        }
+
+        public bool ObtenerDatosUsuario(string mail, string contraseña, out string usuario, out string perfil, out int idUsuario, out int idPersonal)
+        {
             usuario = "";
             perfil = "";
+            idUsuario = 0;
+            idPersonal = 0;
 
             try
             {
@@ -64,7 +100,7 @@ namespace pryBazanERP.Conexión
                     conexion.Open();
 
                     string consulta =
-                        "SELECT TOP 1 Usuario.Nombre, Usuario.Apellido, Perfil.Nombre AS NombrePerfil " +
+                        "SELECT TOP 1 Usuario.Id_Usuario, Usuario.Id_Personal, Usuario.Nombre, Usuario.Apellido, Perfil.Nombre AS NombrePerfil " +
                         "FROM (Usuario INNER JOIN [Usuario-Perfil] " +
                         "ON Usuario.Id_Usuario = CInt([Usuario-Perfil].Id_Usuario)) " +
                         "INNER JOIN Perfil " +
@@ -80,6 +116,13 @@ namespace pryBazanERP.Conexión
                         {
                             if (lector.Read())
                             {
+                                idUsuario = Convert.ToInt32(lector["Id_Usuario"]);
+
+                                if (lector["Id_Personal"] != DBNull.Value)
+                                {
+                                    idPersonal = Convert.ToInt32(lector["Id_Personal"]);
+                                }
+
                                 usuario = lector["Nombre"].ToString() + " " + lector["Apellido"].ToString();
                                 perfil = lector["NombrePerfil"].ToString();
                                 return true;
@@ -123,7 +166,7 @@ namespace pryBazanERP.Conexión
             }
         }
 
-        public bool GuardarContacto(string dniPersonal, string mail, string telefono, bool activo, string instagram, string facebook, string twitter, out string mensaje)
+        public bool GuardarContacto(int idPersonal, string medio, string uso, string dato, out string mensaje)
         {
             mensaje = "";
 
@@ -132,12 +175,17 @@ namespace pryBazanERP.Conexión
                 using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
                 {
                     conexion.Open();
-
-                    int idPersonal = ObtenerIdPersonalPorDni(conexion, dniPersonal);
+                    AsegurarTablaContacto(conexion);
 
                     if (idPersonal == 0)
                     {
-                        mensaje = "No se encontro un personal con ese DNI.";
+                        mensaje = "No hay un personal asociado a la sesion.";
+                        return false;
+                    }
+
+                    if (ExisteContacto(conexion, idPersonal, medio, uso, dato))
+                    {
+                        mensaje = "Ese contacto ya esta cargado para la persona actual.";
                         return false;
                     }
 
@@ -145,12 +193,7 @@ namespace pryBazanERP.Conexión
                     {
                         try
                         {
-                            int idContacto = InsertarContacto(conexion, transaccion, idPersonal, mail, telefono, activo);
-
-                            InsertarRedSocial(conexion, transaccion, idContacto, "Instagram", instagram);
-                            InsertarRedSocial(conexion, transaccion, idContacto, "Facebook", facebook);
-                            InsertarRedSocial(conexion, transaccion, idContacto, "Twitter", twitter);
-
+                            InsertarContacto(conexion, transaccion, idPersonal, medio, uso, dato);
                             transaccion.Commit();
                             mensaje = "Contacto guardado correctamente.";
                             return true;
@@ -170,9 +213,54 @@ namespace pryBazanERP.Conexión
             }
         }
 
+        public List<ContactoItem> ObtenerContactosPorPersonal(int idPersonal)
+        {
+            List<ContactoItem> contactos = new List<ContactoItem>();
+
+            using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
+            {
+                conexion.Open();
+                AsegurarTablaContacto(conexion);
+
+                string consulta =
+                    "SELECT Id_Contacto, Medio, Uso, Dato FROM Contacto " +
+                    "WHERE Id_Personal = ? AND Activo = ? " +
+                    "ORDER BY Uso, Medio, Dato";
+
+                using (OleDbCommand comando = new OleDbCommand(consulta, conexion))
+                {
+                    comando.Parameters.AddWithValue("?", idPersonal);
+                    comando.Parameters.AddWithValue("?", true);
+
+                    using (OleDbDataReader lector = comando.ExecuteReader())
+                    {
+                        while (lector.Read())
+                        {
+                            contactos.Add(new ContactoItem
+                            {
+                                IdContacto = Convert.ToInt32(lector["Id_Contacto"]),
+                                Medio = lector["Medio"].ToString(),
+                                Uso = lector["Uso"].ToString(),
+                                Dato = lector["Dato"].ToString()
+                            });
+                        }
+                    }
+                }
+            }
+
+            return contactos;
+        }
+
         public bool GuardarPersonal(string dni, string apellido, string nombre, string direccion, string geo, string localidad, string provincia, bool activo, out string mensaje)
         {
+            int idPersonal;
+            return GuardarPersonal(dni, apellido, nombre, direccion, geo, localidad, provincia, activo, out mensaje, out idPersonal);
+        }
+
+        public bool GuardarPersonal(string dni, string apellido, string nombre, string direccion, string geo, string localidad, string provincia, bool activo, out string mensaje, out int idPersonal)
+        {
             mensaje = "";
+            idPersonal = 0;
 
             try
             {
@@ -187,12 +275,7 @@ namespace pryBazanERP.Conexión
                     }
 
                     int idProvincia = ObtenerOCrearProvincia(conexion, provincia);
-                    object idLocalidad = DBNull.Value;
-
-                    if (provincia == "Cordoba" && !string.IsNullOrWhiteSpace(localidad))
-                    {
-                        idLocalidad = ObtenerOCrearLocalidad(conexion, localidad, idProvincia);
-                    }
+                    object idLocalidad = ObtenerIdLocalidadParaPersonal(conexion, provincia, localidad, idProvincia);
 
                     string consulta =
                         "INSERT INTO Personal (DNI, Apellido, Nombre, Direccion, Geo, Id_Localidad, Id_Provincia, Activo) " +
@@ -211,6 +294,11 @@ namespace pryBazanERP.Conexión
                         comando.ExecuteNonQuery();
                     }
 
+                    using (OleDbCommand comando = new OleDbCommand("SELECT @@IDENTITY", conexion))
+                    {
+                        idPersonal = Convert.ToInt32(comando.ExecuteScalar());
+                    }
+
                     mensaje = "Personal guardado correctamente.";
                     return true;
                 }
@@ -219,6 +307,117 @@ namespace pryBazanERP.Conexión
             {
                 mensaje = "No se pudo guardar el personal: " + ex.Message;
                 return false;
+            }
+        }
+
+        public bool AsociarUsuarioPersonal(int idUsuario, int idPersonal, out string mensaje)
+        {
+            mensaje = "";
+
+            try
+            {
+                using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
+                {
+                    conexion.Open();
+
+                    using (OleDbCommand comando = new OleDbCommand("UPDATE Usuario SET Id_Personal = ? WHERE Id_Usuario = ?", conexion))
+                    {
+                        comando.Parameters.AddWithValue("?", idPersonal);
+                        comando.Parameters.AddWithValue("?", idUsuario);
+                        comando.ExecuteNonQuery();
+                    }
+                }
+
+                mensaje = "Usuario asociado al personal correctamente.";
+                return true;
+            }
+            catch (Exception ex)
+            {
+                mensaje = "No se pudo asociar el usuario al personal: " + ex.Message;
+                return false;
+            }
+        }
+
+        public bool ActualizarPersonal(int idPersonal, string dni, string apellido, string nombre, string direccion, string geo, string localidad, string provincia, bool activo, out string mensaje)
+        {
+            mensaje = "";
+
+            try
+            {
+                using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
+                {
+                    conexion.Open();
+
+                    int idProvincia = ObtenerOCrearProvincia(conexion, provincia);
+                    object idLocalidad = ObtenerIdLocalidadParaPersonal(conexion, provincia, localidad, idProvincia);
+
+                    string consulta =
+                        "UPDATE Personal SET DNI = ?, Apellido = ?, Nombre = ?, Direccion = ?, Geo = ?, Id_Localidad = ?, Id_Provincia = ?, Activo = ? " +
+                        "WHERE Id_Personal = ?";
+
+                    using (OleDbCommand comando = new OleDbCommand(consulta, conexion))
+                    {
+                        comando.Parameters.AddWithValue("?", dni);
+                        comando.Parameters.AddWithValue("?", apellido);
+                        comando.Parameters.AddWithValue("?", nombre);
+                        comando.Parameters.AddWithValue("?", direccion);
+                        comando.Parameters.AddWithValue("?", geo);
+                        comando.Parameters.AddWithValue("?", idLocalidad);
+                        comando.Parameters.AddWithValue("?", idProvincia);
+                        comando.Parameters.AddWithValue("?", activo);
+                        comando.Parameters.AddWithValue("?", idPersonal);
+                        comando.ExecuteNonQuery();
+                    }
+
+                    mensaje = "Personal actualizado correctamente.";
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                mensaje = "No se pudo actualizar el personal: " + ex.Message;
+                return false;
+            }
+        }
+
+        public PersonalDetalle ObtenerPersonalDetalle(int idPersonal)
+        {
+            using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
+            {
+                conexion.Open();
+
+                string consulta =
+                    "SELECT Personal.Id_Personal, Personal.DNI, Personal.Apellido, Personal.Nombre, Personal.Direccion, Personal.Geo, Personal.Activo, " +
+                    "Localidad.Nombre AS NombreLocalidad, Provincia.Nombre AS NombreProvincia " +
+                    "FROM (Personal LEFT JOIN Localidad ON Personal.Id_Localidad = Localidad.Id_Localidad) " +
+                    "LEFT JOIN Provincia ON Personal.Id_Provincia = Provincia.Id_Provincia " +
+                    "WHERE Personal.Id_Personal = ?";
+
+                using (OleDbCommand comando = new OleDbCommand(consulta, conexion))
+                {
+                    comando.Parameters.AddWithValue("?", idPersonal);
+
+                    using (OleDbDataReader lector = comando.ExecuteReader())
+                    {
+                        if (!lector.Read())
+                        {
+                            return null;
+                        }
+
+                        return new PersonalDetalle
+                        {
+                            IdPersonal = Convert.ToInt32(lector["Id_Personal"]),
+                            DNI = lector["DNI"].ToString(),
+                            Apellido = lector["Apellido"].ToString(),
+                            Nombre = lector["Nombre"].ToString(),
+                            Direccion = lector["Direccion"].ToString(),
+                            Geo = lector["Geo"].ToString(),
+                            Localidad = lector["NombreLocalidad"].ToString(),
+                            Provincia = lector["NombreProvincia"].ToString(),
+                            Activo = lector["Activo"] != DBNull.Value && Convert.ToBoolean(lector["Activo"])
+                        };
+                    }
+                }
             }
         }
 
@@ -249,6 +448,74 @@ namespace pryBazanERP.Conexión
             }
 
             return personal;
+        }
+
+        public List<RedItem> ObtenerRedes()
+        {
+            List<RedItem> redes = new List<RedItem>();
+
+            using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
+            {
+                conexion.Open();
+                AsegurarTablaRedes(conexion);
+
+                string consulta = "SELECT Id_Red, Nombre FROM Redes ORDER BY Nombre";
+
+                using (OleDbCommand comando = new OleDbCommand(consulta, conexion))
+                using (OleDbDataReader lector = comando.ExecuteReader())
+                {
+                    while (lector.Read())
+                    {
+                        redes.Add(new RedItem
+                        {
+                            IdRed = Convert.ToInt32(lector["Id_Red"]),
+                            Nombre = lector["Nombre"].ToString()
+                        });
+                    }
+                }
+            }
+
+            return redes;
+        }
+
+        public bool CambiarContrasena(int idUsuario, string contrasenaActual, string contrasenaNueva, out string mensaje)
+        {
+            mensaje = "";
+
+            try
+            {
+                using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
+                {
+                    conexion.Open();
+
+                    using (OleDbCommand comando = new OleDbCommand("SELECT COUNT(*) FROM Usuario WHERE Id_Usuario = ? AND [Contraseña] = ?", conexion))
+                    {
+                        comando.Parameters.AddWithValue("?", idUsuario);
+                        comando.Parameters.AddWithValue("?", contrasenaActual);
+
+                        if (Convert.ToInt32(comando.ExecuteScalar()) == 0)
+                        {
+                            mensaje = "La contrasena actual no es correcta.";
+                            return false;
+                        }
+                    }
+
+                    using (OleDbCommand comando = new OleDbCommand("UPDATE Usuario SET [Contraseña] = ? WHERE Id_Usuario = ?", conexion))
+                    {
+                        comando.Parameters.AddWithValue("?", contrasenaNueva);
+                        comando.Parameters.AddWithValue("?", idUsuario);
+                        comando.ExecuteNonQuery();
+                    }
+
+                    mensaje = "Contrasena actualizada correctamente.";
+                    return true;
+                }
+            }
+            catch (Exception ex)
+            {
+                mensaje = "No se pudo cambiar la contrasena: " + ex.Message;
+                return false;
+            }
         }
 
         private int ObtenerIdPersonalPorDni(OleDbConnection conexion, string dni)
@@ -292,6 +559,16 @@ namespace pryBazanERP.Conexión
             }
         }
 
+        private object ObtenerIdLocalidadParaPersonal(OleDbConnection conexion, string provincia, string localidad, int idProvincia)
+        {
+            if (provincia == "Cordoba" && !string.IsNullOrWhiteSpace(localidad))
+            {
+                return ObtenerOCrearLocalidad(conexion, localidad, idProvincia);
+            }
+
+            return DBNull.Value;
+        }
+
         private int ObtenerOCrearLocalidad(OleDbConnection conexion, string nombre, int idProvincia)
         {
             using (OleDbCommand comando = new OleDbCommand("SELECT TOP 1 Id_Localidad FROM Localidad WHERE Nombre = ? AND Id_Provincia = ?", conexion))
@@ -319,15 +596,76 @@ namespace pryBazanERP.Conexión
             }
         }
 
-        private int InsertarContacto(OleDbConnection conexion, OleDbTransaction transaccion, int idPersonal, string mail, string telefono, bool activo)
+        private void AsegurarTablaContacto(OleDbConnection conexion)
         {
-            using (OleDbCommand comando = new OleDbCommand("INSERT INTO Contacto (Id_Personal, Mail, Telefono, Redes, Activo) VALUES (?, ?, ?, ?, ?)", conexion, transaccion))
+            AgregarColumnaSiNoExiste(conexion, "Contacto", "Medio", "TEXT(20)");
+            AgregarColumnaSiNoExiste(conexion, "Contacto", "Uso", "TEXT(20)");
+            AgregarColumnaSiNoExiste(conexion, "Contacto", "Dato", "TEXT(255)");
+            MigrarContactosAnteriores(conexion);
+        }
+
+        private void AgregarColumnaSiNoExiste(OleDbConnection conexion, string tabla, string columna, string definicion)
+        {
+            using (System.Data.DataTable columnas = conexion.GetSchema("Columns"))
+            {
+                foreach (System.Data.DataRow fila in columnas.Rows)
+                {
+                    if (fila["TABLE_NAME"].ToString().Equals(tabla, StringComparison.OrdinalIgnoreCase) &&
+                        fila["COLUMN_NAME"].ToString().Equals(columna, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return;
+                    }
+                }
+            }
+
+            using (OleDbCommand comando = new OleDbCommand("ALTER TABLE " + tabla + " ADD COLUMN " + columna + " " + definicion, conexion))
+            {
+                comando.ExecuteNonQuery();
+            }
+        }
+
+        private void MigrarContactosAnteriores(OleDbConnection conexion)
+        {
+            using (OleDbCommand comando = new OleDbCommand("UPDATE Contacto SET Medio = ?, Uso = ?, Dato = Mail WHERE (Dato IS NULL OR Dato = '') AND Mail IS NOT NULL AND Mail <> ''", conexion))
+            {
+                comando.Parameters.AddWithValue("?", "Mail");
+                comando.Parameters.AddWithValue("?", "Principal");
+                comando.ExecuteNonQuery();
+            }
+
+            using (OleDbCommand comando = new OleDbCommand("UPDATE Contacto SET Medio = ?, Uso = ?, Dato = Telefono WHERE (Dato IS NULL OR Dato = '') AND Telefono IS NOT NULL AND Telefono <> ''", conexion))
+            {
+                comando.Parameters.AddWithValue("?", "Telefono");
+                comando.Parameters.AddWithValue("?", "Principal");
+                comando.ExecuteNonQuery();
+            }
+        }
+
+        private bool ExisteContacto(OleDbConnection conexion, int idPersonal, string medio, string uso, string dato)
+        {
+            using (OleDbCommand comando = new OleDbCommand("SELECT COUNT(*) FROM Contacto WHERE Id_Personal = ? AND Medio = ? AND Uso = ? AND Dato = ? AND Activo = ?", conexion))
             {
                 comando.Parameters.AddWithValue("?", idPersonal);
-                comando.Parameters.AddWithValue("?", mail);
-                comando.Parameters.AddWithValue("?", telefono);
+                comando.Parameters.AddWithValue("?", medio);
+                comando.Parameters.AddWithValue("?", uso);
+                comando.Parameters.AddWithValue("?", dato);
+                comando.Parameters.AddWithValue("?", true);
+                return Convert.ToInt32(comando.ExecuteScalar()) > 0;
+            }
+        }
+
+        private int InsertarContacto(OleDbConnection conexion, OleDbTransaction transaccion, int idPersonal, string medio, string uso, string dato)
+        {
+            using (OleDbCommand comando = new OleDbCommand("INSERT INTO Contacto (Id_Personal, Mail, Telefono, Redes, Activo, Medio, Uso, Dato) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", conexion, transaccion))
+            {
+                comando.Parameters.AddWithValue("?", idPersonal);
+                comando.Parameters.AddWithValue("?", medio == "Mail" ? dato : "");
+                comando.Parameters.AddWithValue("?", medio == "Telefono" ? dato : "");
                 comando.Parameters.AddWithValue("?", "");
-                comando.Parameters.AddWithValue("?", activo);
+                comando.Parameters.AddWithValue("?", true);
+                comando.Parameters.AddWithValue("?", medio);
+                comando.Parameters.AddWithValue("?", uso);
+                comando.Parameters.AddWithValue("?", dato);
                 comando.ExecuteNonQuery();
             }
 
@@ -337,18 +675,57 @@ namespace pryBazanERP.Conexión
             }
         }
 
-        private void InsertarRedSocial(OleDbConnection conexion, OleDbTransaction transaccion, int idContacto, string tipo, string usuarioUrl)
+        private void AsegurarTablaRedes(OleDbConnection conexion)
         {
-            if (string.IsNullOrWhiteSpace(usuarioUrl))
+            bool existeTabla = false;
+
+            using (System.Data.DataTable tablas = conexion.GetSchema("Tables"))
             {
-                return;
+                foreach (System.Data.DataRow tabla in tablas.Rows)
+                {
+                    if (tabla["TABLE_NAME"].ToString().Equals("Redes", StringComparison.OrdinalIgnoreCase))
+                    {
+                        existeTabla = true;
+                        break;
+                    }
+                }
             }
 
-            using (OleDbCommand comando = new OleDbCommand("INSERT INTO RedSocial (Id_Contacto, Tipo, UsuarioUrl) VALUES (?, ?, ?)", conexion, transaccion))
+            if (!existeTabla)
             {
-                comando.Parameters.AddWithValue("?", idContacto);
-                comando.Parameters.AddWithValue("?", tipo);
-                comando.Parameters.AddWithValue("?", usuarioUrl.Trim());
+                using (OleDbCommand comando = new OleDbCommand("CREATE TABLE Redes (Id_Red AUTOINCREMENT PRIMARY KEY, Nombre TEXT(50) NOT NULL)", conexion))
+                {
+                    comando.ExecuteNonQuery();
+                }
+
+                using (OleDbCommand comando = new OleDbCommand("CREATE UNIQUE INDEX UX_Redes_Nombre ON Redes (Nombre)", conexion))
+                {
+                    comando.ExecuteNonQuery();
+                }
+            }
+
+            InsertarRedSiNoExiste(conexion, "Instagram");
+            InsertarRedSiNoExiste(conexion, "Tik Tok");
+            InsertarRedSiNoExiste(conexion, "Twitter");
+            InsertarRedSiNoExiste(conexion, "Facebook");
+            InsertarRedSiNoExiste(conexion, "LinkedIn");
+        }
+
+        private void InsertarRedSiNoExiste(OleDbConnection conexion, string nombre)
+        {
+            using (OleDbCommand comando = new OleDbCommand("SELECT TOP 1 Id_Red FROM Redes WHERE Nombre = ?", conexion))
+            {
+                comando.Parameters.AddWithValue("?", nombre);
+
+                if (comando.ExecuteScalar() != null)
+                {
+                    return;
+                }
+            }
+
+            using (OleDbCommand comando = new OleDbCommand("INSERT INTO Redes (Nombre) VALUES (?)", conexion))
+            {
+                comando.Parameters.AddWithValue("?", nombre);
                 comando.ExecuteNonQuery();
             }
         }

@@ -12,6 +12,7 @@
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <ApplicationIcon>imgggg.ico</ApplicationIcon>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>x64</PlatformTarget>
@@ -53,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AppIcon.cs" />
     <Compile Include="Acceso datos\classConexion.cs" />
     <Compile Include="Acceso datos\ConexionAPI.cs" />
     <Compile Include="Acceso datos\LocalidadesAPI.cs" />
@@ -94,6 +96,9 @@
     <EmbeddedResource Include="Formularios\Gestion\frmPersonal.resx">
       <DependentUpon>frmPersonal.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\Gestion\frmUsuarioPerfil.resx">
+      <DependentUpon>frmUsuarioPerfil.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Formularios\Login\frmERP.resx">
       <DependentUpon>frmERP.cs</DependentUpon>
     </EmbeddedResource>
@@ -124,9 +129,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\App.ico">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <Content Include="Acceso datos\Bazan.accdb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="imgggg.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -20,6 +20,7 @@ namespace pryBazanERP
         {
 
             InitializeComponent();
+            AppIcon.Aplicar(this);
             ActualizarEstadoConexion();
         }
 
@@ -56,15 +57,22 @@ namespace pryBazanERP
 
         private void btnIngresar_Click(object sender, EventArgs e)
         {
+            if (!ValidarCamposLogin())
+            {
+                return;
+            }
+
             classConexion conexion = new classConexion();
 
             string usuario;
             string perfil;
+            int idUsuario;
+            int idPersonal;
 
-            if (conexion.ObtenerDatosUsuario(txtUsuario.Text, txtContraseña.Text, out usuario, out perfil))
+            if (conexion.ObtenerDatosUsuario(txtUsuario.Text, txtContraseña.Text, out usuario, out perfil, out idUsuario, out idPersonal))
             {
                 MessageBox.Show("Bienvenido, " + usuario + "!", "Inicio de sesion exitoso", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                frmMain mainForm = new frmMain(usuario, perfil);
+                frmMain mainForm = new frmMain(usuario, perfil, idUsuario, idPersonal);
                 mainForm.Show();
                 this.Hide();
             }
@@ -72,17 +80,36 @@ namespace pryBazanERP
             {
                 conexion.GrabarAuditoriaSesion(txtUsuario.Text, "Intento fallido");
                 intentos--;
-                MessageBox.Show("Usuario o contraseña incorrectos. Intentos restantes: " + intentos, "Login", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show("Usuario o contraseña incorrectos. Intentos restantes: " + intentos, "Login", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 if (intentos == 0)
                 {
-                    MessageBox.Show("Has agotado tus intentos.", "Intentos agotados", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Has agotado tus intentos.", "Intentos agotados", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     txtContraseña.Enabled = false;
                     txtUsuario.Enabled = false;
                     btnIngresar.Enabled = false;
                 }
 
             }
+        }
+
+        private bool ValidarCamposLogin()
+        {
+            if (string.IsNullOrWhiteSpace(txtUsuario.Text))
+            {
+                MessageBox.Show("Debe ingresar el usuario o correo.", "Login", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                txtUsuario.Focus();
+                return false;
+            }
+
+            if (string.IsNullOrWhiteSpace(txtContraseña.Text))
+            {
+                MessageBox.Show("Debe ingresar la contraseña.", "Login", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                txtContraseña.Focus();
+                return false;
+            }
+
+            return true;
         }
 
         private void chkOcultarContraseña_CheckedChanged(object sender, EventArgs e)

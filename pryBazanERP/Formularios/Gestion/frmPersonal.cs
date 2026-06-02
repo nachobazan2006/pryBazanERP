@@ -11,6 +11,9 @@ namespace pryBazanERP.Formulario
     {
         private readonly LocalidadesAPI localidadesAPI = new LocalidadesAPI();
         private readonly Timer temporizadorBusquedaLocalidad = new Timer();
+        private readonly int idUsuarioActual;
+        private readonly Action<int> personalAsociado;
+        private int idPersonalActual;
         private readonly List<string> provinciasDisponibles = new List<string>
         {
             "Buenos Aires",
@@ -40,14 +43,77 @@ namespace pryBazanERP.Formulario
         };
 
         private bool seleccionandoProvincia;
+        private bool seleccionandoLocalidad;
 
-        public frmPersonal()
+        public frmPersonal() : this(0, 0, null)
+        {
+        }
+
+        public frmPersonal(int idPersonal) : this(0, idPersonal, null)
+        {
+        }
+
+        public frmPersonal(int idUsuario, int idPersonal, Action<int> personalAsociado)
         {
             InitializeComponent();
+            AppIcon.Aplicar(this);
+            idUsuarioActual = idUsuario;
+            idPersonalActual = idPersonal;
+            this.personalAsociado = personalAsociado;
             temporizadorBusquedaLocalidad.Interval = 450;
             temporizadorBusquedaLocalidad.Tick += temporizadorBusquedaLocalidad_Tick;
             txtProvincia.Text = "Cordoba";
             ActualizarEstadoLocalidad();
+            _ = localidadesAPI.PrecargarLocalidadesCordobaAsync();
+
+            if (idPersonalActual > 0)
+            {
+                CargarPersonalActual();
+            }
+            else
+            {
+                btnGuardar.Text = "Guardar mis datos";
+            }
+        }
+
+        private void CargarPersonalActual()
+        {
+            try
+            {
+                classConexion conexion = new classConexion();
+                classConexion.PersonalDetalle personal = conexion.ObtenerPersonalDetalle(idPersonalActual);
+
+                if (personal == null)
+                {
+                    BloquearSinPersonalAsociado();
+                    return;
+                }
+
+                txtDni.Text = personal.DNI;
+                txtApellido.Text = personal.Apellido;
+                txtNombre.Text = personal.Nombre;
+                txtDireccion.Text = personal.Direccion;
+                txtGeo.Text = personal.Geo;
+                txtLocalidad.Text = personal.Localidad;
+                txtProvincia.Text = string.IsNullOrWhiteSpace(personal.Provincia) ? "Cordoba" : personal.Provincia;
+                chkActivo.Checked = personal.Activo;
+                btnGuardar.Text = "Actualizar";
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("No se pudieron cargar tus datos personales: " + ex.Message, "Personal", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                BloquearSinPersonalAsociado();
+            }
+        }
+
+        private void BloquearSinPersonalAsociado()
+        {
+            MessageBox.Show("El usuario actual no tiene un personal asociado. No se pueden editar datos personales desde este modulo.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            grpDatos.Enabled = false;
+            grpDomicilio.Enabled = false;
+            btnGuardar.Enabled = false;
+            btnLimpiarDatos.Enabled = false;
+            btnLimpiarDomicilio.Enabled = false;
         }
 
         private void txtProvincia_TextChanged(object sender, EventArgs e)
@@ -65,6 +131,11 @@ namespace pryBazanERP.Formulario
             MostrarProvinciasFiltradas();
         }
 
+        private void txtProvincia_Leave(object sender, EventArgs e)
+        {
+            OcultarProvinciasSiNoEstanEnFoco();
+        }
+
         private void lstProvincias_Click(object sender, EventArgs e)
         {
             SeleccionarProvincia();
@@ -79,9 +150,32 @@ namespace pryBazanERP.Formulario
             }
         }
 
+        private void lstProvincias_Leave(object sender, EventArgs e)
+        {
+            OcultarProvinciasSiNoEstanEnFoco();
+        }
+
+        private void OcultarProvinciasSiNoEstanEnFoco()
+        {
+            BeginInvoke(new Action(() =>
+            {
+                if (!txtProvincia.Focused && !lstProvincias.Focused)
+                {
+                    lstProvincias.Visible = false;
+                }
+            }));
+        }
+
         private void MostrarProvinciasFiltradas()
         {
             string texto = txtProvincia.Text.Trim();
+
+            if (string.IsNullOrWhiteSpace(texto) || ProvinciaIngresadaEsValida())
+            {
+                lstProvincias.Visible = false;
+                return;
+            }
+
             IEnumerable<string> provinciasFiltradas = string.IsNullOrWhiteSpace(texto)
                 ? provinciasDisponibles
                 : provinciasDisponibles.Where(p => p.IndexOf(texto, StringComparison.OrdinalIgnoreCase) >= 0);
@@ -119,10 +213,15 @@ namespace pryBazanERP.Formulario
             temporizadorBusquedaLocalidad.Stop();
             lstLocalidades.Visible = false;
 
-            if (ProvinciaSeleccionadaEsCordoba() && txtLocalidad.Text.Trim().Length >= 2)
+            if (!seleccionandoLocalidad && ProvinciaSeleccionadaEsCordoba() && txtLocalidad.Text.Trim().Length >= 2)
             {
                 temporizadorBusquedaLocalidad.Start();
             }
+        }
+
+        private void txtLocalidad_Leave(object sender, EventArgs e)
+        {
+            OcultarLocalidadesSiNoEstanEnFoco();
         }
 
         private async void temporizadorBusquedaLocalidad_Tick(object sender, EventArgs e)
@@ -176,6 +275,22 @@ namespace pryBazanERP.Formulario
             }
         }
 
+        private void lstLocalidades_Leave(object sender, EventArgs e)
+        {
+            OcultarLocalidadesSiNoEstanEnFoco();
+        }
+
+        private void OcultarLocalidadesSiNoEstanEnFoco()
+        {
+            BeginInvoke(new Action(() =>
+            {
+                if (!txtLocalidad.Focused && !lstLocalidades.Focused)
+                {
+                    lstLocalidades.Visible = false;
+                }
+            }));
+        }
+
         private void SeleccionarLocalidad()
         {
             if (lstLocalidades.SelectedItem == null)
@@ -183,8 +298,10 @@ namespace pryBazanERP.Formulario
                 return;
             }
 
+            seleccionandoLocalidad = true;
             txtLocalidad.Text = lstLocalidades.SelectedItem.ToString();
             txtLocalidad.SelectionStart = txtLocalidad.Text.Length;
+            seleccionandoLocalidad = false;
             lstLocalidades.Visible = false;
             txtLocalidad.Focus();
         }
@@ -199,67 +316,115 @@ namespace pryBazanERP.Formulario
             classConexion conexion = new classConexion();
             string mensaje;
 
-            bool guardado = conexion.GuardarPersonal(
-                txtDni.Text.Trim(),
-                txtApellido.Text.Trim(),
-                txtNombre.Text.Trim(),
-                txtDireccion.Text.Trim(),
-                txtGeo.Text.Trim(),
-                txtLocalidad.Text.Trim(),
-                ObtenerProvinciaNormalizada(),
-                chkActivo.Checked,
-                out mensaje);
+            bool guardado;
+
+            if (idPersonalActual > 0)
+            {
+                guardado = conexion.ActualizarPersonal(
+                    idPersonalActual,
+                    txtDni.Text.Trim(),
+                    txtApellido.Text.Trim(),
+                    txtNombre.Text.Trim(),
+                    txtDireccion.Text.Trim(),
+                    txtGeo.Text.Trim(),
+                    txtLocalidad.Text.Trim(),
+                    ObtenerProvinciaNormalizada(),
+                    chkActivo.Checked,
+                    out mensaje);
+            }
+            else
+            {
+                int idPersonalCreado;
+                guardado = conexion.GuardarPersonal(
+                    txtDni.Text.Trim(),
+                    txtApellido.Text.Trim(),
+                    txtNombre.Text.Trim(),
+                    txtDireccion.Text.Trim(),
+                    txtGeo.Text.Trim(),
+                    txtLocalidad.Text.Trim(),
+                    ObtenerProvinciaNormalizada(),
+                    chkActivo.Checked,
+                    out mensaje,
+                    out idPersonalCreado);
+
+                if (guardado && idUsuarioActual > 0)
+                {
+                    string mensajeAsociacion;
+                    if (conexion.AsociarUsuarioPersonal(idUsuarioActual, idPersonalCreado, out mensajeAsociacion))
+                    {
+                        idPersonalActual = idPersonalCreado;
+                        personalAsociado?.Invoke(idPersonalCreado);
+                        btnGuardar.Text = "Actualizar";
+                    }
+                    else
+                    {
+                        MessageBox.Show(mensajeAsociacion, "Personal", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    }
+                }
+            }
 
             MessageBox.Show(
                 mensaje,
                 "Personal",
                 MessageBoxButtons.OK,
-                guardado ? MessageBoxIcon.Information : MessageBoxIcon.Error);
+                MessageBoxIcon.Information);
 
             if (guardado)
             {
-                LimpiarCampos();
+                if (idPersonalActual > 0)
+                {
+                    CargarPersonalActual();
+                }
+                else
+                {
+                    LimpiarCampos();
+                }
             }
         }
 
-        private void btnLimpiar_Click(object sender, EventArgs e)
+        private void btnLimpiarDatos_Click(object sender, EventArgs e)
         {
-            LimpiarCampos();
+            LimpiarDatosPersonales();
+        }
+
+        private void btnLimpiarDomicilio_Click(object sender, EventArgs e)
+        {
+            LimpiarDomicilio();
         }
 
         private bool ValidarCampos()
         {
             if (string.IsNullOrWhiteSpace(txtDni.Text))
             {
-                MessageBox.Show("Ingresa el DNI.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Ingresa el DNI.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 txtDni.Focus();
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(txtApellido.Text))
             {
-                MessageBox.Show("Ingresa el apellido.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Ingresa el apellido.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 txtApellido.Focus();
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(txtNombre.Text))
             {
-                MessageBox.Show("Ingresa el nombre.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Ingresa el nombre.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 txtNombre.Focus();
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(txtProvincia.Text))
             {
-                MessageBox.Show("Selecciona una provincia.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Selecciona una provincia.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 txtProvincia.Focus();
                 return false;
             }
 
             if (!ProvinciaIngresadaEsValida())
             {
-                MessageBox.Show("Selecciona una provincia valida de la lista.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Selecciona una provincia valida de la lista.", "Personal", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 txtProvincia.Focus();
                 return false;
             }
@@ -269,18 +434,30 @@ namespace pryBazanERP.Formulario
 
         private void LimpiarCampos()
         {
+            LimpiarDatosPersonales();
+            LimpiarDomicilio();
+            txtDni.Focus();
+        }
+
+        private void LimpiarDatosPersonales()
+        {
             txtDni.Clear();
             txtApellido.Clear();
             txtNombre.Clear();
+            chkActivo.Checked = true;
+            txtDni.Focus();
+        }
+
+        private void LimpiarDomicilio()
+        {
             txtDireccion.Clear();
             txtGeo.Clear();
             txtLocalidad.Clear();
             txtProvincia.Text = "Cordoba";
-            chkActivo.Checked = true;
             lstProvincias.Visible = false;
             lstLocalidades.Visible = false;
             ActualizarEstadoLocalidad();
-            txtDni.Focus();
+            txtDireccion.Focus();
         }
 
         private void ActualizarEstadoLocalidad()

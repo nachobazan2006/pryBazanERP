@@ -15,14 +15,19 @@ namespace pryBazanERP.Formulario
     {
         private string usuario;
         private string perfil;
+        private int idUsuario;
+        private int idPersonal;
         private Form formularioActivo;
         private int posicionFinalFormulario;
 
-        public frmMain(string usuario, string perfil)
+        public frmMain(string usuario, string perfil, int idUsuario, int idPersonal)
         {
             InitializeComponent();
+            AppIcon.Aplicar(this);
             this.usuario = usuario;
             this.perfil = perfil;
+            this.idUsuario = idUsuario;
+            this.idPersonal = idPersonal;
         }
 
         private void frmMain_Load(object sender, EventArgs e)
@@ -36,19 +41,19 @@ namespace pryBazanERP.Formulario
         private void btnPersonal_Click(object sender, EventArgs e)
         {
             btnPersonal.Checked = true;
-            AbrirFormularioEnPanel(new frmPersonal());
+            AbrirFormularioEnPanel(new frmPersonal(idUsuario, idPersonal, ActualizarPersonalSesion));
         }
 
         private void btnContacto_Click(object sender, EventArgs e)
         {
             btnContacto.Checked = true;
-            AbrirFormularioEnPanel(new frmContacto());
+            AbrirFormularioEnPanel(new frmContacto(idPersonal, usuario));
         }
 
         private void btnUsuarioPerfil_Click(object sender, EventArgs e)
         {
             btnUsuarioPerfil.Checked = true;
-            AbrirFormularioEnPanel(new frmUsuarioPerfil());
+            AbrirFormularioEnPanel(new frmUsuarioPerfil(idUsuario));
         }
 
         private void AbrirFormularioEnPanel(Form formulario)
@@ -69,6 +74,11 @@ namespace pryBazanERP.Formulario
             fadeTimer.Start();
         }
 
+        private void ActualizarPersonalSesion(int idPersonalNuevo)
+        {
+            idPersonal = idPersonalNuevo;
+        }
+
         private void fadeTimer_Tick(object sender, EventArgs e)
         {
             if (formularioActivo == null)
@@ -85,6 +95,21 @@ namespace pryBazanERP.Formulario
             }
 
             formularioActivo.Left -= 3;
+        }
+
+        private void lblHora_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void pnlHeader_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void pnlContenido_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }
