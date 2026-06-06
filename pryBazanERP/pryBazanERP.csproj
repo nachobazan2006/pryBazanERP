@@ -70,6 +70,9 @@
     <Compile Include="Formularios\Gestion\frmGenerarUsuario.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="Formularios\Gestion\frmGenerarUsuario.Designer.cs">
+      <DependentUpon>frmGenerarUsuario.cs</DependentUpon>
+    </Compile>
     <Compile Include="Formularios\Gestion\frmPersonal.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -98,6 +101,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Formularios\Gestion\frmContacto.resx">
       <DependentUpon>frmContacto.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Formularios\Gestion\frmGenerarUsuario.resx">
+      <DependentUpon>frmGenerarUsuario.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Formularios\Gestion\frmPersonal.resx">
       <DependentUpon>frmPersonal.cs</DependentUpon>

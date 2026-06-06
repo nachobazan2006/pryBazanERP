@@ -371,16 +371,10 @@ namespace pryBazanERP.Formulario
 
             if (guardado)
             {
-                if (idPersonalActual > 0)
-                {
-                    CargarPersonalActual();
-                }
-                else
-                {
-                    LimpiarCampos();
-                }
+                LimpiarCampos();
             }
         }
+
 
         private void btnLimpiarDatos_Click(object sender, EventArgs e)
         {

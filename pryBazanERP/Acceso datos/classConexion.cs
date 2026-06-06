@@ -596,6 +596,11 @@ namespace pryBazanERP.Conexión
 
         public bool GuardarUsuarioGenerado(string nombre, string apellido, string usuario, string contrasena, out string mensaje)
         {
+            return GuardarUsuarioGenerado(nombre, apellido, usuario, contrasena, "Lector", out mensaje);
+        }
+
+        public bool GuardarUsuarioGenerado(string nombre, string apellido, string usuario, string contrasena, string perfil, out string mensaje)
+        {
             mensaje = "";
 
             try
@@ -610,7 +615,7 @@ namespace pryBazanERP.Conexión
                         return false;
                     }
 
-                    int idPerfil = ObtenerIdPerfil(conexion, "Lector");
+                    int idPerfil = ObtenerIdPerfil(conexion, string.IsNullOrWhiteSpace(perfil) ? "Lector" : perfil.Trim());
 
                     using (OleDbTransaction transaccion = conexion.BeginTransaction())
                     {
@@ -763,6 +768,33 @@ namespace pryBazanERP.Conexión
             {
                 return Convert.ToInt32(comando.ExecuteScalar());
             }
+        }
+
+        public List<string> ObtenerPerfilesDisponibles()
+        {
+            List<string> perfiles = new List<string>();
+
+            using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
+            {
+                conexion.Open();
+
+                using (OleDbCommand comando = new OleDbCommand("SELECT Nombre FROM Perfil ORDER BY Nombre", conexion))
+                using (OleDbDataReader lector = comando.ExecuteReader())
+                {
+                    while (lector.Read())
+                    {
+                        perfiles.Add(lector["Nombre"].ToString());
+                    }
+                }
+            }
+
+            if (perfiles.Count == 0)
+            {
+                perfiles.Add("Lector");
+                perfiles.Add("Administrador");
+            }
+
+            return perfiles;
         }
 
         private int InsertarUsuario(OleDbConnection conexion, OleDbTransaction transaccion, string nombre, string apellido, string usuario, string contrasena)

@@ -21,6 +21,7 @@ namespace pryBazanERP.Formulario
         private Form formularioActivo;
         private Guna.UI2.WinForms.Guna2Button btnGenerarUsuarios;
         private Guna.UI2.WinForms.Guna2Button btnAuditoria;
+        private bool avisoFichaMostrado;
         private int posicionFinalFormulario;
 
         public frmMain(string usuario, string perfil, string mail, int idUsuario, int idPersonal)
@@ -46,6 +47,7 @@ namespace pryBazanERP.Formulario
 
             if (!TienePersonalAsociado())
             {
+                MostrarAvisoFichaPendiente();
                 btnPersonal.Checked = true;
                 AbrirFormularioEnPanel(new frmPersonal(idUsuario, idPersonal, ActualizarPersonalSesion));
             }
@@ -61,7 +63,7 @@ namespace pryBazanERP.Formulario
         {
             if (!TienePersonalAsociado())
             {
-                MessageBox.Show("Primero completa tus datos personales. Despues vas a poder cargar contactos.", "Contacto", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MostrarAvisoFichaPendiente();
                 btnPersonal.Checked = true;
                 AbrirFormularioEnPanel(new frmPersonal(idUsuario, idPersonal, ActualizarPersonalSesion));
                 return;
@@ -191,7 +193,12 @@ namespace pryBazanERP.Formulario
 
         private void ActualizarEstadoPersonal()
         {
-            btnContacto.Enabled = TienePersonalAsociado();
+            btnContacto.Enabled = true;
+            btnContacto.FillColor = Color.FromArgb(111, 74, 45);
+            btnContacto.ForeColor = Color.White;
+            btnContacto.HoverState.FillColor = Color.FromArgb(150, 111, 76);
+            btnContacto.Cursor = Cursors.Hand;
+            btnContacto.Text = "Contactos";
 
             if (TienePersonalAsociado())
             {
@@ -203,6 +210,21 @@ namespace pryBazanERP.Formulario
                 lblInicioTitulo.Text = "Completa tu ficha";
                 lblInicioDetalle.Text = "Antes de cargar contactos, completa tus datos personales.";
             }
+        }
+
+        private void MostrarAvisoFichaPendiente()
+        {
+            if (avisoFichaMostrado)
+            {
+                return;
+            }
+
+            avisoFichaMostrado = true;
+            MessageBox.Show(
+                "Primero completa tu ficha en 'Mi ficha'. Despues vas a poder entrar a Contactos.",
+                "Ficha pendiente",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
         }
 
         private void fadeTimer_Tick(object sender, EventArgs e)
