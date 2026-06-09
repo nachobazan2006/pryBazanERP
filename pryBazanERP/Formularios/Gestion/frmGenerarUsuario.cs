@@ -12,17 +12,28 @@ namespace pryBazanERP.Formulario
     {
         private readonly classConexion conexion = new classConexion();
         private readonly string usuarioAdministrador;
+        private readonly bool esAdministrador;
 
-        public frmGenerarUsuario() : this("")
+        public frmGenerarUsuario() : this("", false)
         {
         }
 
-        public frmGenerarUsuario(string usuarioAdministrador)
+        public frmGenerarUsuario(string usuarioAdministrador) : this(usuarioAdministrador, false)
+        {
+        }
+
+        public frmGenerarUsuario(string usuarioAdministrador, bool esAdministrador)
         {
             this.usuarioAdministrador = usuarioAdministrador;
+            this.esAdministrador = esAdministrador;
             InitializeComponent();
             AppIcon.Aplicar(this);
             CargarPerfiles();
+
+            if (!this.esAdministrador)
+            {
+                BloquearSinPermiso();
+            }
         }
 
         private void btnGenerar_Click(object sender, EventArgs e)
@@ -207,6 +218,16 @@ namespace pryBazanERP.Formulario
             }
 
             return "Lector";
+        }
+
+        private void BloquearSinPermiso()
+        {
+            MessageBox.Show("No tenes permisos para generar usuarios.", "Generar usuario", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            grpDatos.Enabled = false;
+            grpCredenciales.Enabled = false;
+            btnGenerar.Enabled = false;
+            btnGuardar.Enabled = false;
+            btnLimpiar.Enabled = false;
         }
     }
 }

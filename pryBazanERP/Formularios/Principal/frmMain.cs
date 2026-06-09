@@ -88,7 +88,7 @@ namespace pryBazanERP.Formulario
             }
 
             btnGenerarUsuarios.Checked = true;
-            AbrirFormularioEnPanel(new frmGenerarUsuario(mail));
+            AbrirFormularioEnPanel(new frmGenerarUsuario(mail, true));
         }
 
         private void btnAuditoria_Click(object sender, EventArgs e)
@@ -100,7 +100,7 @@ namespace pryBazanERP.Formulario
             }
 
             btnAuditoria.Checked = true;
-            AbrirFormularioEnPanel(new frmAuditoriaSesion());
+            AbrirFormularioEnPanel(new frmAuditoriaSesion(true));
         }
 
         private void AbrirFormularioEnPanel(Form formulario)

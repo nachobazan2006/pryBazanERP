@@ -2,6 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Data.OleDb;
 using System.IO;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace pryBazanERP.Conexión
 {
@@ -116,17 +118,22 @@ namespace pryBazanERP.Conexión
                         "ON Usuario.Id_Usuario = CInt([Usuario-Perfil].Id_Usuario)) " +
                         "INNER JOIN Perfil " +
                         "ON Perfil.Id_Perfil = CInt([Usuario-Perfil].Id_Perfil) " +
-                        "WHERE Usuario.Mail = ? AND Usuario.[Contraseña] = ?";
+                        "WHERE Usuario.Mail = ?";
 
                     using (OleDbCommand comando = new OleDbCommand(consulta, conexion))
                     {
                         comando.Parameters.AddWithValue("?", mail);
-                        comando.Parameters.AddWithValue("?", contraseña);
 
                         using (OleDbDataReader lector = comando.ExecuteReader())
                         {
                             if (lector.Read())
                             {
+                                string contrasenaPersistida = ObtenerContrasenaPersistida(conexion, mail);
+                                if (!VerificarContrasenaPersistida(contrasenaPersistida, contraseña))
+                                {
+                                    return false;
+                                }
+
                                 idUsuario = Convert.ToInt32(lector["Id_Usuario"]);
 
                                 if (lector["Id_Personal"] != DBNull.Value)
@@ -545,12 +552,18 @@ namespace pryBazanERP.Conexión
                 {
                     conexion.Open();
 
-                    using (OleDbCommand comando = new OleDbCommand("SELECT COUNT(*) FROM Usuario WHERE Id_Usuario = ? AND [Contraseña] = ?", conexion))
+                    using (OleDbCommand comando = new OleDbCommand("SELECT [Contraseña] FROM Usuario WHERE Id_Usuario = ?", conexion))
                     {
                         comando.Parameters.AddWithValue("?", idUsuario);
-                        comando.Parameters.AddWithValue("?", contrasenaActual);
+                        object resultado = comando.ExecuteScalar();
 
-                        if (Convert.ToInt32(comando.ExecuteScalar()) == 0)
+                        if (resultado == null)
+                        {
+                            mensaje = "No se encontro el usuario.";
+                            return false;
+                        }
+
+                        if (!VerificarContrasenaPersistida(resultado.ToString(), contrasenaActual))
                         {
                             mensaje = "La contrasena actual no es correcta.";
                             return false;
@@ -559,7 +572,7 @@ namespace pryBazanERP.Conexión
 
                     using (OleDbCommand comando = new OleDbCommand("UPDATE Usuario SET [Contraseña] = ? WHERE Id_Usuario = ?", conexion))
                     {
-                        comando.Parameters.AddWithValue("?", contrasenaNueva);
+                        comando.Parameters.AddWithValue("?", CodificarContrasena(contrasenaNueva));
                         comando.Parameters.AddWithValue("?", idUsuario);
                         comando.ExecuteNonQuery();
                     }
@@ -804,7 +817,7 @@ namespace pryBazanERP.Conexión
                 comando.Parameters.AddWithValue("?", nombre);
                 comando.Parameters.AddWithValue("?", apellido);
                 comando.Parameters.AddWithValue("?", usuario);
-                comando.Parameters.AddWithValue("?", contrasena);
+                comando.Parameters.AddWithValue("?", CodificarContrasena(contrasena));
                 comando.ExecuteNonQuery();
             }
 
@@ -821,6 +834,85 @@ namespace pryBazanERP.Conexión
                 comando.Parameters.AddWithValue("?", idUsuario.ToString());
                 comando.Parameters.AddWithValue("?", idPerfil.ToString());
                 comando.ExecuteNonQuery();
+            }
+        }
+
+        public string ObtenerRutaBaseDatos()
+        {
+            string prefijo = "Data Source=";
+            int inicio = cadenaConexion.IndexOf(prefijo, StringComparison.OrdinalIgnoreCase);
+
+            if (inicio < 0)
+            {
+                return "";
+            }
+
+            inicio += prefijo.Length;
+            int fin = cadenaConexion.IndexOf(';', inicio);
+
+            if (fin < 0)
+            {
+                fin = cadenaConexion.Length;
+            }
+
+            return cadenaConexion.Substring(inicio, fin - inicio);
+        }
+
+        private string ObtenerContrasenaPersistida(OleDbConnection conexion, string mail)
+        {
+            using (OleDbCommand comando = new OleDbCommand("SELECT TOP 1 [Contraseña] FROM Usuario WHERE Mail = ?", conexion))
+            {
+                comando.Parameters.AddWithValue("?", mail);
+                object resultado = comando.ExecuteScalar();
+                return resultado == null || resultado == DBNull.Value ? "" : resultado.ToString();
+            }
+        }
+
+        private bool VerificarContrasenaPersistida(string contrasenaPersistida, string contrasenaIngresada)
+        {
+            if (string.IsNullOrWhiteSpace(contrasenaPersistida))
+            {
+                return false;
+            }
+
+            if (contrasenaPersistida.StartsWith("sha256$", StringComparison.OrdinalIgnoreCase))
+            {
+                string[] partes = contrasenaPersistida.Split('$');
+                if (partes.Length != 3)
+                {
+                    return false;
+                }
+
+                string salt = partes[1];
+                string hashEsperado = partes[2];
+                string hashIngresado = CalcularSha256(salt + contrasenaIngresada);
+                return string.Equals(hashEsperado, hashIngresado, StringComparison.OrdinalIgnoreCase);
+            }
+
+            return string.Equals(contrasenaPersistida, contrasenaIngresada, StringComparison.Ordinal);
+        }
+
+        private string CodificarContrasena(string contrasena)
+        {
+            string salt = Guid.NewGuid().ToString("N");
+            string hash = CalcularSha256(salt + contrasena);
+            return "sha256$" + salt + "$" + hash;
+        }
+
+        private string CalcularSha256(string texto)
+        {
+            using (SHA256 sha256 = SHA256.Create())
+            {
+                byte[] bytes = Encoding.UTF8.GetBytes(texto);
+                byte[] hash = sha256.ComputeHash(bytes);
+                StringBuilder sb = new StringBuilder(hash.Length * 2);
+
+                for (int i = 0; i < hash.Length; i++)
+                {
+                    sb.Append(hash[i].ToString("x2"));
+                }
+
+                return sb.ToString();
             }
         }
 

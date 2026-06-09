@@ -74,6 +74,11 @@ namespace pryBazanERP.Formulario
             {
                 btnGuardar.Text = "Guardar mi ficha";
             }
+
+            if (idUsuarioActual == 0)
+            {
+                BloquearSinSesion();
+            }
         }
 
         private void CargarPersonalActual()
@@ -109,6 +114,16 @@ namespace pryBazanERP.Formulario
         private void BloquearSinPersonalAsociado()
         {
             MessageBox.Show("El usuario actual no tiene un personal asociado. No se pueden editar datos personales desde este modulo.", "Mi ficha", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            grpDatos.Enabled = false;
+            grpDomicilio.Enabled = false;
+            btnGuardar.Enabled = false;
+            btnLimpiarDatos.Enabled = false;
+            btnLimpiarDomicilio.Enabled = false;
+        }
+
+        private void BloquearSinSesion()
+        {
+            MessageBox.Show("No se pudo identificar la sesion actual. Ingresá nuevamente para acceder a Mi ficha.", "Mi ficha", MessageBoxButtons.OK, MessageBoxIcon.Information);
             grpDatos.Enabled = false;
             grpDomicilio.Enabled = false;
             btnGuardar.Enabled = false;

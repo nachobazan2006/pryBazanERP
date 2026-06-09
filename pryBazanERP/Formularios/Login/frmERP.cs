@@ -36,10 +36,13 @@ namespace pryBazanERP
         private void ActualizarEstadoConexion()
         {
             classConexion conexion = new classConexion();
+            string rutaBaseDatos = conexion.ObtenerRutaBaseDatos();
 
             if (conexion.ProbarConexion())
             {
-                lblEstado.Text = "Conectado";
+                lblEstado.Text = string.IsNullOrWhiteSpace(rutaBaseDatos)
+                    ? "Conectado"
+                    : "Conectado - " + rutaBaseDatos;
                 lblEstado.ForeColor = Color.FromArgb(68, 112, 74);
                 pnlEstado.FillColor = Color.FromArgb(68, 112, 74);
             }

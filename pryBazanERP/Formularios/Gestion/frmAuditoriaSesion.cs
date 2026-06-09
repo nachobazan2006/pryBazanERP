@@ -28,12 +28,23 @@ namespace pryBazanERP.Formulario
         private Guna.UI2.WinForms.Guna2ComboBox cmbPerfil;
         private Guna.UI2.WinForms.Guna2ComboBox cmbDetalle;
         private DateTimePicker dtpDia;
+        private readonly bool esAdministrador;
 
-        public frmAuditoriaSesion()
+        public frmAuditoriaSesion() : this(false)
         {
+        }
+
+        public frmAuditoriaSesion(bool esAdministrador)
+        {
+            this.esAdministrador = esAdministrador;
             InitializeComponent();
             AppIcon.Aplicar(this);
             CargarAuditoria();
+
+            if (!this.esAdministrador)
+            {
+                BloquearSinPermiso();
+            }
         }
 
         private void InitializeComponent()
@@ -337,6 +348,16 @@ namespace pryBazanERP.Formulario
             if (!string.IsNullOrWhiteSpace(formato) && columna.DefaultCellStyle != null)
             {
                 columna.DefaultCellStyle.Format = formato;
+            }
+        }
+
+        private void BloquearSinPermiso()
+        {
+            MessageBox.Show("No tenes permisos para ver la auditoria.", "Auditoria", MessageBoxButtons.OK, MessageBoxIcon.Information);
+
+            if (dgvAuditoria != null)
+            {
+                dgvAuditoria.Enabled = false;
             }
         }
 
