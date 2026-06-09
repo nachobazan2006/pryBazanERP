@@ -18,16 +18,16 @@ namespace pryBazanERP.Formulario
             this.lblTitulo = new System.Windows.Forms.Label();
             this.lblSubtitulo = new System.Windows.Forms.Label();
             this.grpCambio = new Guna.UI2.WinForms.Guna2Panel();
+            this.btnLimpiarCambio = new Guna.UI2.WinForms.Guna2Button();
             this.txtConfirmar = new Guna.UI2.WinForms.Guna2TextBox();
             this.lblConfirmar = new System.Windows.Forms.Label();
             this.txtNueva = new Guna.UI2.WinForms.Guna2TextBox();
             this.lblNueva = new System.Windows.Forms.Label();
             this.txtActual = new Guna.UI2.WinForms.Guna2TextBox();
             this.lblActual = new System.Windows.Forms.Label();
-            this.lblCambioTitulo = new System.Windows.Forms.Label();
             this.chkMostrarContrasenas = new Guna.UI2.WinForms.Guna2CheckBox();
+            this.lblCambioTitulo = new System.Windows.Forms.Label();
             this.btnGuardar = new Guna.UI2.WinForms.Guna2Button();
-            this.btnLimpiarCambio = new Guna.UI2.WinForms.Guna2Button();
             this.grpCambio.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -35,10 +35,10 @@ namespace pryBazanERP.Formulario
             // 
             this.lblTitulo.AutoSize = true;
             this.lblTitulo.Font = new System.Drawing.Font("Segoe UI Semibold", 24F, System.Drawing.FontStyle.Bold);
-            this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
+            this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
             this.lblTitulo.Location = new System.Drawing.Point(34, 26);
             this.lblTitulo.Name = "lblTitulo";
-            this.lblTitulo.Size = new System.Drawing.Size(161, 45);
+            this.lblTitulo.Size = new System.Drawing.Size(166, 45);
             this.lblTitulo.TabIndex = 0;
             this.lblTitulo.Text = "Mi cuenta";
             // 
@@ -46,16 +46,17 @@ namespace pryBazanERP.Formulario
             // 
             this.lblSubtitulo.AutoSize = true;
             this.lblSubtitulo.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.lblSubtitulo.ForeColor = System.Drawing.Color.FromArgb(120, 92, 64);
+            this.lblSubtitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(92)))), ((int)(((byte)(64)))));
             this.lblSubtitulo.Location = new System.Drawing.Point(39, 74);
             this.lblSubtitulo.Name = "lblSubtitulo";
-            this.lblSubtitulo.Size = new System.Drawing.Size(252, 19);
+            this.lblSubtitulo.Size = new System.Drawing.Size(295, 19);
             this.lblSubtitulo.TabIndex = 1;
             this.lblSubtitulo.Text = "Datos de usuario, perfil y contrasena de acceso";
             // 
             // grpCambio
             // 
-            this.grpCambio.BorderColor = System.Drawing.Color.FromArgb(218, 198, 174);
+            this.grpCambio.BackColor = System.Drawing.Color.Transparent;
+            this.grpCambio.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(198)))), ((int)(((byte)(174)))));
             this.grpCambio.BorderRadius = 16;
             this.grpCambio.BorderThickness = 1;
             this.grpCambio.Controls.Add(this.btnLimpiarCambio);
@@ -67,25 +68,43 @@ namespace pryBazanERP.Formulario
             this.grpCambio.Controls.Add(this.lblActual);
             this.grpCambio.Controls.Add(this.chkMostrarContrasenas);
             this.grpCambio.Controls.Add(this.lblCambioTitulo);
-            this.grpCambio.FillColor = System.Drawing.Color.FromArgb(246, 238, 226);
+            this.grpCambio.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(238)))), ((int)(((byte)(226)))));
             this.grpCambio.Location = new System.Drawing.Point(42, 120);
             this.grpCambio.Name = "grpCambio";
-            this.grpCambio.ShadowDecoration.Color = System.Drawing.Color.FromArgb(120, 92, 64);
+            this.grpCambio.ShadowDecoration.Color = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(92)))), ((int)(((byte)(64)))));
             this.grpCambio.ShadowDecoration.Depth = 8;
             this.grpCambio.ShadowDecoration.Enabled = true;
             this.grpCambio.Size = new System.Drawing.Size(330, 322);
             this.grpCambio.TabIndex = 2;
             // 
+            // btnLimpiarCambio
+            // 
+            this.btnLimpiarCambio.Animated = true;
+            this.btnLimpiarCambio.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(111)))), ((int)(((byte)(76)))));
+            this.btnLimpiarCambio.BorderRadius = 8;
+            this.btnLimpiarCambio.BorderThickness = 1;
+            this.btnLimpiarCambio.Cursor = System.Windows.Forms.Cursors.Hand;
+            this.btnLimpiarCambio.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(243)))));
+            this.btnLimpiarCambio.Font = new System.Drawing.Font("Segoe UI Semibold", 8.5F, System.Drawing.FontStyle.Bold);
+            this.btnLimpiarCambio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(60)))), ((int)(((byte)(42)))));
+            this.btnLimpiarCambio.HoverState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(198)))), ((int)(((byte)(174)))));
+            this.btnLimpiarCambio.Location = new System.Drawing.Point(219, 18);
+            this.btnLimpiarCambio.Name = "btnLimpiarCambio";
+            this.btnLimpiarCambio.Size = new System.Drawing.Size(85, 28);
+            this.btnLimpiarCambio.TabIndex = 8;
+            this.btnLimpiarCambio.Text = "Limpiar";
+            this.btnLimpiarCambio.Click += new System.EventHandler(this.btnLimpiarCambio_Click);
+            // 
             // txtConfirmar
             // 
-            this.txtConfirmar.BorderColor = System.Drawing.Color.FromArgb(218, 198, 174);
+            this.txtConfirmar.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(198)))), ((int)(((byte)(174)))));
             this.txtConfirmar.BorderRadius = 12;
             this.txtConfirmar.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.txtConfirmar.DefaultText = "";
-            this.txtConfirmar.FillColor = System.Drawing.Color.FromArgb(255, 250, 243);
-            this.txtConfirmar.FocusedState.BorderColor = System.Drawing.Color.FromArgb(111, 74, 45);
+            this.txtConfirmar.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(243)))));
+            this.txtConfirmar.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(74)))), ((int)(((byte)(45)))));
             this.txtConfirmar.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtConfirmar.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
+            this.txtConfirmar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
             this.txtConfirmar.Location = new System.Drawing.Point(26, 222);
             this.txtConfirmar.Name = "txtConfirmar";
             this.txtConfirmar.PasswordChar = '*';
@@ -98,23 +117,23 @@ namespace pryBazanERP.Formulario
             // 
             this.lblConfirmar.AutoSize = true;
             this.lblConfirmar.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.lblConfirmar.ForeColor = System.Drawing.Color.FromArgb(84, 60, 42);
+            this.lblConfirmar.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(60)))), ((int)(((byte)(42)))));
             this.lblConfirmar.Location = new System.Drawing.Point(24, 203);
             this.lblConfirmar.Name = "lblConfirmar";
-            this.lblConfirmar.Size = new System.Drawing.Size(122, 15);
+            this.lblConfirmar.Size = new System.Drawing.Size(121, 15);
             this.lblConfirmar.TabIndex = 5;
-            this.lblConfirmar.Text = "Confirmar contrasena";
+            this.lblConfirmar.Text = "Confirmar contraseña";
             // 
             // txtNueva
             // 
-            this.txtNueva.BorderColor = System.Drawing.Color.FromArgb(218, 198, 174);
+            this.txtNueva.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(198)))), ((int)(((byte)(174)))));
             this.txtNueva.BorderRadius = 12;
             this.txtNueva.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.txtNueva.DefaultText = "";
-            this.txtNueva.FillColor = System.Drawing.Color.FromArgb(255, 250, 243);
-            this.txtNueva.FocusedState.BorderColor = System.Drawing.Color.FromArgb(111, 74, 45);
+            this.txtNueva.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(243)))));
+            this.txtNueva.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(74)))), ((int)(((byte)(45)))));
             this.txtNueva.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtNueva.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
+            this.txtNueva.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
             this.txtNueva.Location = new System.Drawing.Point(26, 158);
             this.txtNueva.Name = "txtNueva";
             this.txtNueva.PasswordChar = '*';
@@ -127,23 +146,23 @@ namespace pryBazanERP.Formulario
             // 
             this.lblNueva.AutoSize = true;
             this.lblNueva.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.lblNueva.ForeColor = System.Drawing.Color.FromArgb(84, 60, 42);
+            this.lblNueva.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(60)))), ((int)(((byte)(42)))));
             this.lblNueva.Location = new System.Drawing.Point(24, 139);
             this.lblNueva.Name = "lblNueva";
-            this.lblNueva.Size = new System.Drawing.Size(105, 15);
+            this.lblNueva.Size = new System.Drawing.Size(102, 15);
             this.lblNueva.TabIndex = 3;
-            this.lblNueva.Text = "Nueva contrasena";
+            this.lblNueva.Text = "Nueva contraseña";
             // 
             // txtActual
             // 
-            this.txtActual.BorderColor = System.Drawing.Color.FromArgb(218, 198, 174);
+            this.txtActual.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(198)))), ((int)(((byte)(174)))));
             this.txtActual.BorderRadius = 12;
             this.txtActual.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.txtActual.DefaultText = "";
-            this.txtActual.FillColor = System.Drawing.Color.FromArgb(255, 250, 243);
-            this.txtActual.FocusedState.BorderColor = System.Drawing.Color.FromArgb(111, 74, 45);
+            this.txtActual.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(243)))));
+            this.txtActual.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(74)))), ((int)(((byte)(45)))));
             this.txtActual.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtActual.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
+            this.txtActual.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
             this.txtActual.Location = new System.Drawing.Point(26, 94);
             this.txtActual.Name = "txtActual";
             this.txtActual.PasswordChar = '*';
@@ -156,53 +175,53 @@ namespace pryBazanERP.Formulario
             // 
             this.lblActual.AutoSize = true;
             this.lblActual.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.lblActual.ForeColor = System.Drawing.Color.FromArgb(84, 60, 42);
+            this.lblActual.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(60)))), ((int)(((byte)(42)))));
             this.lblActual.Location = new System.Drawing.Point(24, 75);
             this.lblActual.Name = "lblActual";
-            this.lblActual.Size = new System.Drawing.Size(104, 15);
+            this.lblActual.Size = new System.Drawing.Size(101, 15);
             this.lblActual.TabIndex = 1;
-            this.lblActual.Text = "Contrasena actual";
+            this.lblActual.Text = "Contraseña actual";
+            // 
+            // chkMostrarContrasenas
+            // 
+            this.chkMostrarContrasenas.AutoSize = true;
+            this.chkMostrarContrasenas.CheckedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(74)))), ((int)(((byte)(45)))));
+            this.chkMostrarContrasenas.CheckedState.BorderRadius = 3;
+            this.chkMostrarContrasenas.CheckedState.BorderThickness = 0;
+            this.chkMostrarContrasenas.CheckedState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(74)))), ((int)(((byte)(45)))));
+            this.chkMostrarContrasenas.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
+            this.chkMostrarContrasenas.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(60)))), ((int)(((byte)(42)))));
+            this.chkMostrarContrasenas.Location = new System.Drawing.Point(26, 270);
+            this.chkMostrarContrasenas.Name = "chkMostrarContrasenas";
+            this.chkMostrarContrasenas.Size = new System.Drawing.Size(133, 19);
+            this.chkMostrarContrasenas.TabIndex = 7;
+            this.chkMostrarContrasenas.Text = "Mostrar contraseñas";
+            this.chkMostrarContrasenas.UncheckedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(111)))), ((int)(((byte)(76)))));
+            this.chkMostrarContrasenas.UncheckedState.BorderRadius = 3;
+            this.chkMostrarContrasenas.UncheckedState.BorderThickness = 0;
+            this.chkMostrarContrasenas.UncheckedState.FillColor = System.Drawing.Color.Transparent;
+            this.chkMostrarContrasenas.CheckedChanged += new System.EventHandler(this.chkMostrarContrasenas_CheckedChanged);
             // 
             // lblCambioTitulo
             // 
             this.lblCambioTitulo.AutoSize = true;
             this.lblCambioTitulo.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold);
-            this.lblCambioTitulo.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
+            this.lblCambioTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
             this.lblCambioTitulo.Location = new System.Drawing.Point(22, 18);
             this.lblCambioTitulo.Name = "lblCambioTitulo";
-            this.lblCambioTitulo.Size = new System.Drawing.Size(176, 21);
+            this.lblCambioTitulo.Size = new System.Drawing.Size(154, 21);
             this.lblCambioTitulo.TabIndex = 0;
-            this.lblCambioTitulo.Text = "Cambiar contrasena";
-            // 
-            // chkMostrarContrasenas
-            // 
-            this.chkMostrarContrasenas.AutoSize = true;
-            this.chkMostrarContrasenas.CheckedState.BorderColor = System.Drawing.Color.FromArgb(111, 74, 45);
-            this.chkMostrarContrasenas.CheckedState.BorderRadius = 3;
-            this.chkMostrarContrasenas.CheckedState.BorderThickness = 0;
-            this.chkMostrarContrasenas.CheckedState.FillColor = System.Drawing.Color.FromArgb(111, 74, 45);
-            this.chkMostrarContrasenas.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.chkMostrarContrasenas.ForeColor = System.Drawing.Color.FromArgb(84, 60, 42);
-            this.chkMostrarContrasenas.Location = new System.Drawing.Point(26, 270);
-            this.chkMostrarContrasenas.Name = "chkMostrarContrasenas";
-            this.chkMostrarContrasenas.Size = new System.Drawing.Size(133, 19);
-            this.chkMostrarContrasenas.TabIndex = 7;
-            this.chkMostrarContrasenas.Text = "Mostrar contrasenas";
-            this.chkMostrarContrasenas.UncheckedState.BorderColor = System.Drawing.Color.FromArgb(150, 111, 76);
-            this.chkMostrarContrasenas.UncheckedState.BorderRadius = 3;
-            this.chkMostrarContrasenas.UncheckedState.BorderThickness = 0;
-            this.chkMostrarContrasenas.UncheckedState.FillColor = System.Drawing.Color.Transparent;
-            this.chkMostrarContrasenas.CheckedChanged += new System.EventHandler(this.chkMostrarContrasenas_CheckedChanged);
+            this.lblCambioTitulo.Text = "Cambiar contraseña";
             // 
             // btnGuardar
             // 
             this.btnGuardar.Animated = true;
             this.btnGuardar.BorderRadius = 12;
             this.btnGuardar.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnGuardar.FillColor = System.Drawing.Color.FromArgb(111, 74, 45);
+            this.btnGuardar.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(74)))), ((int)(((byte)(45)))));
             this.btnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.btnGuardar.ForeColor = System.Drawing.Color.White;
-            this.btnGuardar.HoverState.FillColor = System.Drawing.Color.FromArgb(84, 60, 42);
+            this.btnGuardar.HoverState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(60)))), ((int)(((byte)(42)))));
             this.btnGuardar.Location = new System.Drawing.Point(252, 470);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(140, 42);
@@ -210,29 +229,11 @@ namespace pryBazanERP.Formulario
             this.btnGuardar.Text = "Guardar";
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
             // 
-            // btnLimpiarCambio
-            // 
-            this.btnLimpiarCambio.Animated = true;
-            this.btnLimpiarCambio.BorderColor = System.Drawing.Color.FromArgb(150, 111, 76);
-            this.btnLimpiarCambio.BorderRadius = 8;
-            this.btnLimpiarCambio.BorderThickness = 1;
-            this.btnLimpiarCambio.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnLimpiarCambio.FillColor = System.Drawing.Color.FromArgb(255, 250, 243);
-            this.btnLimpiarCambio.Font = new System.Drawing.Font("Segoe UI Semibold", 8.5F, System.Drawing.FontStyle.Bold);
-            this.btnLimpiarCambio.ForeColor = System.Drawing.Color.FromArgb(84, 60, 42);
-            this.btnLimpiarCambio.HoverState.FillColor = System.Drawing.Color.FromArgb(218, 198, 174);
-            this.btnLimpiarCambio.Location = new System.Drawing.Point(219, 18);
-            this.btnLimpiarCambio.Name = "btnLimpiarCambio";
-            this.btnLimpiarCambio.Size = new System.Drawing.Size(85, 28);
-            this.btnLimpiarCambio.TabIndex = 8;
-            this.btnLimpiarCambio.Text = "Limpiar";
-            this.btnLimpiarCambio.Click += new System.EventHandler(this.btnLimpiarCambio_Click);
-            // 
             // frmUsuarioPerfil
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(232, 218, 198);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(218)))), ((int)(((byte)(198)))));
             this.ClientSize = new System.Drawing.Size(760, 520);
             this.Controls.Add(this.btnGuardar);
             this.Controls.Add(this.grpCambio);
@@ -248,6 +249,7 @@ namespace pryBazanERP.Formulario
             this.grpCambio.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         private System.Windows.Forms.Label lblTitulo;

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
 using pryBazanERP.Acceso_datos;
@@ -14,6 +15,7 @@ namespace pryBazanERP.Formulario
         private readonly int idUsuarioActual;
         private readonly Action<int> personalAsociado;
         private int idPersonalActual;
+        private classConexion.PersonalDetalle personalActual;
         private readonly List<string> provinciasDisponibles = new List<string>
         {
             "Buenos Aires",
@@ -57,6 +59,7 @@ namespace pryBazanERP.Formulario
         {
             InitializeComponent();
             AppIcon.Aplicar(this);
+            ConfigurarIconosFormulario();
             idUsuarioActual = idUsuario;
             idPersonalActual = idPersonal;
             this.personalAsociado = personalAsociado;
@@ -94,14 +97,9 @@ namespace pryBazanERP.Formulario
                     return;
                 }
 
-                txtDni.Text = personal.DNI;
-                txtApellido.Text = personal.Apellido;
-                txtNombre.Text = personal.Nombre;
-                txtDireccion.Text = personal.Direccion;
-                txtGeo.Text = personal.Geo;
-                txtLocalidad.Text = personal.Localidad;
-                txtProvincia.Text = string.IsNullOrWhiteSpace(personal.Provincia) ? "Cordoba" : personal.Provincia;
-                chkActivo.Checked = personal.Activo;
+                personalActual = personal;
+                MostrarDatosCargados();
+                VaciarInputsFichaCargada();
                 btnGuardar.Text = "Actualizar";
             }
             catch (Exception ex)
@@ -129,6 +127,34 @@ namespace pryBazanERP.Formulario
             btnGuardar.Enabled = false;
             btnLimpiarDatos.Enabled = false;
             btnLimpiarDomicilio.Enabled = false;
+        }
+
+        private void ConfigurarIconosFormulario()
+        {
+            btnLimpiarDatos.Text = "Limpiar";
+            btnLimpiarDomicilio.Text = "Limpiar";
+            btnLimpiarDatos.Image = CrearIconoBoton("E74D", Color.FromArgb(84, 60, 42), 18);
+            btnLimpiarDomicilio.Image = CrearIconoBoton("E74D", Color.FromArgb(84, 60, 42), 18);
+            btnLimpiarDatos.ImageSize = new Size(14, 14);
+            btnLimpiarDomicilio.ImageSize = new Size(14, 14);
+            btnLimpiarDatos.ImageAlign = HorizontalAlignment.Left;
+            btnLimpiarDomicilio.ImageAlign = HorizontalAlignment.Left;
+        }
+
+        private Image CrearIconoBoton(string codigoHex, Color color, int tamano)
+        {
+            Bitmap bitmap = new Bitmap(tamano, tamano);
+            using (Graphics graphics = Graphics.FromImage(bitmap))
+            using (Font fuente = new Font("Segoe MDL2 Assets", tamano - 3, FontStyle.Regular, GraphicsUnit.Pixel))
+            using (SolidBrush brush = new SolidBrush(color))
+            {
+                graphics.Clear(Color.Transparent);
+                graphics.TextRenderingHint = System.Drawing.Text.TextRenderingHint.AntiAliasGridFit;
+                string texto = char.ConvertFromUtf32(Convert.ToInt32(codigoHex, 16));
+                graphics.DrawString(texto, fuente, brush, new PointF(0, 0));
+            }
+
+            return bitmap;
         }
 
         private void txtProvincia_TextChanged(object sender, EventArgs e)
@@ -332,18 +358,25 @@ namespace pryBazanERP.Formulario
             string mensaje;
 
             bool guardado;
+            string dni = ObtenerValorParaGuardar(txtDni.Text, personalActual?.DNI);
+            string apellido = ObtenerValorParaGuardar(txtApellido.Text, personalActual?.Apellido);
+            string nombre = ObtenerValorParaGuardar(txtNombre.Text, personalActual?.Nombre);
+            string direccion = ObtenerValorParaGuardar(txtDireccion.Text, personalActual?.Direccion);
+            string geo = ObtenerValorParaGuardar(txtGeo.Text, personalActual?.Geo);
+            string localidad = ObtenerValorParaGuardar(txtLocalidad.Text, personalActual?.Localidad);
+            string provincia = ObtenerProvinciaParaGuardar();
 
             if (idPersonalActual > 0)
             {
                 guardado = conexion.ActualizarPersonal(
                     idPersonalActual,
-                    txtDni.Text.Trim(),
-                    txtApellido.Text.Trim(),
-                    txtNombre.Text.Trim(),
-                    txtDireccion.Text.Trim(),
-                    txtGeo.Text.Trim(),
-                    txtLocalidad.Text.Trim(),
-                    ObtenerProvinciaNormalizada(),
+                    dni,
+                    apellido,
+                    nombre,
+                    direccion,
+                    geo,
+                    localidad,
+                    provincia,
                     chkActivo.Checked,
                     out mensaje);
             }
@@ -351,13 +384,13 @@ namespace pryBazanERP.Formulario
             {
                 int idPersonalCreado;
                 guardado = conexion.GuardarPersonal(
-                    txtDni.Text.Trim(),
-                    txtApellido.Text.Trim(),
-                    txtNombre.Text.Trim(),
-                    txtDireccion.Text.Trim(),
-                    txtGeo.Text.Trim(),
-                    txtLocalidad.Text.Trim(),
-                    ObtenerProvinciaNormalizada(),
+                    dni,
+                    apellido,
+                    nombre,
+                    direccion,
+                    geo,
+                    localidad,
+                    provincia,
                     chkActivo.Checked,
                     out mensaje,
                     out idPersonalCreado);
@@ -386,7 +419,14 @@ namespace pryBazanERP.Formulario
 
             if (guardado)
             {
-                LimpiarCampos();
+                if (idPersonalActual > 0)
+                {
+                    CargarPersonalActual();
+                }
+                else
+                {
+                    LimpiarCampos();
+                }
             }
         }
 
@@ -403,35 +443,39 @@ namespace pryBazanERP.Formulario
 
         private bool ValidarCampos()
         {
-            if (string.IsNullOrWhiteSpace(txtDni.Text))
+            string dni = ObtenerValorParaGuardar(txtDni.Text, personalActual?.DNI);
+            string apellido = ObtenerValorParaGuardar(txtApellido.Text, personalActual?.Apellido);
+            string nombre = ObtenerValorParaGuardar(txtNombre.Text, personalActual?.Nombre);
+
+            if (string.IsNullOrWhiteSpace(dni))
             {
                 MessageBox.Show("Ingresa el DNI.", "Mi ficha", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 txtDni.Focus();
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(txtApellido.Text))
+            if (string.IsNullOrWhiteSpace(apellido))
             {
                 MessageBox.Show("Ingresa el apellido.", "Mi ficha", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 txtApellido.Focus();
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(txtNombre.Text))
+            if (string.IsNullOrWhiteSpace(nombre))
             {
                 MessageBox.Show("Ingresa el nombre.", "Mi ficha", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 txtNombre.Focus();
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(txtProvincia.Text))
+            if (string.IsNullOrWhiteSpace(txtProvincia.Text) && (personalActual == null || string.IsNullOrWhiteSpace(personalActual.Provincia)))
             {
                 MessageBox.Show("Selecciona una provincia.", "Mi ficha", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 txtProvincia.Focus();
                 return false;
             }
 
-            if (!ProvinciaIngresadaEsValida())
+            if (!string.IsNullOrWhiteSpace(txtProvincia.Text) && !ProvinciaIngresadaEsValida())
             {
                 MessageBox.Show("Selecciona una provincia valida de la lista.", "Mi ficha", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 txtProvincia.Focus();
@@ -467,6 +511,87 @@ namespace pryBazanERP.Formulario
             lstLocalidades.Visible = false;
             ActualizarEstadoLocalidad();
             txtDireccion.Focus();
+        }
+
+        private void MostrarDatosCargados()
+        {
+            if (personalActual == null)
+            {
+                return;
+            }
+
+            lblResumenActualizado.Text = "Actualizado hoy " + DateTime.Now.ToString("HH:mm");
+            lblResumenDniValor.Text = TextoOValor(personalActual.DNI);
+            lblResumenApellidoValor.Text = TextoOValor(personalActual.Apellido);
+            lblResumenNombreValor.Text = TextoOValor(personalActual.Nombre);
+            
+            
+            
+            lblResumenDomDireccionValor.Text = TextoOValor(personalActual.Direccion);
+            lblResumenDomLocalidadValor.Text = TextoOValor(personalActual.Localidad);
+            lblResumenDomProvinciaValor.Text = TextoOValor(personalActual.Provincia);
+            lblResumenDomGeoValor.Text = TextoOValor(personalActual.Geo);
+            lblResumenEstadoValor.Text = personalActual.Activo ? "Activo" : "Inactivo";
+            pnlResumenEstado.BorderColor = personalActual.Activo ? Color.FromArgb(130, 192, 132) : Color.FromArgb(204, 133, 120);
+            pnlResumenEstado.FillColor = personalActual.Activo ? Color.FromArgb(226, 242, 221) : Color.FromArgb(250, 226, 221);
+            lblResumenEstadoValor.ForeColor = personalActual.Activo ? Color.FromArgb(54, 102, 52) : Color.FromArgb(135, 60, 50);
+            grpDatosCargados.BringToFront();
+        }
+
+        private void CargarInputsFichaCargada()
+        {
+            txtDni.Text = TextoOValor(personalActual?.DNI) == "-" ? "" : personalActual.DNI;
+            txtApellido.Text = TextoOValor(personalActual?.Apellido) == "-" ? "" : personalActual.Apellido;
+            txtNombre.Text = TextoOValor(personalActual?.Nombre) == "-" ? "" : personalActual.Nombre;
+            txtDireccion.Text = TextoOValor(personalActual?.Direccion) == "-" ? "" : personalActual.Direccion;
+            txtGeo.Text = TextoOValor(personalActual?.Geo) == "-" ? "" : personalActual.Geo;
+            txtProvincia.Text = TextoOValor(personalActual?.Provincia) == "-" ? "Cordoba" : personalActual.Provincia;
+            txtLocalidad.Text = TextoOValor(personalActual?.Localidad) == "-" ? "" : personalActual.Localidad;
+            chkActivo.Checked = personalActual == null || personalActual.Activo;
+            lstProvincias.Visible = false;
+            lstLocalidades.Visible = false;
+            ActualizarEstadoLocalidad();
+        }
+
+        private void VaciarInputsFichaCargada()
+        {
+            txtDni.Clear();
+            txtApellido.Clear();
+            txtNombre.Clear();
+            txtDireccion.Clear();
+            txtGeo.Clear();
+            txtLocalidad.Clear();
+            txtProvincia.Clear();
+            chkActivo.Checked = personalActual == null || personalActual.Activo;
+            lstProvincias.Visible = false;
+            lstLocalidades.Visible = false;
+            ActualizarEstadoLocalidad();
+            txtDni.Focus();
+        }
+
+        private string ObtenerValorParaGuardar(string ingresado, string actual)
+        {
+            return string.IsNullOrWhiteSpace(ingresado) ? (actual ?? "") : ingresado.Trim();
+        }
+
+        private string ObtenerProvinciaParaGuardar()
+        {
+            if (!string.IsNullOrWhiteSpace(txtProvincia.Text))
+            {
+                return ObtenerProvinciaNormalizada();
+            }
+
+            if (personalActual != null && !string.IsNullOrWhiteSpace(personalActual.Provincia))
+            {
+                return personalActual.Provincia;
+            }
+
+            return "";
+        }
+
+        private string TextoOValor(string valor)
+        {
+            return string.IsNullOrWhiteSpace(valor) ? "-" : valor;
         }
 
         private void ActualizarEstadoLocalidad()

@@ -22,7 +22,7 @@ namespace pryBazanERP.Formulario
 
         private readonly classConexion conexion = new classConexion();
         private List<classConexion.AuditoriaItem> auditorias = new List<classConexion.AuditoriaItem>();
-        private DataGridView dgvAuditoria;
+        private Guna.UI2.WinForms.Guna2DataGridView dgvAuditoria;
         private Label lblResumen;
         private Guna.UI2.WinForms.Guna2ComboBox cmbUsuario;
         private Guna.UI2.WinForms.Guna2ComboBox cmbPerfil;
@@ -79,18 +79,36 @@ namespace pryBazanERP.Formulario
 
             Guna.UI2.WinForms.Guna2Panel grpFiltros = CrearPanelFiltros();
 
-            dgvAuditoria = new DataGridView();
+            dgvAuditoria = new Guna.UI2.WinForms.Guna2DataGridView();
             dgvAuditoria.AllowUserToAddRows = false;
             dgvAuditoria.AllowUserToDeleteRows = false;
             dgvAuditoria.AutoSizeColumnsMode = DataGridViewAutoSizeColumnsMode.Fill;
             dgvAuditoria.BackgroundColor = Color.FromArgb(255, 250, 243);
-            dgvAuditoria.BorderStyle = BorderStyle.FixedSingle;
+            dgvAuditoria.BorderStyle = BorderStyle.None;
             dgvAuditoria.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             dgvAuditoria.Location = new Point(22, 108);
             dgvAuditoria.ReadOnly = true;
             dgvAuditoria.RowHeadersVisible = false;
             dgvAuditoria.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dgvAuditoria.Size = new Size(652, 294);
+            dgvAuditoria.ThemeStyle.AlternatingRowsStyle.BackColor = Color.FromArgb(255, 250, 243);
+            dgvAuditoria.ThemeStyle.AlternatingRowsStyle.ForeColor = Color.FromArgb(72, 48, 34);
+            dgvAuditoria.ThemeStyle.AlternatingRowsStyle.SelectionBackColor = Color.FromArgb(218, 198, 174);
+            dgvAuditoria.ThemeStyle.AlternatingRowsStyle.SelectionForeColor = Color.FromArgb(72, 48, 34);
+            dgvAuditoria.ThemeStyle.BackColor = Color.FromArgb(255, 250, 243);
+            dgvAuditoria.ThemeStyle.GridColor = Color.FromArgb(232, 218, 198);
+            dgvAuditoria.ThemeStyle.HeaderStyle.BackColor = Color.FromArgb(111, 74, 45);
+            dgvAuditoria.ThemeStyle.HeaderStyle.BorderStyle = DataGridViewHeaderBorderStyle.None;
+            dgvAuditoria.ThemeStyle.HeaderStyle.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            dgvAuditoria.ThemeStyle.HeaderStyle.ForeColor = Color.White;
+            dgvAuditoria.ThemeStyle.HeaderStyle.HeaightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvAuditoria.ThemeStyle.RowsStyle.BackColor = Color.FromArgb(255, 250, 243);
+            dgvAuditoria.ThemeStyle.RowsStyle.BorderStyle = DataGridViewCellBorderStyle.SingleHorizontal;
+            dgvAuditoria.ThemeStyle.RowsStyle.Font = new Font("Segoe UI", 9F);
+            dgvAuditoria.ThemeStyle.RowsStyle.ForeColor = Color.FromArgb(72, 48, 34);
+            dgvAuditoria.ThemeStyle.RowsStyle.Height = 28;
+            dgvAuditoria.ThemeStyle.RowsStyle.SelectionBackColor = Color.FromArgb(218, 198, 174);
+            dgvAuditoria.ThemeStyle.RowsStyle.SelectionForeColor = Color.FromArgb(72, 48, 34);
 
             grpListado.Controls.Add(lblResumen);
             grpListado.Controls.Add(grpFiltros);

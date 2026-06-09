@@ -24,6 +24,7 @@ namespace pryBazanERP.Formulario
             AppIcon.Aplicar(this);
             this.idPersonal = idPersonal;
             this.nombrePersona = nombrePersona;
+            AplicarEstiloGrid(dgvContactos);
             CrearCampoEnlace();
             InicializarCombos();
             CargarPantalla();
@@ -77,14 +78,14 @@ namespace pryBazanERP.Formulario
 
         private void CargarPantalla()
         {
-            lblPersonaValor.Text = string.IsNullOrWhiteSpace(nombrePersona) ? "Sin personal asociado" : nombrePersona;
+           
 
             if (idPersonal == 0)
             {
                 MessageBox.Show("El usuario actual no tiene un personal asociado. No se pueden cargar contactos.", "Contacto", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 grpCarga.Enabled = false;
                 btnGuardar.Enabled = false;
-                btnLimpiarCarga.Enabled = false;
+               
                 dgvContactos.DataSource = null;
                 return;
             }
@@ -205,6 +206,33 @@ namespace pryBazanERP.Formulario
         private bool MedioEsRedSocial()
         {
             return cmbMedio.Text == "Red social";
+        }
+
+        private void AplicarEstiloGrid(DataGridView grid)
+        {
+            if (grid == null)
+            {
+                return;
+            }
+
+            grid.AllowUserToResizeRows = false;
+            grid.BorderStyle = BorderStyle.None;
+            grid.EnableHeadersVisualStyles = false;
+            grid.BackgroundColor = Color.FromArgb(255, 250, 243);
+            grid.GridColor = Color.FromArgb(232, 218, 198);
+            grid.ColumnHeadersHeight = 34;
+            grid.ColumnHeadersDefaultCellStyle.BackColor = Color.FromArgb(111, 74, 45);
+            grid.ColumnHeadersDefaultCellStyle.ForeColor = Color.White;
+            grid.ColumnHeadersDefaultCellStyle.Font = new Font("Segoe UI Semibold", 9F, FontStyle.Bold);
+            grid.ColumnHeadersDefaultCellStyle.SelectionBackColor = Color.FromArgb(111, 74, 45);
+            grid.ColumnHeadersDefaultCellStyle.SelectionForeColor = Color.White;
+            grid.DefaultCellStyle.BackColor = Color.FromArgb(255, 250, 243);
+            grid.DefaultCellStyle.ForeColor = Color.FromArgb(72, 48, 34);
+            grid.DefaultCellStyle.SelectionBackColor = Color.FromArgb(218, 198, 174);
+            grid.DefaultCellStyle.SelectionForeColor = Color.FromArgb(72, 48, 34);
+            grid.AlternatingRowsDefaultCellStyle.BackColor = Color.FromArgb(249, 243, 235);
+            grid.AlternatingRowsDefaultCellStyle.ForeColor = Color.FromArgb(72, 48, 34);
+            grid.RowTemplate.Height = 28;
         }
     }
 }

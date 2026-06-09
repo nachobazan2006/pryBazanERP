@@ -136,7 +136,7 @@ namespace pryBazanERP
             this.lblTitulo.Name = "lblTitulo";
             this.lblTitulo.Size = new System.Drawing.Size(176, 37);
             this.lblTitulo.TabIndex = 0;
-            this.lblTitulo.Text = "Iniciar sesion";
+            this.lblTitulo.Text = "Iniciar sesión";
             // 
             // btnIngresar
             // 
@@ -191,7 +191,7 @@ namespace pryBazanERP
             this.txtUsuario.Location = new System.Drawing.Point(42, 150);
             this.txtUsuario.Name = "txtUsuario";
             this.txtUsuario.PlaceholderForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(150)))), ((int)(((byte)(111)))), ((int)(((byte)(76)))));
-            this.txtUsuario.PlaceholderText = "Correo o usuario";
+            this.txtUsuario.PlaceholderText = "Ej: uvita@gmail.com";
             this.txtUsuario.SelectedText = "";
             this.txtUsuario.Size = new System.Drawing.Size(246, 34);
             this.txtUsuario.TabIndex = 1;
@@ -214,9 +214,9 @@ namespace pryBazanERP
             this.lblUsuario.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(60)))), ((int)(((byte)(42)))));
             this.lblUsuario.Location = new System.Drawing.Point(40, 129);
             this.lblUsuario.Name = "lblUsuario";
-            this.lblUsuario.Size = new System.Drawing.Size(92, 15);
+            this.lblUsuario.Size = new System.Drawing.Size(42, 15);
             this.lblUsuario.TabIndex = 0;
-            this.lblUsuario.Text = "Usuario / correo";
+            this.lblUsuario.Text = "Correo";
             // 
             // lblEstado
             // 

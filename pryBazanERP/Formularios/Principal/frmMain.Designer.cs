@@ -107,9 +107,9 @@ namespace pryBazanERP.Formulario
             this.lblInicioTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
             this.lblInicioTitulo.Location = new System.Drawing.Point(24, 25);
             this.lblInicioTitulo.Name = "lblInicioTitulo";
-            this.lblInicioTitulo.Size = new System.Drawing.Size(144, 42);
+            this.lblInicioTitulo.Size = new System.Drawing.Size(321, 42);
             this.lblInicioTitulo.TabIndex = 0;
-            this.lblInicioTitulo.Text = "Resumen";
+            this.lblInicioTitulo.Text = "Bienvenido al sistema";
             // 
             // pnlHeader
             // 
@@ -327,9 +327,9 @@ namespace pryBazanERP.Formulario
             this.lblApp.ForeColor = System.Drawing.Color.White;
             this.lblApp.Location = new System.Drawing.Point(20, 27);
             this.lblApp.Name = "lblApp";
-            this.lblApp.Size = new System.Drawing.Size(161, 41);
+            this.lblApp.Size = new System.Drawing.Size(186, 41);
             this.lblApp.TabIndex = 0;
-            this.lblApp.Text = "Bazan ERP";
+            this.lblApp.Text = "Sistema ERP";
             // 
             // fadeTimer
             // 
@@ -348,7 +348,7 @@ namespace pryBazanERP.Formulario
             this.MaximizeBox = false;
             this.Name = "frmMain";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Bazan ERP - Principal";
+            this.Text = "Sistema ERP - Principal";
             this.Load += new System.EventHandler(this.frmMain_Load);
             this.pnlRoot.ResumeLayout(false);
             this.pnlContenido.ResumeLayout(false);

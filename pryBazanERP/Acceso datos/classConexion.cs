@@ -62,6 +62,27 @@ namespace pryBazanERP.Conexión
             public string Detalle { get; set; }
         }
 
+        public class UsuarioItem
+        {
+            public int IdUsuario { get; set; }
+            public int IdPersonal { get; set; }
+            public string Nombre { get; set; }
+            public string Apellido { get; set; }
+            public string Mail { get; set; }
+            public string Perfil { get; set; }
+            public bool Activo { get; set; }
+
+            public string NombreCompleto
+            {
+                get { return (Nombre + " " + Apellido).Trim(); }
+            }
+
+            public string Estado
+            {
+                get { return Activo ? "Activo" : "Inactivo"; }
+            }
+        }
+
         public classConexion()
         {
             string carpetaAplicacion = Path.GetDirectoryName(typeof(classConexion).Assembly.Location);
@@ -111,9 +132,10 @@ namespace pryBazanERP.Conexión
                 using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
                 {
                     conexion.Open();
+                    AsegurarEstadoUsuarios(conexion);
 
                     string consulta =
-                        "SELECT TOP 1 Usuario.Id_Usuario, Usuario.Id_Personal, Usuario.Nombre, Usuario.Apellido, Perfil.Nombre AS NombrePerfil " +
+                        "SELECT TOP 1 Usuario.Id_Usuario, Usuario.Id_Personal, Usuario.Nombre, Usuario.Apellido, Usuario.Activo, Perfil.Nombre AS NombrePerfil " +
                         "FROM (Usuario INNER JOIN [Usuario-Perfil] " +
                         "ON Usuario.Id_Usuario = CInt([Usuario-Perfil].Id_Usuario)) " +
                         "INNER JOIN Perfil " +
@@ -130,6 +152,11 @@ namespace pryBazanERP.Conexión
                             {
                                 string contrasenaPersistida = ObtenerContrasenaPersistida(conexion, mail);
                                 if (!VerificarContrasenaPersistida(contrasenaPersistida, contraseña))
+                                {
+                                    return false;
+                                }
+
+                                if (lector["Activo"] != DBNull.Value && !Convert.ToBoolean(lector["Activo"]))
                                 {
                                     return false;
                                 }
@@ -222,6 +249,107 @@ namespace pryBazanERP.Conexión
             }
 
             return auditorias;
+        }
+
+        public List<UsuarioItem> ObtenerUsuarios()
+        {
+            List<UsuarioItem> usuarios = new List<UsuarioItem>();
+
+            using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
+            {
+                conexion.Open();
+                AsegurarEstadoUsuarios(conexion);
+
+                string consulta =
+                    "SELECT Usuario.Id_Usuario, Usuario.Id_Personal, Usuario.Nombre, Usuario.Apellido, Usuario.Mail, Usuario.Activo " +
+                    "FROM Usuario " +
+                    "ORDER BY Usuario.Apellido, Usuario.Nombre, Usuario.Mail";
+
+                using (OleDbCommand comando = new OleDbCommand(consulta, conexion))
+                using (OleDbDataReader lector = comando.ExecuteReader())
+                {
+                    while (lector.Read())
+                    {
+                        int idUsuario = Convert.ToInt32(lector["Id_Usuario"]);
+                        usuarios.Add(new UsuarioItem
+                        {
+                            IdUsuario = idUsuario,
+                            IdPersonal = lector["Id_Personal"] == DBNull.Value ? 0 : Convert.ToInt32(lector["Id_Personal"]),
+                            Nombre = lector["Nombre"].ToString(),
+                            Apellido = lector["Apellido"].ToString(),
+                            Mail = lector["Mail"].ToString(),
+                            Perfil = ObtenerPerfilesUsuario(conexion, idUsuario),
+                            Activo = lector["Activo"] == DBNull.Value || Convert.ToBoolean(lector["Activo"])
+                        });
+                    }
+                }
+            }
+
+            return usuarios;
+        }
+
+        public bool ActualizarEstadoUsuario(int idUsuario, bool activo, out string mensaje)
+        {
+            mensaje = "";
+
+            try
+            {
+                using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    AsegurarEstadoUsuarios(conexion);
+
+                    using (OleDbCommand comando = new OleDbCommand("UPDATE Usuario SET Activo = ? WHERE Id_Usuario = ?", conexion))
+                    {
+                        comando.Parameters.AddWithValue("?", activo);
+                        comando.Parameters.AddWithValue("?", idUsuario);
+
+                        if (comando.ExecuteNonQuery() == 0)
+                        {
+                            mensaje = "No se encontro el usuario seleccionado.";
+                            return false;
+                        }
+                    }
+                }
+
+                mensaje = activo ? "Usuario activado correctamente." : "Usuario inactivado correctamente.";
+                return true;
+            }
+            catch (Exception ex)
+            {
+                mensaje = "No se pudo actualizar el estado del usuario: " + ex.Message;
+                return false;
+            }
+        }
+
+        public bool CredencialesDeUsuarioInactivo(string mail, string contrasena)
+        {
+            try
+            {
+                using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
+                {
+                    conexion.Open();
+                    AsegurarEstadoUsuarios(conexion);
+
+                    using (OleDbCommand comando = new OleDbCommand("SELECT TOP 1 Activo FROM Usuario WHERE Mail = ?", conexion))
+                    {
+                        comando.Parameters.AddWithValue("?", mail);
+                        object activo = comando.ExecuteScalar();
+
+                        if (activo == null || activo == DBNull.Value || Convert.ToBoolean(activo))
+                        {
+                            return false;
+                        }
+                    }
+
+                    string contrasenaPersistida = ObtenerContrasenaPersistida(conexion, mail);
+                    return VerificarContrasenaPersistida(contrasenaPersistida, contrasena);
+                }
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public bool GuardarContacto(int idPersonal, string medio, string uso, string dato, out string mensaje)
@@ -621,6 +749,7 @@ namespace pryBazanERP.Conexión
                 using (OleDbConnection conexion = new OleDbConnection(cadenaConexion))
                 {
                     conexion.Open();
+                    AsegurarEstadoUsuarios(conexion);
 
                     if (ExisteUsuario(conexion, usuario))
                     {
@@ -812,12 +941,13 @@ namespace pryBazanERP.Conexión
 
         private int InsertarUsuario(OleDbConnection conexion, OleDbTransaction transaccion, string nombre, string apellido, string usuario, string contrasena)
         {
-            using (OleDbCommand comando = new OleDbCommand("INSERT INTO Usuario (Nombre, Apellido, Mail, [Contraseña]) VALUES (?, ?, ?, ?)", conexion, transaccion))
+            using (OleDbCommand comando = new OleDbCommand("INSERT INTO Usuario (Nombre, Apellido, Mail, [Contraseña], Activo) VALUES (?, ?, ?, ?, ?)", conexion, transaccion))
             {
                 comando.Parameters.AddWithValue("?", nombre);
                 comando.Parameters.AddWithValue("?", apellido);
                 comando.Parameters.AddWithValue("?", usuario);
                 comando.Parameters.AddWithValue("?", CodificarContrasena(contrasena));
+                comando.Parameters.AddWithValue("?", true);
                 comando.ExecuteNonQuery();
             }
 
@@ -985,6 +1115,39 @@ namespace pryBazanERP.Conexión
             AgregarColumnaSiNoExiste(conexion, "Contacto", "Dato", "TEXT(255)");
             AgregarColumnaSiNoExiste(conexion, "Contacto", "Enlace", "TEXT(255)");
             MigrarContactosAnteriores(conexion);
+        }
+
+        private void AsegurarEstadoUsuarios(OleDbConnection conexion)
+        {
+            bool existiaColumna = ExisteColumna(conexion, "Usuario", "Activo");
+            AgregarColumnaSiNoExiste(conexion, "Usuario", "Activo", "YESNO");
+
+            string consulta = existiaColumna
+                ? "UPDATE Usuario SET Activo = ? WHERE Activo IS NULL"
+                : "UPDATE Usuario SET Activo = ?";
+
+            using (OleDbCommand comando = new OleDbCommand(consulta, conexion))
+            {
+                comando.Parameters.AddWithValue("?", true);
+                comando.ExecuteNonQuery();
+            }
+        }
+
+        private bool ExisteColumna(OleDbConnection conexion, string tabla, string columna)
+        {
+            using (System.Data.DataTable columnas = conexion.GetSchema("Columns"))
+            {
+                foreach (System.Data.DataRow fila in columnas.Rows)
+                {
+                    if (fila["TABLE_NAME"].ToString().Equals(tabla, StringComparison.OrdinalIgnoreCase) &&
+                        fila["COLUMN_NAME"].ToString().Equals(columna, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         private void AgregarColumnaSiNoExiste(OleDbConnection conexion, string tabla, string columna, string definicion)

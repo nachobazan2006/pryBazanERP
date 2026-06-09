@@ -42,7 +42,7 @@ namespace pryBazanERP
             {
                 lblEstado.Text = string.IsNullOrWhiteSpace(rutaBaseDatos)
                     ? "Conectado"
-                    : "Conectado - " + rutaBaseDatos;
+                    : "Conectado  " ;
                 lblEstado.ForeColor = Color.FromArgb(68, 112, 74);
                 pnlEstado.FillColor = Color.FromArgb(68, 112, 74);
             }
@@ -74,17 +74,21 @@ namespace pryBazanERP
 
             if (conexion.ObtenerDatosUsuario(txtUsuario.Text, txtContraseña.Text, out usuario, out perfil, out idUsuario, out idPersonal))
             {
-                conexion.GrabarAuditoriaSesion(txtUsuario.Text.Trim(), "Inicio de sesion exitoso");
-                MessageBox.Show("Bienvenido, " + usuario + "!", "Inicio de sesion exitoso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                conexion.GrabarAuditoriaSesion(txtUsuario.Text.Trim(), "Inicio de sesión exitoso");
+                MessageBox.Show("Bienvenido/a, " + usuario + "!", "Inicio de sesión exitoso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 frmMain mainForm = new frmMain(usuario, perfil, txtUsuario.Text.Trim(), idUsuario, idPersonal);
                 mainForm.Show();
                 this.Hide();
             }
             else
             {
-                conexion.GrabarAuditoriaSesion(txtUsuario.Text, "Intento fallido");
+                bool usuarioInactivo = conexion.CredencialesDeUsuarioInactivo(txtUsuario.Text.Trim(), txtContraseña.Text);
+                conexion.GrabarAuditoriaSesion(txtUsuario.Text, usuarioInactivo ? "Intento fallido: usuario inactivo" : "Intento fallido");
                 intentos--;
-                MessageBox.Show("Usuario o contraseña incorrectos. Intentos restantes: " + intentos, "Login", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                string mensaje = usuarioInactivo
+                    ? "El usuario esta inactivo. Contacte a un administrador. Intentos restantes: " + intentos
+                    : "Usuario o contraseña incorrectos. Intentos restantes: " + intentos;
+                MessageBox.Show(mensaje, "Login", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
                 if (intentos == 0)
                 {

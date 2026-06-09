@@ -26,14 +26,12 @@ namespace pryBazanERP.Formulario
             this.cmbUso = new Guna.UI2.WinForms.Guna2ComboBox();
             this.lblMedio = new System.Windows.Forms.Label();
             this.cmbMedio = new Guna.UI2.WinForms.Guna2ComboBox();
-            this.lblPersonaValor = new System.Windows.Forms.Label();
             this.lblPersona = new System.Windows.Forms.Label();
             this.lblCargaTitulo = new System.Windows.Forms.Label();
             this.grpListado = new Guna.UI2.WinForms.Guna2Panel();
-            this.dgvContactos = new System.Windows.Forms.DataGridView();
+            this.dgvContactos = new Guna.UI2.WinForms.Guna2DataGridView();
             this.lblListadoTitulo = new System.Windows.Forms.Label();
             this.btnGuardar = new Guna.UI2.WinForms.Guna2Button();
-            this.btnLimpiarCarga = new Guna.UI2.WinForms.Guna2Button();
             this.pnlInfo.SuspendLayout();
             this.grpCarga.SuspendLayout();
             this.grpListado.SuspendLayout();
@@ -44,7 +42,7 @@ namespace pryBazanERP.Formulario
             // 
             this.lblTitulo.AutoSize = true;
             this.lblTitulo.Font = new System.Drawing.Font("Segoe UI Semibold", 24F, System.Drawing.FontStyle.Bold);
-            this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
+            this.lblTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
             this.lblTitulo.Location = new System.Drawing.Point(34, 24);
             this.lblTitulo.Name = "lblTitulo";
             this.lblTitulo.Size = new System.Drawing.Size(167, 45);
@@ -55,55 +53,55 @@ namespace pryBazanERP.Formulario
             // 
             this.lblSubtitulo.AutoSize = true;
             this.lblSubtitulo.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.lblSubtitulo.ForeColor = System.Drawing.Color.FromArgb(120, 92, 64);
+            this.lblSubtitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(92)))), ((int)(((byte)(64)))));
             this.lblSubtitulo.Location = new System.Drawing.Point(39, 73);
             this.lblSubtitulo.Name = "lblSubtitulo";
-            this.lblSubtitulo.Size = new System.Drawing.Size(308, 19);
+            this.lblSubtitulo.Size = new System.Drawing.Size(306, 19);
             this.lblSubtitulo.TabIndex = 1;
             this.lblSubtitulo.Text = "Mail y telefono principal o de auxilio del personal";
             // 
             // pnlInfo
             // 
-            this.pnlInfo.BorderColor = System.Drawing.Color.FromArgb(218, 198, 174);
+            this.pnlInfo.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(198)))), ((int)(((byte)(174)))));
             this.pnlInfo.BorderRadius = 12;
             this.pnlInfo.BorderThickness = 1;
             this.pnlInfo.Controls.Add(this.lblInfo);
-            this.pnlInfo.FillColor = System.Drawing.Color.FromArgb(255, 250, 243);
+            this.pnlInfo.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(243)))));
             this.pnlInfo.Location = new System.Drawing.Point(42, 108);
             this.pnlInfo.Name = "pnlInfo";
-            this.pnlInfo.Size = new System.Drawing.Size(690, 48);
+            this.pnlInfo.Size = new System.Drawing.Size(707, 48);
             this.pnlInfo.TabIndex = 2;
             // 
             // lblInfo
             // 
             this.lblInfo.AutoSize = true;
             this.lblInfo.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblInfo.ForeColor = System.Drawing.Color.FromArgb(84, 60, 42);
+            this.lblInfo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(60)))), ((int)(((byte)(42)))));
             this.lblInfo.Location = new System.Drawing.Point(18, 15);
             this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Size = new System.Drawing.Size(496, 17);
+            this.lblInfo.Size = new System.Drawing.Size(524, 17);
             this.lblInfo.TabIndex = 0;
-            this.lblInfo.Text = "Un personal puede tener varios contactos: mail principal, telefono principal y auxilios.";
+            this.lblInfo.Text = "Un personal puede tener varios contactos: mail principal, telefono principal y au" +
+    "xilios.";
             // 
             // grpCarga
             // 
-            this.grpCarga.BorderColor = System.Drawing.Color.FromArgb(218, 198, 174);
+            this.grpCarga.BackColor = System.Drawing.Color.Transparent;
+            this.grpCarga.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(198)))), ((int)(((byte)(174)))));
             this.grpCarga.BorderRadius = 16;
             this.grpCarga.BorderThickness = 1;
-            this.grpCarga.Controls.Add(this.btnLimpiarCarga);
             this.grpCarga.Controls.Add(this.lblDato);
             this.grpCarga.Controls.Add(this.txtDato);
             this.grpCarga.Controls.Add(this.lblUso);
             this.grpCarga.Controls.Add(this.cmbUso);
             this.grpCarga.Controls.Add(this.lblMedio);
             this.grpCarga.Controls.Add(this.cmbMedio);
-            this.grpCarga.Controls.Add(this.lblPersonaValor);
             this.grpCarga.Controls.Add(this.lblPersona);
             this.grpCarga.Controls.Add(this.lblCargaTitulo);
-            this.grpCarga.FillColor = System.Drawing.Color.FromArgb(246, 238, 226);
+            this.grpCarga.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(238)))), ((int)(((byte)(226)))));
             this.grpCarga.Location = new System.Drawing.Point(42, 176);
             this.grpCarga.Name = "grpCarga";
-            this.grpCarga.ShadowDecoration.Color = System.Drawing.Color.FromArgb(120, 92, 64);
+            this.grpCarga.ShadowDecoration.Color = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(92)))), ((int)(((byte)(64)))));
             this.grpCarga.ShadowDecoration.Depth = 8;
             this.grpCarga.ShadowDecoration.Enabled = true;
             this.grpCarga.Size = new System.Drawing.Size(330, 288);
@@ -113,7 +111,7 @@ namespace pryBazanERP.Formulario
             // 
             this.lblDato.AutoSize = true;
             this.lblDato.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.lblDato.ForeColor = System.Drawing.Color.FromArgb(84, 60, 42);
+            this.lblDato.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(60)))), ((int)(((byte)(42)))));
             this.lblDato.Location = new System.Drawing.Point(24, 203);
             this.lblDato.Name = "lblDato";
             this.lblDato.Size = new System.Drawing.Size(33, 15);
@@ -122,14 +120,14 @@ namespace pryBazanERP.Formulario
             // 
             // txtDato
             // 
-            this.txtDato.BorderColor = System.Drawing.Color.FromArgb(218, 198, 174);
+            this.txtDato.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(198)))), ((int)(((byte)(174)))));
             this.txtDato.BorderRadius = 12;
             this.txtDato.Cursor = System.Windows.Forms.Cursors.IBeam;
             this.txtDato.DefaultText = "";
-            this.txtDato.FillColor = System.Drawing.Color.FromArgb(255, 250, 243);
-            this.txtDato.FocusedState.BorderColor = System.Drawing.Color.FromArgb(111, 74, 45);
+            this.txtDato.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(243)))));
+            this.txtDato.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(74)))), ((int)(((byte)(45)))));
             this.txtDato.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.txtDato.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
+            this.txtDato.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
             this.txtDato.Location = new System.Drawing.Point(26, 222);
             this.txtDato.Name = "txtDato";
             this.txtDato.PlaceholderText = "Mail o telefono";
@@ -141,7 +139,7 @@ namespace pryBazanERP.Formulario
             // 
             this.lblUso.AutoSize = true;
             this.lblUso.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.lblUso.ForeColor = System.Drawing.Color.FromArgb(84, 60, 42);
+            this.lblUso.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(60)))), ((int)(((byte)(42)))));
             this.lblUso.Location = new System.Drawing.Point(24, 139);
             this.lblUso.Name = "lblUso";
             this.lblUso.Size = new System.Drawing.Size(27, 15);
@@ -151,15 +149,15 @@ namespace pryBazanERP.Formulario
             // cmbUso
             // 
             this.cmbUso.BackColor = System.Drawing.Color.Transparent;
-            this.cmbUso.BorderColor = System.Drawing.Color.FromArgb(218, 198, 174);
+            this.cmbUso.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(198)))), ((int)(((byte)(174)))));
             this.cmbUso.BorderRadius = 12;
             this.cmbUso.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cmbUso.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbUso.FillColor = System.Drawing.Color.FromArgb(255, 250, 243);
-            this.cmbUso.FocusedColor = System.Drawing.Color.FromArgb(111, 74, 45);
-            this.cmbUso.FocusedState.BorderColor = System.Drawing.Color.FromArgb(111, 74, 45);
+            this.cmbUso.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(243)))));
+            this.cmbUso.FocusedColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(74)))), ((int)(((byte)(45)))));
+            this.cmbUso.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(74)))), ((int)(((byte)(45)))));
             this.cmbUso.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.cmbUso.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
+            this.cmbUso.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
             this.cmbUso.ItemHeight = 30;
             this.cmbUso.Location = new System.Drawing.Point(26, 158);
             this.cmbUso.Name = "cmbUso";
@@ -170,50 +168,39 @@ namespace pryBazanERP.Formulario
             // 
             this.lblMedio.AutoSize = true;
             this.lblMedio.Font = new System.Drawing.Font("Segoe UI Semibold", 9F, System.Drawing.FontStyle.Bold);
-            this.lblMedio.ForeColor = System.Drawing.Color.FromArgb(84, 60, 42);
+            this.lblMedio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(60)))), ((int)(((byte)(42)))));
             this.lblMedio.Location = new System.Drawing.Point(24, 75);
             this.lblMedio.Name = "lblMedio";
-            this.lblMedio.Size = new System.Drawing.Size(42, 15);
+            this.lblMedio.Size = new System.Drawing.Size(41, 15);
             this.lblMedio.TabIndex = 3;
             this.lblMedio.Text = "Medio";
             // 
             // cmbMedio
             // 
             this.cmbMedio.BackColor = System.Drawing.Color.Transparent;
-            this.cmbMedio.BorderColor = System.Drawing.Color.FromArgb(218, 198, 174);
+            this.cmbMedio.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(198)))), ((int)(((byte)(174)))));
             this.cmbMedio.BorderRadius = 12;
             this.cmbMedio.DrawMode = System.Windows.Forms.DrawMode.OwnerDrawFixed;
             this.cmbMedio.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cmbMedio.FillColor = System.Drawing.Color.FromArgb(255, 250, 243);
-            this.cmbMedio.FocusedColor = System.Drawing.Color.FromArgb(111, 74, 45);
-            this.cmbMedio.FocusedState.BorderColor = System.Drawing.Color.FromArgb(111, 74, 45);
+            this.cmbMedio.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(243)))));
+            this.cmbMedio.FocusedColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(74)))), ((int)(((byte)(45)))));
+            this.cmbMedio.FocusedState.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(74)))), ((int)(((byte)(45)))));
             this.cmbMedio.Font = new System.Drawing.Font("Segoe UI", 10F);
-            this.cmbMedio.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
+            this.cmbMedio.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
             this.cmbMedio.ItemHeight = 30;
             this.cmbMedio.Location = new System.Drawing.Point(26, 94);
             this.cmbMedio.Name = "cmbMedio";
             this.cmbMedio.Size = new System.Drawing.Size(278, 36);
             this.cmbMedio.TabIndex = 4;
             // 
-            // lblPersonaValor
-            // 
-            this.lblPersonaValor.AutoSize = true;
-            this.lblPersonaValor.Font = new System.Drawing.Font("Segoe UI", 9.5F);
-            this.lblPersonaValor.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
-            this.lblPersonaValor.Location = new System.Drawing.Point(89, 47);
-            this.lblPersonaValor.Name = "lblPersonaValor";
-            this.lblPersonaValor.Size = new System.Drawing.Size(12, 17);
-            this.lblPersonaValor.TabIndex = 2;
-            this.lblPersonaValor.Text = "-";
-            // 
             // lblPersona
             // 
             this.lblPersona.AutoSize = true;
             this.lblPersona.Font = new System.Drawing.Font("Segoe UI Semibold", 9.5F, System.Drawing.FontStyle.Bold);
-            this.lblPersona.ForeColor = System.Drawing.Color.FromArgb(84, 60, 42);
+            this.lblPersona.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(60)))), ((int)(((byte)(42)))));
             this.lblPersona.Location = new System.Drawing.Point(24, 47);
             this.lblPersona.Name = "lblPersona";
-            this.lblPersona.Size = new System.Drawing.Size(58, 17);
+            this.lblPersona.Size = new System.Drawing.Size(63, 17);
             this.lblPersona.TabIndex = 1;
             this.lblPersona.Text = "Personal:";
             // 
@@ -221,27 +208,28 @@ namespace pryBazanERP.Formulario
             // 
             this.lblCargaTitulo.AutoSize = true;
             this.lblCargaTitulo.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold);
-            this.lblCargaTitulo.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
+            this.lblCargaTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
             this.lblCargaTitulo.Location = new System.Drawing.Point(22, 18);
             this.lblCargaTitulo.Name = "lblCargaTitulo";
-            this.lblCargaTitulo.Size = new System.Drawing.Size(123, 21);
+            this.lblCargaTitulo.Size = new System.Drawing.Size(127, 21);
             this.lblCargaTitulo.TabIndex = 0;
             this.lblCargaTitulo.Text = "Nuevo contacto";
             // 
             // grpListado
             // 
-            this.grpListado.BorderColor = System.Drawing.Color.FromArgb(218, 198, 174);
+            this.grpListado.BackColor = System.Drawing.Color.Transparent;
+            this.grpListado.BorderColor = System.Drawing.Color.FromArgb(((int)(((byte)(218)))), ((int)(((byte)(198)))), ((int)(((byte)(174)))));
             this.grpListado.BorderRadius = 16;
             this.grpListado.BorderThickness = 1;
             this.grpListado.Controls.Add(this.dgvContactos);
             this.grpListado.Controls.Add(this.lblListadoTitulo);
-            this.grpListado.FillColor = System.Drawing.Color.FromArgb(246, 238, 226);
+            this.grpListado.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(246)))), ((int)(((byte)(238)))), ((int)(((byte)(226)))));
             this.grpListado.Location = new System.Drawing.Point(402, 176);
             this.grpListado.Name = "grpListado";
-            this.grpListado.ShadowDecoration.Color = System.Drawing.Color.FromArgb(120, 92, 64);
+            this.grpListado.ShadowDecoration.Color = System.Drawing.Color.FromArgb(((int)(((byte)(120)))), ((int)(((byte)(92)))), ((int)(((byte)(64)))));
             this.grpListado.ShadowDecoration.Depth = 8;
             this.grpListado.ShadowDecoration.Enabled = true;
-            this.grpListado.Size = new System.Drawing.Size(330, 288);
+            this.grpListado.Size = new System.Drawing.Size(347, 288);
             this.grpListado.TabIndex = 4;
             // 
             // dgvContactos
@@ -249,25 +237,24 @@ namespace pryBazanERP.Formulario
             this.dgvContactos.AllowUserToAddRows = false;
             this.dgvContactos.AllowUserToDeleteRows = false;
             this.dgvContactos.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
-            this.dgvContactos.BackgroundColor = System.Drawing.Color.FromArgb(255, 250, 243);
-            this.dgvContactos.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.dgvContactos.BackgroundColor = System.Drawing.Color.FromArgb(((int)(((byte)(255)))), ((int)(((byte)(250)))), ((int)(((byte)(243)))));
             this.dgvContactos.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            this.dgvContactos.Location = new System.Drawing.Point(22, 52);
+            this.dgvContactos.Location = new System.Drawing.Point(3, 42);
             this.dgvContactos.Name = "dgvContactos";
             this.dgvContactos.ReadOnly = true;
             this.dgvContactos.RowHeadersVisible = false;
             this.dgvContactos.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dgvContactos.Size = new System.Drawing.Size(286, 234);
+            this.dgvContactos.Size = new System.Drawing.Size(341, 234);
             this.dgvContactos.TabIndex = 1;
             // 
             // lblListadoTitulo
             // 
             this.lblListadoTitulo.AutoSize = true;
             this.lblListadoTitulo.Font = new System.Drawing.Font("Segoe UI Semibold", 12F, System.Drawing.FontStyle.Bold);
-            this.lblListadoTitulo.ForeColor = System.Drawing.Color.FromArgb(72, 48, 34);
-            this.lblListadoTitulo.Location = new System.Drawing.Point(22, 18);
+            this.lblListadoTitulo.ForeColor = System.Drawing.Color.FromArgb(((int)(((byte)(72)))), ((int)(((byte)(48)))), ((int)(((byte)(34)))));
+            this.lblListadoTitulo.Location = new System.Drawing.Point(3, 18);
             this.lblListadoTitulo.Name = "lblListadoTitulo";
-            this.lblListadoTitulo.Size = new System.Drawing.Size(152, 21);
+            this.lblListadoTitulo.Size = new System.Drawing.Size(155, 21);
             this.lblListadoTitulo.TabIndex = 0;
             this.lblListadoTitulo.Text = "Contactos cargados";
             // 
@@ -276,10 +263,10 @@ namespace pryBazanERP.Formulario
             this.btnGuardar.Animated = true;
             this.btnGuardar.BorderRadius = 12;
             this.btnGuardar.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnGuardar.FillColor = System.Drawing.Color.FromArgb(111, 74, 45);
+            this.btnGuardar.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(111)))), ((int)(((byte)(74)))), ((int)(((byte)(45)))));
             this.btnGuardar.Font = new System.Drawing.Font("Segoe UI Semibold", 10F, System.Drawing.FontStyle.Bold);
             this.btnGuardar.ForeColor = System.Drawing.Color.White;
-            this.btnGuardar.HoverState.FillColor = System.Drawing.Color.FromArgb(84, 60, 42);
+            this.btnGuardar.HoverState.FillColor = System.Drawing.Color.FromArgb(((int)(((byte)(84)))), ((int)(((byte)(60)))), ((int)(((byte)(42)))));
             this.btnGuardar.Location = new System.Drawing.Point(252, 500);
             this.btnGuardar.Name = "btnGuardar";
             this.btnGuardar.Size = new System.Drawing.Size(140, 42);
@@ -287,29 +274,11 @@ namespace pryBazanERP.Formulario
             this.btnGuardar.Text = "Guardar";
             this.btnGuardar.Click += new System.EventHandler(this.btnGuardar_Click);
             // 
-            // btnLimpiarCarga
-            // 
-            this.btnLimpiarCarga.Animated = true;
-            this.btnLimpiarCarga.BorderColor = System.Drawing.Color.FromArgb(150, 111, 76);
-            this.btnLimpiarCarga.BorderRadius = 8;
-            this.btnLimpiarCarga.BorderThickness = 1;
-            this.btnLimpiarCarga.Cursor = System.Windows.Forms.Cursors.Hand;
-            this.btnLimpiarCarga.FillColor = System.Drawing.Color.FromArgb(255, 250, 243);
-            this.btnLimpiarCarga.Font = new System.Drawing.Font("Segoe UI Semibold", 8.5F, System.Drawing.FontStyle.Bold);
-            this.btnLimpiarCarga.ForeColor = System.Drawing.Color.FromArgb(84, 60, 42);
-            this.btnLimpiarCarga.HoverState.FillColor = System.Drawing.Color.FromArgb(218, 198, 174);
-            this.btnLimpiarCarga.Location = new System.Drawing.Point(219, 18);
-            this.btnLimpiarCarga.Name = "btnLimpiarCarga";
-            this.btnLimpiarCarga.Size = new System.Drawing.Size(85, 28);
-            this.btnLimpiarCarga.TabIndex = 9;
-            this.btnLimpiarCarga.Text = "Limpiar";
-            this.btnLimpiarCarga.Click += new System.EventHandler(this.btnLimpiarCarga_Click);
-            // 
             // frmContacto
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.BackColor = System.Drawing.Color.FromArgb(232, 218, 198);
+            this.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(232)))), ((int)(((byte)(218)))), ((int)(((byte)(198)))));
             this.ClientSize = new System.Drawing.Size(800, 580);
             this.Controls.Add(this.btnGuardar);
             this.Controls.Add(this.grpListado);
@@ -332,6 +301,7 @@ namespace pryBazanERP.Formulario
             ((System.ComponentModel.ISupportInitialize)(this.dgvContactos)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
+
         }
 
         private System.Windows.Forms.Label lblTitulo;
@@ -341,7 +311,6 @@ namespace pryBazanERP.Formulario
         private Guna.UI2.WinForms.Guna2Panel grpCarga;
         private System.Windows.Forms.Label lblCargaTitulo;
         private System.Windows.Forms.Label lblPersona;
-        private System.Windows.Forms.Label lblPersonaValor;
         private System.Windows.Forms.Label lblMedio;
         private Guna.UI2.WinForms.Guna2ComboBox cmbMedio;
         private System.Windows.Forms.Label lblUso;
@@ -350,8 +319,7 @@ namespace pryBazanERP.Formulario
         private Guna.UI2.WinForms.Guna2TextBox txtDato;
         private Guna.UI2.WinForms.Guna2Panel grpListado;
         private System.Windows.Forms.Label lblListadoTitulo;
-        private System.Windows.Forms.DataGridView dgvContactos;
+        private Guna.UI2.WinForms.Guna2DataGridView dgvContactos;
         private Guna.UI2.WinForms.Guna2Button btnGuardar;
-        private Guna.UI2.WinForms.Guna2Button btnLimpiarCarga;
     }
 }
