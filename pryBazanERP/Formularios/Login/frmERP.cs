@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using pryBazanERP.Conexión;
+﻿using pryBazanERP.Conexión;
 using pryBazanERP.Formulario;
+using System;
+using System.Drawing;
+using System.Windows.Forms;
 
 namespace pryBazanERP
 {
@@ -126,7 +120,7 @@ namespace pryBazanERP
             {
                 txtContraseña.PasswordChar = '\0';
             }
-            else 
+            else
             {
                 txtContraseña.PasswordChar = '*';
             }

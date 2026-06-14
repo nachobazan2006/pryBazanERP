@@ -1,9 +1,9 @@
+using pryBazanERP.Conexión;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
-using pryBazanERP.Conexión;
 
 namespace pryBazanERP.Formulario
 {

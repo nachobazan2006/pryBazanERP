@@ -1,16 +1,17 @@
+using pryBazanERP.Conexión;
 using System;
+using System.ComponentModel;
 using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
-using pryBazanERP.Conexión;
 
 namespace pryBazanERP.Formulario
 {
     public partial class frmGenerarUsuario : Form
     {
-        private readonly classConexion conexion = new classConexion();
+        private classConexion conexion;
         private readonly string usuarioAdministrador;
         private readonly bool esAdministrador;
 
@@ -27,6 +28,13 @@ namespace pryBazanERP.Formulario
             this.usuarioAdministrador = usuarioAdministrador;
             this.esAdministrador = esAdministrador;
             InitializeComponent();
+
+            if (EnModoDiseno())
+            {
+                return;
+            }
+
+            conexion = new classConexion();
             AppIcon.Aplicar(this);
             CargarPerfiles();
 
@@ -199,6 +207,11 @@ namespace pryBazanERP.Formulario
         {
             cmbPerfil.Items.Clear();
 
+            if (conexion == null)
+            {
+                return;
+            }
+
             foreach (string perfil in conexion.ObtenerPerfilesDisponibles())
             {
                 cmbPerfil.Items.Add(perfil);
@@ -228,6 +241,11 @@ namespace pryBazanERP.Formulario
             btnGenerar.Enabled = false;
             btnGuardar.Enabled = false;
             btnLimpiar.Enabled = false;
+        }
+
+        private static bool EnModoDiseno()
+        {
+            return LicenseManager.UsageMode == LicenseUsageMode.Designtime;
         }
     }
 }
